@@ -1,7 +1,11 @@
 package project;
 
 import java.awt.*;
-
+/**
+ * 
+ * @author thomasayele17
+ *
+ */
 public class TimePoint {
 	private Point point;
 

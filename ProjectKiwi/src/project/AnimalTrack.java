@@ -1,7 +1,11 @@
 package project;
 
 import java.util.*;
-
+/**
+ * 
+ * @author thomasayele17
+ *
+ */
 public class AnimalTrack {
 	private String animalID;
 
