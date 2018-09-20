@@ -1,10 +1,11 @@
 package project;
 
+import java.awt.List;
+
 public class ProjectData {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
+	private List<AnimalTrack> tracks;
+	private Video video;
+	
 
 }
