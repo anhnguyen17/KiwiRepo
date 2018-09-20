@@ -10,7 +10,7 @@ import java.awt.*;
 public class Video {
 	private double frameRate;
 	private double xPixelsPerCm;
-	private double yPixelsPerCM;
+	private double yPixelsPerCm;
 	private int totalNumFrames;
 	private String fileName;
 	private int startFrameNum;
@@ -45,13 +45,13 @@ public class Video {
 	}
 
 
-	public double getyPixelsPerCM() {
-		return yPixelsPerCM;
+	public double getyPixelsPerCm() {
+		return yPixelsPerCm;
 	}
 
 
-	public void setyPixelsPerCM(double yPixelsPerCM) {
-		this.yPixelsPerCM = yPixelsPerCM;
+	public void setyPixelsPerCm(double yPixelsPerCm) {
+		this.yPixelsPerCm = yPixelsPerCm;
 	}
 
 
