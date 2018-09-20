@@ -17,8 +17,8 @@ public class Video {
 	private int endFrameNum;
 	private Rectangle arenaBounds;
 	
-	public Video() {
-		
+	public Video(double FrameRate) {
+		this.frameRate = frameRate;
 	}
 	public double getFrameRate() {
 		return frameRate;
