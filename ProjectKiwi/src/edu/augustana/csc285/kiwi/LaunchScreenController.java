@@ -1,11 +1,16 @@
 package edu.augustana.csc285.kiwi;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ScrollBar;
+
+import javafx.scene.control.*;
+
 
 public class LaunchScreenController {
-	@FXML	private Slider slide;
-	@FXML	private ScrollBar scroll;
+	@FXML	private Label numChickLabel;
+	@FXML	private Label videoSelectLabel;
+	@FXML   private TextField chickNum;
+	@FXML   private TextField videoPath;
+	@FXML   private Button BrowseButton;
+	@FXML   private Button SubmitButton;
 
 }
