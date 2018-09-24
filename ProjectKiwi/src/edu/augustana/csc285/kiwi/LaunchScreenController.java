@@ -53,12 +53,11 @@ public class LaunchScreenController {
 
 				Image imageToShow = mat2Image(frame);
 				videoView.setImage(imageToShow);
-				
+
 			} else {
 				capture.release();
 			}
 		}
-
 	}
 
 	public void handleSlider() {
