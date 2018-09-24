@@ -25,13 +25,18 @@ import org.opencv.imgproc.Imgproc;
 public class LaunchScreenController {
 
 	private VideoCapture capture = new VideoCapture();
+	private double clearFrameNum;
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button BrowseButton;
-	//@FXML private Button SubmitButton;
+	@FXML private Button SubmitButton;
 
 	@FXML
 	public void initialize() {
+	}
+	
+	public void handleSubmit() {
+		
 	}
 
 	public void handleBrowse() throws FileNotFoundException {
@@ -61,8 +66,12 @@ public class LaunchScreenController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				if (capture.isOpened()) {
-					capture.set(Videoio.CAP_PROP_POS_FRAMES, newValue.doubleValue() / sliderSeekBar.getMax()
-							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
+					double frameNum = newValue.doubleValue() / sliderSeekBar.getMax()
+							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1;
+					
+					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
+					setClearFrameNum(frameNum);
+					System.out.println(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
 
@@ -123,6 +132,14 @@ public class LaunchScreenController {
 		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
 
 		return image;
+	}
+
+	public double getClearFrameNum() {
+		return clearFrameNum;
+	}
+
+	public void setClearFrameNum(double clearFrameNum) {
+		this.clearFrameNum = clearFrameNum;
 	}
 
 }
