@@ -1,5 +1,4 @@
 package project;
-
 import java.awt.*;
 
 /**
@@ -8,32 +7,20 @@ import java.awt.*;
  */
 
 public class Video {
-	private double frameRate;
 	private double xPixelsPerCm;
 	private double yPixelsPerCm;
-	private int totalNumFrames;
 	private String fileName;
 	private int startFrameNum;
 	private int endFrameNum;
-	private Rectangle arenaBounds;
+	private Rectangle arenaBounds; 
+	private double frameNum;
 	
-	public Video(double frameRate, String fileName, int totalNumFrames) {
+	public Video(String fileName) {
 		super();
-		this.frameRate = frameRate;
 		this.fileName = fileName;
-		this.totalNumFrames = totalNumFrames;
+		
 	}
 	
-
-	public double getFrameRate() {
-		return frameRate;
-	}
-
-
-	public void setFrameRate(double frameRate) {
-		this.frameRate = frameRate;
-	}
-
 
 	public double getxPixelsPerCm() {
 		return xPixelsPerCm;
@@ -53,17 +40,6 @@ public class Video {
 	public void setyPixelsPerCm(double yPixelsPerCm) {
 		this.yPixelsPerCm = yPixelsPerCm;
 	}
-
-
-	public int getTotalNumFrames() {
-		return totalNumFrames;
-	}
-
-
-	public void setTotalNumFrames(int totalNumFrames) {
-		this.totalNumFrames = totalNumFrames;
-	}
-
 
 	public String getFileName() {
 		return fileName;
