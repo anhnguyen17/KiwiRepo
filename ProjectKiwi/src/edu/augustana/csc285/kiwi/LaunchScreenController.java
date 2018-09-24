@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -32,6 +33,11 @@ public class LaunchScreenController {
 
 	@FXML
 	public void initialize() {
+
+		videoView.setOnMouseClicked(event ->{
+			System.out.println(" " + event.getX());
+			System.out.println(" " + event.getY());
+		});
 	}
 
 	public void handleBrowse() throws FileNotFoundException {
