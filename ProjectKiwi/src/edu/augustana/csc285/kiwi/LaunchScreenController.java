@@ -35,8 +35,8 @@ public class LaunchScreenController {
 	public void initialize() {
 
 		videoView.setOnMouseClicked(event ->{
-			System.out.println(" " + event.getX());
-			System.out.println(" " + event.getY());
+			System.out.println(" x = " + event.getX());
+			System.out.println(" y = " + event.getY());
 		});
 	}
 
