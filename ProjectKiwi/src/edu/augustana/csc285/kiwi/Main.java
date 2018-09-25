@@ -19,7 +19,7 @@ public class Main extends Application {
 		try {
 		
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("LaunchScreen.fxml"));
-			Scene scene = new Scene(root,800,800);
+			Scene scene = new Scene(root,650,650);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
