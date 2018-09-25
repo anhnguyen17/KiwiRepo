@@ -1,31 +1,33 @@
 package project;
 
 import java.util.*;
+
+import project.TimePoint;
+
 /**
  * 
  * @author thomasayele17
  *
  */
 public class AnimalTrack {
-	private String animalID;
+	public static final String UNNAMED_ID = "<<unassigned>>";
+	private String animalID = UNNAMED_ID;
+	
+	private List<TimePoint> positions;
 
-	public AnimalTrack(String animalID, List<TimePoint> positions) {
-		super();
-		this.animalID = animalID;
-		this.positions = positions;
+	public AnimalTrack() {
+		positions = new ArrayList<TimePoint>();
 	}
-	public String getAnimalID() {
-		return animalID;
+	
+	public boolean hasIDAssigned() {
+		return !animalID.equals(UNNAMED_ID);
 	}
-	public void setAnimalID(String animalID) {
-		this.animalID = animalID;
-	}
+	
 	public List<TimePoint> getPositions() {
 		return positions;
 	}
-	public void setPositions(List<TimePoint> positions) {
-		this.positions = positions;
+	
+	public String toString() {
+		return "AnimalTrack[id="+ animalID + ",len=" + positions.size()+"]"; 
 	}
-	private List <TimePoint> positions;
-
 }
