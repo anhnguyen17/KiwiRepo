@@ -1,6 +1,7 @@
 package project;
 
 import java.awt.*;
+
 /**
  * 
  * @author thomasayele17
@@ -8,25 +9,31 @@ import java.awt.*;
  */
 public class TimePoint {
 	private Point point;
+	private int frameNum; // time (measured in frames)
 
-	public TimePoint(Point point, int frameNumber) {
-		super();
-		this.point = point;
-		this.frameNumber = frameNumber;
+	public TimePoint(int x, int y, int frameNum) {
+		point = new Point(x, y);
+		this.frameNum = frameNum;
 	}
-	public Point getPoint() {
-		return point;
-	}
-	public void setPoint(Point point) {
-		this.point = point;
-	}
-	public int getFrameNumber() {
-		return frameNumber;
-	}
-	public void setFrameNumber(int frameNumber) {
-		this.frameNumber = frameNumber;
-	}
-	private int frameNumber; 
 
+	public int getX() {
+		return point.x;
+	}
+	
+	public int getY() {
+		return point.y;
+	}
 
+	public int getFrameNum() {
+		return frameNum;
+	}
+
+	public String toString() {
+		return "("+point.x+","+point.y+"@T="+frameNum +")";
+	}
+
+	public double getDistanceTo(TimePoint other) {
+		return point.distance(other.point);
+	}
+	
 }
