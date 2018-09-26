@@ -33,7 +33,7 @@
                   <Insets left="100.0" />
                </VBox.margin>
             </Slider>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="Submit Clear Frame">
+            <Button fx:id="SubmitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Clear Frame">
                <VBox.margin>
                   <Insets left="300.0" top="50.0" />
                </VBox.margin>

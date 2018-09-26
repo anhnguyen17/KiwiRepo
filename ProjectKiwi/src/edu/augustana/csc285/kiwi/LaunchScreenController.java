@@ -26,7 +26,7 @@ import org.opencv.imgproc.Imgproc;
 public class LaunchScreenController {
 
 	private VideoCapture capture = new VideoCapture();
-	private double clearFrameNum;
+	private int clearFrameNum;
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button BrowseButton;
@@ -72,8 +72,8 @@ public class LaunchScreenController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				if (capture.isOpened()) {
-					double frameNum = newValue.doubleValue() / sliderSeekBar.getMax()
-							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1;
+					int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
+							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
 					
 					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
 					setClearFrameNum(frameNum);
@@ -145,7 +145,7 @@ public class LaunchScreenController {
 	}
 
 	public void setClearFrameNum(double clearFrameNum) {
-		this.clearFrameNum = clearFrameNum;
+		this.clearFrameNum = (int) clearFrameNum;
 	}
 
 }
