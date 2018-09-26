@@ -20,7 +20,7 @@
       </Button>
    </top>
    <center>
-      <ImageView fx:id="videoView" fitHeight="450.0" fitWidth="550.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <ImageView fx:id="videoView" fitHeight="440.0" fitWidth="660.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets top="40.0" />
          </BorderPane.margin>
