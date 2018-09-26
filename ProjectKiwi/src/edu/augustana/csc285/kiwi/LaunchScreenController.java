@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
@@ -38,6 +40,13 @@ public class LaunchScreenController {
 		videoView.setOnMouseClicked(event ->{
 			System.out.println(" x = " + event.getX());
 			System.out.println(" y = " + event.getY());
+			
+			Circle dot = new Circle();
+			dot.setCenterX(event.getX());
+			dot.setCenterY(event.getY());
+			dot.setRadius(50);
+			dot.setFill(Paint.valueOf("RED"));
+				
 		});
 	}
 	
