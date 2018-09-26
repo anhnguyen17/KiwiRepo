@@ -76,7 +76,6 @@ public class LaunchScreenController {
 					
 					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
 					setClearFrameNum(frameNum);
-					System.out.println(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
 
