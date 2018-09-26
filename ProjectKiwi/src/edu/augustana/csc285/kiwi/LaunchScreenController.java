@@ -37,7 +37,7 @@ public class LaunchScreenController {
 	@FXML
 	public void initialize() {
 
-		videoView.setOnMouseClicked(event ->{
+		videoView.setOnMouseDragged(event ->{
 			System.out.println(" x = " + event.getX());
 			System.out.println(" y = " + event.getY());
 			
