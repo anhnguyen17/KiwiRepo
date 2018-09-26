@@ -1,28 +1,31 @@
 package project;
 
+import java.io.FileNotFoundException; 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectData {
-	
-	private List<AnimalTrack> tracks;
 	private Video video;
+	private List<AnimalTrack> tracks;
+	private List<AnimalTrack> unassignedSegments;
 	
-	public ProjectData() {
-		
+	public ProjectData(String videoFilePath) throws FileNotFoundException {
+		video = new Video(videoFilePath);
+		tracks = new ArrayList<>();
+		unassignedSegments = new ArrayList<>();
+	}
+
+	public Video getVideo() {
+		return video;
 	}
 	
 	public List<AnimalTrack> getTracks() {
 		return tracks;
 	}
-	public void setTracks(List<AnimalTrack> tracks) {
-		this.tracks = tracks;
-	}
-	public Video getVideo() {
-		return video;
-	}
-	public void setVideo(Video video) {
-		this.video = video;
-	}
-	
 
+	public List<AnimalTrack> getUnassignedSegments() {
+		return unassignedSegments;
+	}
+
+	
 }
