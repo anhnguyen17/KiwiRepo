@@ -1,21 +1,35 @@
 package edu.augustana.csc285.kiwi;
 
-import javafx.application.Platform;
+import javafx.application.Platform; 
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+<<<<<<< HEAD
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+=======
 import javafx.scene.Group;
+>>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+<<<<<<< HEAD
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+=======
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+>>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.awt.image.BufferedImage;
@@ -23,15 +37,21 @@ import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
+
+import edu.augustana.csc285.kiwi.SecondWindowController.*;
+
 import org.opencv.imgproc.Imgproc;
 
 public class LaunchScreenController {
 
 	private VideoCapture capture = new VideoCapture();
 	private int clearFrameNum;
+	private String filePath;
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button browseButton;
@@ -59,6 +79,8 @@ public class LaunchScreenController {
 		});
 	}
 	
+<<<<<<< HEAD
+=======
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
@@ -67,12 +89,14 @@ public class LaunchScreenController {
 	public void handleSubmit() {
 		
 	}
+>>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
 		Window mainWindow = videoView.getScene().getWindow();
 		File chosenFile = fileChooser.showOpenDialog(mainWindow);
+		setFilePath(chosenFile.getAbsolutePath());
 
 		if (chosenFile != null) {
 			capture.open(chosenFile.getAbsolutePath());
@@ -86,6 +110,19 @@ public class LaunchScreenController {
 				capture.release();
 			}
 		}
+	}
+	
+	@FXML
+	public void handleSubmit(ActionEvent event) throws IOException  {
+		FXMLLoader FXMLloader = new FXMLLoader(getClass().getResource("SecondWindow.fxml"));
+		Parent root1 = (Parent) FXMLloader.load();
+
+		Stage stage = new Stage();
+		stage.setScene(new Scene(root1));
+		stage.show();
+		
+		
+		
 	}
 
 	public void handleSlider() {
@@ -168,5 +205,17 @@ public class LaunchScreenController {
 	public void setClearFrameNum(double clearFrameNum) {
 		this.clearFrameNum = (int) clearFrameNum;
 	}
+
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	
 
 }

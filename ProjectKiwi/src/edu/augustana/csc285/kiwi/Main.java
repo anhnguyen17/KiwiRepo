@@ -1,6 +1,6 @@
 package edu.augustana.csc285.kiwi;
 	
-import org.opencv.core.Core;
+import org.opencv.core.Core; 
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 import javafx.fxml.FXMLLoader;
 
 
@@ -17,6 +16,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+<<<<<<< HEAD
+			
+=======
+>>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
 			BorderPane root = (BorderPane)loader.load();
 			
