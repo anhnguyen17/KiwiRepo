@@ -51,7 +51,7 @@ public class LaunchScreenController {
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
-			dot.setRadius(40);
+			dot.setRadius(5);
 			dot.setFill(Color.RED);
 			//add circle to scene
 			videoPane.getChildren().add(dot);

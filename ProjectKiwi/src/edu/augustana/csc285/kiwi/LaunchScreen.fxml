@@ -22,7 +22,10 @@
    <center>
       <BorderPane fx:id="videoPane">
          <center>
-            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin></ImageView>
          </center>
       </BorderPane>
    </center>
@@ -41,12 +44,12 @@
             </Slider>
             <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
                <VBox.margin>
-                  <Insets left="235.0" />
+                  <Insets left="227.0" />
                </VBox.margin>
             </Button>
          </children>
          <BorderPane.margin>
-            <Insets top="20.0" />
+            <Insets bottom="10.0" top="20.0" />
          </BorderPane.margin>
       </VBox>
    </bottom>
