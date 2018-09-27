@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="624.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.LaunchScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="624.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.LaunchScreenController">
    <top>
       <Button fx:id="browseButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBrowse" prefHeight="25.0" prefWidth="124.0" text="Choose your video: " BorderPane.alignment="CENTER">
          <opaqueInsets>
@@ -20,18 +20,18 @@
       </Button>
    </top>
    <center>
-      <ImageView fx:id="videoView" fitHeight="440.0" fitWidth="660.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets top="40.0" />
-         </BorderPane.margin>
-      </ImageView>
+      <BorderPane fx:id="videoPane">
+         <center>
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true" />
+         </center>
+      </BorderPane>
    </center>
    <bottom>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Drag the slider to your preferred blank frame:">
                <VBox.margin>
-                  <Insets bottom="10.0" left="200.0" top="100.0" />
+                  <Insets bottom="10.0" left="200.0" />
                </VBox.margin>
             </Label>
             <Slider fx:id="sliderSeekBar" maxWidth="600.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="600.0">
@@ -39,12 +39,15 @@
                   <Insets bottom="10.0" left="50.0" right="50.0" />
                </VBox.margin>
             </Slider>
-            <Button mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
                <VBox.margin>
                   <Insets left="235.0" />
                </VBox.margin>
             </Button>
          </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </bottom>
 </BorderPane>
