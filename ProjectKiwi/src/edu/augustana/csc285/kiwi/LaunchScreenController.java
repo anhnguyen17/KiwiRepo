@@ -57,16 +57,12 @@ public class LaunchScreenController {
 	@FXML private Button submitButton;
 	@FXML private BorderPane videoPane;
 	
-	
-	
 	@FXML
 	public void initialize() {
 
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
-			
-			
 						
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
@@ -79,13 +75,11 @@ public class LaunchScreenController {
 		});
 	}
 	
-
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
 	}
 	
-
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
