@@ -43,13 +43,11 @@ public class LaunchScreenController {
 	@FXML
 	public void initialize() {
 
-		
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
 			
-			//
-			
+						
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
