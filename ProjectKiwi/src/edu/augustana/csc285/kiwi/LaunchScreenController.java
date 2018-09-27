@@ -7,25 +7,24 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-<<<<<<< HEAD
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-=======
+
 import javafx.scene.Group;
->>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-<<<<<<< HEAD
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-=======
+
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
->>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
+
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -79,17 +78,12 @@ public class LaunchScreenController {
 		});
 	}
 	
-<<<<<<< HEAD
-=======
+
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
 	}
 	
-	public void handleSubmit() {
-		
-	}
->>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();

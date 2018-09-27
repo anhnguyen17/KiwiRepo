@@ -16,10 +16,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-<<<<<<< HEAD
-			
-=======
->>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
 			BorderPane root = (BorderPane)loader.load();
 			
