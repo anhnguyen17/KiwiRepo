@@ -16,13 +16,19 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+<<<<<<< HEAD
 			
+=======
+>>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
 			BorderPane root = (BorderPane)loader.load();
 			
 			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			
+			LaunchScreenController controller = loader.getController();
+			controller.initializeAfterSceneCreated();
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
