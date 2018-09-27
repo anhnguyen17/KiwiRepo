@@ -17,11 +17,15 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-		
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("LaunchScreen.fxml"));
-			Scene scene = new Scene(root,650,650);
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
+			BorderPane root = (BorderPane)loader.load();
+			
+			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			
+			LaunchScreenController controller = loader.getController();
+			controller.initializeAfterSceneCreated();
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -5,11 +5,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -31,23 +34,36 @@ public class LaunchScreenController {
 	private int clearFrameNum;
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
-	@FXML private Button BrowseButton;
-	@FXML private Button SubmitButton;
-
+	@FXML private Button browseButton;
+	@FXML private Button submitButton;
+	@FXML private BorderPane videoPane;
+	
+	
+	
 	@FXML
 	public void initialize() {
 
+		
 		videoView.setOnMouseClicked(event ->{
-			System.out.println(" x = " + event.getX());
-			System.out.println(" y = " + event.getY());
+			System.out.println("x = " + event.getX());
+			System.out.println("y = " + event.getY());
+			
+			//
 			
 			Circle dot = new Circle();
-			dot.setCenterX(event.getX());
-			dot.setCenterY(event.getY());
-			dot.setRadius(50);
-			dot.setFill(Paint.valueOf("RED"));
+			dot.setCenterX(event.getX() + videoView.getLayoutX());
+			dot.setCenterY(event.getY() + videoView.getLayoutY());
+			dot.setRadius(40);
+			dot.setFill(Color.RED);
+			//add circle to scene
+			videoPane.getChildren().add(dot);
 				
 		});
+	}
+	
+	public void initializeAfterSceneCreated() {
+		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
+		
 	}
 	
 	public void handleSubmit() {
