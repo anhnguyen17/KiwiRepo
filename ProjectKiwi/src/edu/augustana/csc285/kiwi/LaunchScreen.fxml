@@ -20,18 +20,18 @@
       </Button>
    </top>
    <center>
-      <BorderPane fx:id="videoPane">
-         <center>
-            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true" />
-         </center>
-      </BorderPane>
+      <ImageView fx:id="videoView" fitHeight="440.0" fitWidth="660.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets top="40.0" />
+         </BorderPane.margin>
+      </ImageView>
    </center>
    <bottom>
-      <VBox prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Drag the slider to your preferred blank frame:">
                <VBox.margin>
-                  <Insets bottom="10.0" left="200.0" />
+                  <Insets bottom="10.0" left="200.0" top="100.0" />
                </VBox.margin>
             </Label>
             <Slider fx:id="sliderSeekBar" maxWidth="600.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="600.0">
@@ -39,19 +39,12 @@
                   <Insets bottom="10.0" left="50.0" right="50.0" />
                </VBox.margin>
             </Slider>
-<<<<<<< HEAD
             <Button mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
-=======
-            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
->>>>>>> 9d7408a2f55b6f859a4d8ad66951de6be91681a6
                <VBox.margin>
                   <Insets left="235.0" />
                </VBox.margin>
             </Button>
          </children>
-         <BorderPane.margin>
-            <Insets top="20.0" />
-         </BorderPane.margin>
       </VBox>
    </bottom>
 </BorderPane>
