@@ -233,7 +233,7 @@ public class LaunchScreenController implements AutoTrackListener {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);
-			//video.setStartFrameNum(Integer.parseInt(textfieldStartFrame.getText()));
+			project.getVideo().setStartFrameNum(clearFrameNum);
 			//video.setEndFrameNum(Integer.parseInt(textfieldEndFrame.getText()));
 			autotracker = new AutoTracker();
 			// Use Observer Pattern to give autotracker a reference to this object, 
