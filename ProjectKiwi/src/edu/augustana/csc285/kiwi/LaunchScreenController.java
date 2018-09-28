@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Mat;
@@ -58,15 +59,17 @@ import org.opencv.imgproc.Imgproc;
 public class LaunchScreenController implements AutoTrackListener {
 
 	private VideoCapture capture = new VideoCapture();
-	private int clearFrameNum;
+	private int startFrameNum;
 	private String filePath = "";
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button browseButton;
 	@FXML private Button submitButton;
 	@FXML private BorderPane videoPane;
+	@FXML private ChoiceBox chickChoice;
 	
-	private List<Circle> currentDots;
+	
+	private List<Circle> currentDots = new ArrayList<>(); 
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
@@ -76,8 +79,10 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML
 	public void initialize() {
 		
+		chickChoice.getItems().add("Chick 1");
+		chickChoice.getItems().add("Chick 2");
+		chickChoice.getItems().add("Chick 3");
 		
-
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
@@ -103,10 +108,11 @@ public class LaunchScreenController implements AutoTrackListener {
 		fileChooser.setTitle("Open Video File");
 		Window mainWindow = videoView.getScene().getWindow();
 		File chosenFile = fileChooser.showOpenDialog(mainWindow);
-		this.filePath = chosenFile.getAbsolutePath();
-		System.out.println(filePath);
+		
 
 		if (chosenFile != null) {
+			this.filePath = chosenFile.getAbsolutePath();
+			System.out.println(filePath);
 			project = new ProjectData(filePath);
 			capture.open(chosenFile.getAbsolutePath());
 			Mat frame = grabFrame();
@@ -211,11 +217,11 @@ public class LaunchScreenController implements AutoTrackListener {
 	}
 
 	public double getClearFrameNum() {
-		return clearFrameNum;
+		return startFrameNum;
 	}
 
 	public void setClearFrameNum(double clearFrameNum) {
-		this.clearFrameNum = (int) clearFrameNum;
+		this.startFrameNum = (int) clearFrameNum;
 	}
 
 
@@ -233,8 +239,7 @@ public class LaunchScreenController implements AutoTrackListener {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);
-			project.getVideo().setStartFrameNum(clearFrameNum);
-			//video.setEndFrameNum(Integer.parseInt(textfieldEndFrame.getText()));
+			project.getVideo().setStartFrameNum(startFrameNum);
 			autotracker = new AutoTracker();
 			// Use Observer Pattern to give autotracker a reference to this object, 
 			// and call back to methods in this class to update progress.
@@ -242,7 +247,7 @@ public class LaunchScreenController implements AutoTrackListener {
 			// this method will start a new thread to run AutoTracker in the background
 			// so that we don't freeze up the main JavaFX UI thread.
 			autotracker.startAnalysis(project.getVideo());
-			//btnAutotrack.setText("CANCEL auto-tracking");
+			submitButton.setText("CANCEL auto-tracking");
 		} else {
 			autotracker.cancelAnalysis();			
 			submitButton.setText("Start auto-tracking");
@@ -271,7 +276,6 @@ public class LaunchScreenController implements AutoTrackListener {
 
 		for (AnimalTrack track: trackedSegments) {
 			System.out.println(track);
-//			System.out.println("  " + track.getPositions());
 		}
 		Platform.runLater(() -> { 
 			//progressAutoTrack.setProgress(1.0);
