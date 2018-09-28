@@ -21,9 +21,9 @@
    </top>
    <center>
       <BorderPane fx:id="videoPane">
-         <center>
-            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true" />
-         </center>
+         <top>
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="625.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+         </top>
       </BorderPane>
    </center>
    <bottom>
@@ -34,14 +34,14 @@
                   <Insets bottom="10.0" left="200.0" />
                </VBox.margin>
             </Label>
-            <Slider fx:id="sliderSeekBar" maxWidth="600.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="600.0">
+            <Slider fx:id="sliderSeekBar" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="600.0">
                <VBox.margin>
-                  <Insets bottom="10.0" left="50.0" right="50.0" />
+                  <Insets bottom="10.0" left="3.0" />
                </VBox.margin>
             </Slider>
             <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Submit Blank Frame">
                <VBox.margin>
-                  <Insets left="235.0" />
+                  <Insets bottom="10.0" left="235.0" />
                </VBox.margin>
             </Button>
          </children>

@@ -66,11 +66,13 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML private Button submitButton;
 	@FXML private BorderPane videoPane;
 	
+	private List<Circle> currentDots;
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
-	private Video video;
+	//private Video video;
 	
+
 	@FXML
 	public void initialize() {
 		
@@ -79,26 +81,23 @@ public class LaunchScreenController implements AutoTrackListener {
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
-			
-			
 						
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
 			dot.setRadius(5);
 			dot.setFill(Color.RED);
+			currentDots.add(dot);
 			//add circle to scene
 			videoPane.getChildren().add(dot);
 		});
 	}
 	
-
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
 	}
 	
-
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
@@ -108,7 +107,7 @@ public class LaunchScreenController implements AutoTrackListener {
 		System.out.println(filePath);
 
 		if (chosenFile != null) {
-			video = new Video(filePath);
+			project = new ProjectData(filePath);
 			capture.open(chosenFile.getAbsolutePath());
 			Mat frame = grabFrame();
 			if (frame.width() != 0) {
@@ -122,7 +121,8 @@ public class LaunchScreenController implements AutoTrackListener {
 		}
 	}
 	
-	/*@FXML
+	/*Code to move to second window
+	 * @FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("SecondWindow.fxml"));
 		
@@ -231,6 +231,8 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML
 	public void handleSubmit() {
 		if (autotracker == null || !autotracker.isRunning()) {
+			project.getVideo().setXPixelsPerCm(5.5);
+			project.getVideo().setYPixelsPerCm(5.5);
 			//video.setStartFrameNum(Integer.parseInt(textfieldStartFrame.getText()));
 			//video.setEndFrameNum(Integer.parseInt(textfieldEndFrame.getText()));
 			autotracker = new AutoTracker();
@@ -239,7 +241,7 @@ public class LaunchScreenController implements AutoTrackListener {
 			autotracker.addAutoTrackListener(this); 
 			// this method will start a new thread to run AutoTracker in the background
 			// so that we don't freeze up the main JavaFX UI thread.
-			autotracker.startAnalysis(video);
+			autotracker.startAnalysis(project.getVideo());
 			//btnAutotrack.setText("CANCEL auto-tracking");
 		} else {
 			autotracker.cancelAnalysis();			
