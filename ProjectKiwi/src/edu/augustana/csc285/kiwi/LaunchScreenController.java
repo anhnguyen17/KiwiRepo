@@ -21,7 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import javafx.scene.layout.BorderPane;
@@ -66,14 +66,16 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML private Button browseButton;
 	@FXML private Button submitButton;
 	@FXML private BorderPane videoPane;
-	@FXML private ChoiceBox chickChoice;
-	
+	@FXML private ChoiceBox<String> chickChoice;
+	@FXML private AnchorPane trackPane;
 	
 	private List<Circle> currentDots = new ArrayList<>(); 
+	
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
-	//private Video video;
+	private int colorChoice =0;
+
 	
 
 	@FXML
@@ -83,19 +85,26 @@ public class LaunchScreenController implements AutoTrackListener {
 		chickChoice.getItems().add("Chick 2");
 		chickChoice.getItems().add("Chick 3");
 		
+		Color[] color = new Color[] {Color.RED, Color.AQUA, Color.YELLOW};
+		
+
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
-						
+			
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
 			dot.setRadius(5);
-			dot.setFill(Color.RED);
+			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
 			currentDots.add(dot);
 			//add circle to scene
-			videoPane.getChildren().add(dot);
+			videoPane.getChildren().add(dot);	
 		});
+		
+		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
+				System.out.println("dropdown chose: " + newValue.intValue());
+			});
 	}
 	
 	public void initializeAfterSceneCreated() {
@@ -168,6 +177,8 @@ public class LaunchScreenController implements AutoTrackListener {
 
 		});
 	}
+	
+	
 
 	private Mat grabFrame() {
 		// init everything
