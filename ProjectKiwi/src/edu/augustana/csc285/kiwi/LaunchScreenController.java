@@ -1,6 +1,6 @@
 package edu.augustana.csc285.kiwi;
 
-import javafx.application.Platform; 
+import javafx.application.Platform;  
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,17 +8,20 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import javafx.scene.Group;
+import autotracking.AutoTrackListener;
+import autotracking.AutoTracker;
+import project.AnimalTrack;
+import project.ProjectData;
+import project.TimePoint;
+import project.Video;
 
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import javafx.scene.layout.BorderPane;
@@ -30,6 +33,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import project.AnimalTrack;
+import project.Video;
+import utils.UtilsForOpenCV;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -37,30 +43,38 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
+import autotracking.AutoTrackListener;
+import autotracking.AutoTracker;
 import edu.augustana.csc285.kiwi.SecondWindowController.*;
 
 import org.opencv.imgproc.Imgproc;
 
-public class LaunchScreenController {
+public class LaunchScreenController implements AutoTrackListener {
 
 	private VideoCapture capture = new VideoCapture();
 	private int clearFrameNum;
-	private String filePath;
+	private String filePath = "";
 	@FXML private ImageView videoView;
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button browseButton;
 	@FXML private Button submitButton;
 	@FXML private BorderPane videoPane;
 	
-	
+	private AutoTracker autotracker;
+	private ProjectData project;
+	private Stage stage;
+	private Video video;
 	
 	@FXML
 	public void initialize() {
+		
+		
 
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
@@ -75,7 +89,6 @@ public class LaunchScreenController {
 			dot.setFill(Color.RED);
 			//add circle to scene
 			videoPane.getChildren().add(dot);
-				
 		});
 	}
 	
@@ -91,9 +104,11 @@ public class LaunchScreenController {
 		fileChooser.setTitle("Open Video File");
 		Window mainWindow = videoView.getScene().getWindow();
 		File chosenFile = fileChooser.showOpenDialog(mainWindow);
-		setFilePath(chosenFile.getAbsolutePath());
+		this.filePath = chosenFile.getAbsolutePath();
+		System.out.println(filePath);
 
 		if (chosenFile != null) {
+			video = new Video(filePath);
 			capture.open(chosenFile.getAbsolutePath());
 			Mat frame = grabFrame();
 			if (frame.width() != 0) {
@@ -107,18 +122,20 @@ public class LaunchScreenController {
 		}
 	}
 	
-	@FXML
+	/*@FXML
 	public void handleSubmit(ActionEvent event) throws IOException  {
-		FXMLLoader FXMLloader = new FXMLLoader(getClass().getResource("SecondWindow.fxml"));
-		Parent root1 = (Parent) FXMLloader.load();
-
-		Stage stage = new Stage();
-		stage.setScene(new Scene(root1));
-		stage.show();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("SecondWindow.fxml"));
 		
+		BorderPane root = (BorderPane)loader.load();
+		SecondWindowController nextController = loader.getController();
+		//nextController.loadVideo("/S:/CLASS/CS/285/sample_videos/sample1.mp4"); 
+		nextController.setTxtStart("01010101");
+		Scene nextScene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
+		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
-		
-	}
+		Stage primary = (Stage) submitButton.getScene().getWindow();
+		primary.setScene(nextScene);
+	}*/
 
 	public void handleSlider() {
 
@@ -211,6 +228,55 @@ public class LaunchScreenController {
 		this.filePath = filePath;
 	}
 	
+	@FXML
+	public void handleSubmit() {
+		if (autotracker == null || !autotracker.isRunning()) {
+			//video.setStartFrameNum(Integer.parseInt(textfieldStartFrame.getText()));
+			//video.setEndFrameNum(Integer.parseInt(textfieldEndFrame.getText()));
+			autotracker = new AutoTracker();
+			// Use Observer Pattern to give autotracker a reference to this object, 
+			// and call back to methods in this class to update progress.
+			autotracker.addAutoTrackListener(this); 
+			// this method will start a new thread to run AutoTracker in the background
+			// so that we don't freeze up the main JavaFX UI thread.
+			autotracker.startAnalysis(video);
+			//btnAutotrack.setText("CANCEL auto-tracking");
+		} else {
+			autotracker.cancelAnalysis();			
+			submitButton.setText("Start auto-tracking");
+		}
+		 
+	}
+
+	// this method will get called repeatedly by the Autotracker after it analyzes each frame
+	@Override
+	public void handleTrackedFrame(Mat frame, int frameNumber, double fractionComplete) {
+		Image imgFrame = UtilsForOpenCV.matToJavaFXImage(frame);
+		// this method is being run by the AutoTracker's thread, so we must
+		// ask the JavaFX UI thread to update some visual properties
+		Platform.runLater(() -> { 
+			videoView.setImage(imgFrame);
+			//progressAutoTrack.setProgress(fractionComplete);
+			sliderSeekBar.setValue(frameNumber);
+			//textFieldCurFrameNum.setText(String.format("%05d",frameNumber));
+		});		
+	}
+
+	@Override
+	public void trackingComplete(List<AnimalTrack> trackedSegments) {
+		project.getUnassignedSegments().clear();
+		project.getUnassignedSegments().addAll(trackedSegments);
+
+		for (AnimalTrack track: trackedSegments) {
+			System.out.println(track);
+//			System.out.println("  " + track.getPositions());
+		}
+		Platform.runLater(() -> { 
+			//progressAutoTrack.setProgress(1.0);
+			submitButton.setText("Start auto-tracking");
+		});	
+		
+	}
 	
 
 }

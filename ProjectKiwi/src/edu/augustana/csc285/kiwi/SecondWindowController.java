@@ -1,13 +1,13 @@
 package edu.augustana.csc285.kiwi;
 
-	import java.io.File;
+	import java.io.File; 
 
 	import java.io.FileInputStream;
 	import java.io.FileNotFoundException;
 	import java.util.List;
 
 	import org.opencv.core.Mat;
-	
+	import org.opencv.videoio.VideoCapture;
 
 	import autotracking.AutoTrackListener;
 	import autotracking.AutoTracker;
@@ -16,13 +16,20 @@ package edu.augustana.csc285.kiwi;
 	import project.TimePoint;
 	import project.Video;
 	import javafx.application.Platform;
+	import javafx.beans.value.ChangeListener;
+	import javafx.beans.value.ObservableValue;
 	import javafx.fxml.FXML;
+	import javafx.scene.canvas.Canvas;
+	import javafx.scene.control.Alert;
+	import javafx.scene.control.Alert.AlertType;
 	import javafx.scene.control.Button;
 	import javafx.scene.control.Label;
 	import javafx.scene.control.Slider;
 	import javafx.scene.control.TextField;
 	import javafx.scene.image.Image;
 	import javafx.scene.image.ImageView;
+	import javafx.scene.layout.Pane;
+	import javafx.stage.FileChooser;
 	import javafx.stage.Stage;
 	import javafx.stage.Window;
 	import utils.UtilsForOpenCV;
@@ -35,6 +42,7 @@ package edu.augustana.csc285.kiwi;
 		@FXML private TextField textfieldEndFrame;
 		@FXML private Button btnAutotrack;
 		@FXML private Label startFrameLabel;
+		private VideoCapture capture = new VideoCapture();
 		
 		//@FXML private ProgressBar progressAutoTrack;
 
@@ -59,7 +67,7 @@ package edu.augustana.csc285.kiwi;
 //			project.getVideo().setXPixelsPerCm(5.5); //  these are just rough estimates!
 //			project.getVideo().setYPixelsPerCm(5.5);
 			
-			//sliderVideoTime.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue())); 
+			sliderVideoTime.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue())); 
 		}
 		
 		public void initializeWithStage(Stage stage) {
@@ -145,7 +153,9 @@ package edu.augustana.csc285.kiwi;
 			
 		}
 		
-		
+		public void setTxtStart(String num) {
+			textfieldStartFrame.setText(num);
+		}
 		
 	}
 
