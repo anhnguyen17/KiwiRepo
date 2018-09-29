@@ -69,6 +69,7 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML private ChoiceBox<String> chickChoice;
 	@FXML private AnchorPane trackPane;
 	
+	
 	private List<Circle> currentDots = new ArrayList<>(); 
 	
 	private AutoTracker autotracker;
@@ -87,6 +88,9 @@ public class LaunchScreenController implements AutoTrackListener {
 		
 		Color[] color = new Color[] {Color.RED, Color.AQUA, Color.YELLOW};
 		
+		AnimalTrack chick1 = new AnimalTrack("Chick 1");
+		AnimalTrack chick2 = new AnimalTrack("Chick 2");
+		AnimalTrack chick3 = new AnimalTrack("Chick 3");
 
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
