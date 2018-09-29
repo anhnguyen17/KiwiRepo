@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
@@ -16,15 +17,15 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
-			BorderPane root = (BorderPane)loader.load();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("ChickNameWindow.fxml"));
+			AnchorPane root = (AnchorPane)loader.load();
 			
 			Scene scene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			
-			TrackScreenController controller = loader.getController();
-			controller.initializeAfterSceneCreated();
+			ChickNameWindowController controller = loader.getController();
+			//controller.initializeAfterSceneCreated();
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

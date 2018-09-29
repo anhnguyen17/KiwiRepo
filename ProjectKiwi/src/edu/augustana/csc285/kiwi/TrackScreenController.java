@@ -162,22 +162,7 @@ public class TrackScreenController implements AutoTrackListener {
 			}
 		}
 	}
-	
-	/*Code to move to second window
-	 * @FXML 
-	public void handleSubmit(ActionEvent event) throws IOException  {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("SecondWindow.fxml"));
-		
-		BorderPane root = (BorderPane)loader.load();
-		SecondWindowController nextController = loader.getController();
-		//nextController.loadVideo("/S:/CLASS/CS/285/sample_videos/sample1.mp4"); 
-		nextController.setTxtStart("01010101");
-		Scene nextScene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
-		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		
-		Stage primary = (Stage) submitButton.getScene().getWindow();
-		primary.setScene(nextScene);
-	}*/
+
 
 	public void handleSlider() {
 
