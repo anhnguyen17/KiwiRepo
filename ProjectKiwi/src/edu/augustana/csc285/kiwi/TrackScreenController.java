@@ -80,22 +80,15 @@ public class TrackScreenController implements AutoTrackListener {
 	private Stage stage;
 	private int colorChoice =0;
 	private ScheduledExecutorService timer;
+	public ArrayList<String> chickNames = new ArrayList<String>();
 
 	
 
 	@FXML
 	public void initialize() {
+	
+		Color[] color = new Color[] {Color.PURPLE, Color.AQUA, Color.YELLOW};
 		
-		chickChoice.getItems().add("Chick 1");
-		chickChoice.getItems().add("Chick 2");
-		chickChoice.getItems().add("Chick 3");
-		
-		Color[] color = new Color[] {Color.RED, Color.AQUA, Color.YELLOW};
-		
-		AnimalTrack chick1 = new AnimalTrack("Chick 1");
-		AnimalTrack chick2 = new AnimalTrack("Chick 2");
-		AnimalTrack chick3 = new AnimalTrack("Chick 3");
-
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
@@ -111,9 +104,24 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 		
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
-				System.out.println("dropdown chose: " + newValue.intValue());
+				//System.out.println("dropdown chose: " + newValue.intValue());
 			});
 	}
+
+	public void setChickNames(ArrayList<String> chickName) {
+		this.chickNames = chickName;
+
+		System.out.println(chickNames.size());
+		for (int i=0; i < chickNames.size(); i++) {
+		  chickChoice.getItems().add(chickNames.get(i));
+		}
+		
+		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
+		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
+		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
+		
+	}
+
 	
 	public void removeDots() {
 		
@@ -199,27 +207,6 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 	}
 	
-	
-
-
-	public double getClearFrameNum() {
-		return startFrameNum;
-	}
-
-	public void setClearFrameNum(double clearFrameNum) {
-		this.startFrameNum = (int) clearFrameNum;
-	}
-
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	
 	@FXML
 	public void handleSubmit() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -269,6 +256,25 @@ public class TrackScreenController implements AutoTrackListener {
 		});	
 		
 	}
+	
+	public double getClearFrameNum() {
+		return startFrameNum;
+	}
+
+	public void setClearFrameNum(double clearFrameNum) {
+		this.startFrameNum = (int) clearFrameNum;
+	}
+
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
 	
 	private Mat grabFrame() {
 		// init everything

@@ -2,6 +2,7 @@ package edu.augustana.csc285.kiwi;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,11 +26,18 @@ public class ChickNameWindowController {
 	
 	 @FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("LaunchScreen.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
 		
 		BorderPane root = (BorderPane)loader.load();
 		TrackScreenController nextController = loader.getController();
-		//nextController.loadVideo("/S:/CLASS/CS/285/sample_videos/sample1.mp4"); 
+		
+		ArrayList<String> chickName = new ArrayList<String>();
+		chickName.add(chick1ID.getText()); 
+		chickName.add(chick2ID.getText()); 
+		chickName.add(chick3ID.getText()); 
+		
+		nextController.setChickNames(chickName);
+		
 
 		Scene nextScene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());
 		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
