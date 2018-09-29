@@ -82,21 +82,11 @@ public class TrackScreenController implements AutoTrackListener {
 	private ScheduledExecutorService timer;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
-	
-
 	@FXML
 	public void initialize() {
 	
 		Color[] color = new Color[] {Color.PURPLE, Color.AQUA, Color.YELLOW};
-		
-		AnimalTrack chick1 = new AnimalTrack("Chick 1");
-		AnimalTrack chick2 = new AnimalTrack("Chick 2");
-		AnimalTrack chick3 = new AnimalTrack("Chick 3");
-				
-		project.getTracks().add(chick1);
-		project.getTracks().add(chick2);
-		project.getTracks().add(chick3);
-		
+					
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
@@ -117,7 +107,7 @@ public class TrackScreenController implements AutoTrackListener {
 				//System.out.println("dropdown chose: " + newValue.intValue());
 			});
 	}
-
+	
 	public void setChickNames(ArrayList<String> chickName) {
 		this.chickNames = chickName;
 
@@ -129,6 +119,10 @@ public class TrackScreenController implements AutoTrackListener {
 		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
 		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
 		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
+		
+	//	project.getTracks().add(chick1);
+	//	project.getTracks().add(chick2);
+	//	project.getTracks().add(chick3);
 		
 	}
 
