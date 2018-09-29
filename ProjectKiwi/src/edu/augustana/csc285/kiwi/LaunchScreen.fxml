@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.LaunchScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
    <top>
       <Button fx:id="browseButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBrowse" prefHeight="25.0" prefWidth="124.0" text="Choose your video: " BorderPane.alignment="CENTER">
          <opaqueInsets>
@@ -33,10 +33,11 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="340.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking" />
-            <Label layoutX="340.0" layoutY="92.0" text="Drag the slider to your preferred start frame:" />
-            <Slider fx:id="sliderSeekBar" layoutX="169.0" layoutY="118.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="600.0" />
+            <Button fx:id="submitButton" layoutX="454.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking" />
+            <Label layoutX="436.0" layoutY="92.0" text="Drag the slider to your preferred start frame:" />
+            <Slider fx:id="sliderSeekBar" layoutX="255.0" layoutY="113.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="562.0" />
             <ChoiceBox fx:id="chickChoice" layoutX="6.0" layoutY="53.0" prefWidth="150.0" />
+            <Button fx:id="playVideoButton" layoutX="156.0" layoutY="107.0" mnemonicParsing="false" onAction="#handlePlayVideo" prefHeight="25.0" prefWidth="92.0" text="Play Video" />
          </children>
       </AnchorPane>
    </bottom>
