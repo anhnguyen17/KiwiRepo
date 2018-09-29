@@ -107,6 +107,10 @@ public class LaunchScreenController implements AutoTrackListener {
 			});
 	}
 	
+	public void removeDots() {
+		
+	}
+	
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
@@ -165,7 +169,9 @@ public class LaunchScreenController implements AutoTrackListener {
 					setClearFrameNum(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
-
+					
+					videoPane.getChildren().removeAll(currentDots);
+					
 					Platform.runLater(new Runnable() {
 						public void run() {
 							videoView.setImage(currentImage);
