@@ -1,6 +1,6 @@
 package edu.augustana.csc285.kiwi;
 
-import javafx.application.Platform;  
+import javafx.application.Platform;   
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,6 +45,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -52,11 +55,10 @@ import org.opencv.videoio.Videoio;
 
 import autotracking.AutoTrackListener;
 import autotracking.AutoTracker;
-import edu.augustana.csc285.kiwi.SecondWindowController.*;
 
 import org.opencv.imgproc.Imgproc;
 
-public class LaunchScreenController implements AutoTrackListener {
+public class TrackScreenController implements AutoTrackListener {
 
 	private VideoCapture capture = new VideoCapture();
 	private int startFrameNum;
@@ -65,9 +67,11 @@ public class LaunchScreenController implements AutoTrackListener {
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button browseButton;
 	@FXML private Button submitButton;
+	@FXML private Button playVideoButton;
 	@FXML private BorderPane videoPane;
 	@FXML private ChoiceBox<String> chickChoice;
 	@FXML private AnchorPane trackPane;
+	
 	
 	private List<Circle> currentDots = new ArrayList<>(); 
 	
@@ -75,6 +79,7 @@ public class LaunchScreenController implements AutoTrackListener {
 	private ProjectData project;
 	private Stage stage;
 	private int colorChoice =0;
+	private ScheduledExecutorService timer;
 
 	
 
@@ -111,6 +116,28 @@ public class LaunchScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		
 	}
+	
+	//Code to autoplay window - need to interact with slider
+	public void handlePlayVideo(ActionEvent event) {
+		        Runnable frameGrabber = new Runnable() {
+		            public void run() {
+		            	Mat frame = grabFrame();
+		            	
+		            	
+						Image currentImage = mat2Image(frame);
+		                Platform.runLater(new Runnable() {
+		                    @Override public void run() {
+		                    	videoView.setImage(currentImage); 
+		                    	}
+		                });
+		            }
+		        };
+		        this.timer = Executors.newSingleThreadScheduledExecutor();
+		        this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
+		        playVideoButton.setText("Stop Video"); 
+
+	}
+	
 	
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -180,52 +207,6 @@ public class LaunchScreenController implements AutoTrackListener {
 	
 	
 
-	private Mat grabFrame() {
-		// init everything
-		Mat frame = new Mat();
-
-		// check if the capture is open
-		if (this.capture.isOpened()) {
-			try {
-				// read the current frame
-				this.capture.read(frame);
-
-			} catch (Exception e) {
-				// log the error
-				System.err.println("Exception during the image elaboration: " + e);
-			}
-		}
-
-		return frame;
-	}
-
-	public static Image mat2Image(Mat frame) {
-		try {
-			return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
-		} catch (Exception e) {
-			System.err.println("Cannot convert the Mat obejct: ");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private static BufferedImage matToBufferedImage(Mat original) {
-		// init
-		BufferedImage image = null;
-		int width = original.width(), height = original.height(), channels = original.channels();
-		byte[] sourcePixels = new byte[width * height * channels];
-		original.get(0, 0, sourcePixels);
-
-		if (original.channels() > 1) {
-			image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-		} else {
-			image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-		}
-		final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
-
-		return image;
-	}
 
 	public double getClearFrameNum() {
 		return startFrameNum;
@@ -294,6 +275,54 @@ public class LaunchScreenController implements AutoTrackListener {
 		});	
 		
 	}
+	
+	private Mat grabFrame() {
+		// init everything
+		Mat frame = new Mat();
+
+		// check if the capture is open
+		if (this.capture.isOpened()) {
+			try {
+				// read the current frame
+				this.capture.read(frame);
+
+			} catch (Exception e) {
+				// log the error
+				System.err.println("Exception during the image elaboration: " + e);
+			}
+		}
+
+		return frame;
+	}
+
+	public static Image mat2Image(Mat frame) {
+		try {
+			return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
+		} catch (Exception e) {
+			System.err.println("Cannot convert the Mat obejct: ");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static BufferedImage matToBufferedImage(Mat original) {
+		// init
+		BufferedImage image = null;
+		int width = original.width(), height = original.height(), channels = original.channels();
+		byte[] sourcePixels = new byte[width * height * channels];
+		original.get(0, 0, sourcePixels);
+
+		if (original.channels() > 1) {
+			image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+		} else {
+			image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
+		}
+		final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
+
+		return image;
+	}
+
 	
 
 }

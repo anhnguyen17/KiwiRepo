@@ -23,7 +23,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			
-			LaunchScreenController controller = loader.getController();
+			TrackScreenController controller = loader.getController();
 			controller.initializeAfterSceneCreated();
 			primaryStage.show();
 		} catch(Exception e) {
