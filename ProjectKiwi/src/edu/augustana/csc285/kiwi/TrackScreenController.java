@@ -89,9 +89,19 @@ public class TrackScreenController implements AutoTrackListener {
 	
 		Color[] color = new Color[] {Color.PURPLE, Color.AQUA, Color.YELLOW};
 		
+		AnimalTrack chick1 = new AnimalTrack("Chick 1");
+		AnimalTrack chick2 = new AnimalTrack("Chick 2");
+		AnimalTrack chick3 = new AnimalTrack("Chick 3");
+				
+		project.getTracks().add(chick1);
+		project.getTracks().add(chick2);
+		project.getTracks().add(chick3);
+		
 		videoView.setOnMouseClicked(event ->{
 			System.out.println("x = " + event.getX());
 			System.out.println("y = " + event.getY());
+			
+			TimePoint pt = new TimePoint(event.getX(), event.getY(), project.getVideo().getCurrentFrameNum());
 			
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
