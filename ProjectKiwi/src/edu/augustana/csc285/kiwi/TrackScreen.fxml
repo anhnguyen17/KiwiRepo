@@ -46,11 +46,11 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="365.0" layoutY="85.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
+            <Button fx:id="submitButton" layoutX="418.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Label layoutX="308.0" layoutY="34.0" text="Drag the slider to your preferred start frame:">
+            <Label layoutX="361.0" layoutY="34.0" text="Drag the slider to your preferred start frame:">
                <font>
                   <Font size="14.0" />
                </font></Label>
@@ -64,6 +64,8 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button fx:id="backwardBtn" layoutX="225.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
+            <Button fx:id="Forward" layoutX="711.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
          </children>
       </AnchorPane>
    </bottom>

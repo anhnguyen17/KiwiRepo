@@ -67,6 +67,8 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML private Slider sliderSeekBar;
 	@FXML private Button browseButton;
 	@FXML private Button submitButton;
+	@FXML private Button backwardBtn;
+	@FXML private Button forwardBtn;
 	@FXML private Button playVideoButton;
 	@FXML private BorderPane videoPane;
 	@FXML private ChoiceBox<String> chickChoice;
@@ -89,8 +91,15 @@ public class TrackScreenController implements AutoTrackListener {
 	public void initialize() {
 	}
 	
+	public void handleBackward() {
+		
+	}
+	
+public void handleForward() {
+		
+	}
+	
 	public void drawDot(MouseEvent event) {
-		choiceBoxLabel.setText(" "); 
 		Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 		System.out.println("x = " + event.getX());
 		System.out.println("y = " + event.getY());
@@ -211,7 +220,7 @@ public class TrackScreenController implements AutoTrackListener {
 					
 					timeLabel.setText(time);
 			
-					setClearFrameNum(frameNum);
+					setFrameNum(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
 					
@@ -283,7 +292,7 @@ public class TrackScreenController implements AutoTrackListener {
 		return startFrameNum;
 	}
 
-	public void setClearFrameNum(double clearFrameNum) {
+	public void setFrameNum(double clearFrameNum) {
 		this.startFrameNum = (int) clearFrameNum;
 	}
 
