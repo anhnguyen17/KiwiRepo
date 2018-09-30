@@ -74,6 +74,7 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	
 	private List<Circle> currentDots = new ArrayList<>(); 
+	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 	
 	private AutoTracker autotracker;
 	private ProjectData project;
@@ -84,28 +85,32 @@ public class TrackScreenController implements AutoTrackListener {
 
 	@FXML
 	public void initialize() {
+	}
 	
-		Color[] color = new Color[] {Color.PURPLE, Color.AQUA, Color.YELLOW};
-					
-		videoView.setOnMouseClicked(event ->{
-			System.out.println("x = " + event.getX());
-			System.out.println("y = " + event.getY());
-			
-			TimePoint pt = new TimePoint(event.getX(), event.getY(), project.getVideo().getCurrentFrameNum());
-			
-			Circle dot = new Circle();
-			dot.setCenterX(event.getX() + videoView.getLayoutX());
-			dot.setCenterY(event.getY() + videoView.getLayoutY());
-			dot.setRadius(5);
-			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
-			currentDots.add(dot);
-			//add circle to scene
-			videoPane.getChildren().add(dot);	
+	public void drawDot(MouseEvent event) {
+		Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+		System.out.println("x = " + event.getX());
+		System.out.println("y = " + event.getY());
+
+		// TimePoint pt = new TimePoint(event.getX(), event.getY(),
+		// project.getVideo().getCurrentFrameNum());
+		Circle dot = new Circle();
+		dot.setCenterX(event.getX() + videoView.getLayoutX());
+		dot.setCenterY(event.getY() + videoView.getLayoutY());
+		dot.setRadius(5);
+		dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
+		currentDots.add(dot);
+		// add circle to scene
+		videoPane.getChildren().add(dot);
+
+		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
+			// System.out.println("dropdown chose: " + newValue.intValue());
 		});
 		
-		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
-				//System.out.println("dropdown chose: " + newValue.intValue());
-			});
+		
+		//	project.getTracks().add(chick1);
+		//	project.getTracks().add(chick2);
+		//	project.getTracks().add(chick3);
 	}
 	
 	public void setChickNames(ArrayList<String> chickName) {
@@ -120,20 +125,14 @@ public class TrackScreenController implements AutoTrackListener {
 		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
 		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
 		
-	//	project.getTracks().add(chick1);
-	//	project.getTracks().add(chick2);
-	//	project.getTracks().add(chick3);
 		
 	}
 
-	
-	public void removeDots() {
-		
-	}
+
 	
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
-		
+
 	}
 	
 	//Code to autoplay window - need to interact with slider

@@ -23,7 +23,7 @@
    <center>
       <BorderPane fx:id="videoPane">
          <top>
-            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="611.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="611.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="140.0" />
                </BorderPane.margin></ImageView>
