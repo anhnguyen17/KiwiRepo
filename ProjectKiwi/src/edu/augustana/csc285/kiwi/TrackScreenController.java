@@ -72,6 +72,8 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML private ChoiceBox<String> chickChoice;
 	@FXML private AnchorPane trackPane;
 	@FXML private Label choiceBoxLabel;
+	@FXML private Label timeLabel;
+	
 	
 	private List<Circle> currentDots = new ArrayList<>(); 
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
@@ -145,8 +147,7 @@ public class TrackScreenController implements AutoTrackListener {
 		        Runnable frameGrabber = new Runnable() {
 		            public void run() {
 		            	Mat frame = grabFrame();
-		            	
-		            	
+		     
 						Image currentImage = mat2Image(frame);
 		                Platform.runLater(new Runnable() {
 		                    @Override public void run() {
@@ -158,6 +159,8 @@ public class TrackScreenController implements AutoTrackListener {
 		        this.timer = Executors.newSingleThreadScheduledExecutor();
 		        this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
 		        playVideoButton.setText("Stop Video"); 
+		        
+		   //System.out.println(this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS));
 
 	}
 	
@@ -196,6 +199,18 @@ public class TrackScreenController implements AutoTrackListener {
 							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
 					
 					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
+			
+					int minute = (int)(frameNum/30)/60;
+					int second = (int)(frameNum/30) - minute*60;
+					String time = "";
+					if (second <10) {
+						 time = "0" +minute +":" + "0" + second;
+					} else {
+						time = "0" +minute +":" + second;
+					}
+					
+					timeLabel.setText(time);
+			
 					setClearFrameNum(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);

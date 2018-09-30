@@ -23,23 +23,43 @@
    </top>
    <center>
       <BorderPane fx:id="videoPane">
-         <top>
-            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="773.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+         <center>
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="632.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets left="40.0" />
+                  <Insets left="30.0" />
                </BorderPane.margin></ImageView>
-         </top>
+         </center>
+         <left>
+            <AnchorPane prefHeight="420.0" prefWidth="54.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="choiceBoxLabel" layoutY="190.0" prefHeight="17.0" prefWidth="147.0" text="      Choose a chick">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ChoiceBox fx:id="chickChoice" layoutX="8.0" layoutY="210.0" prefWidth="150.0" />
+               </children>
+            </AnchorPane>
+         </left>
       </BorderPane>
    </center>
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="463.0" layoutY="79.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking" />
-            <Label layoutX="425.0" layoutY="29.0" text="Drag the slider to your preferred start frame:" />
-            <Slider fx:id="sliderSeekBar" layoutX="282.0" layoutY="59.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="528.0" />
-            <ChoiceBox fx:id="chickChoice" layoutX="6.0" layoutY="53.0" prefWidth="150.0" />
-            <Button fx:id="playVideoButton" layoutX="190.0" layoutY="54.0" mnemonicParsing="false" onAction="#handlePlayVideo" prefHeight="25.0" prefWidth="92.0" text="Play Video" />
-            <Label fx:id="choiceBoxLabel" layoutX="6.0" layoutY="27.0" prefHeight="17.0" prefWidth="147.0" text="      Choose a chick">
+            <Button fx:id="submitButton" layoutX="365.0" layoutY="85.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Label layoutX="308.0" layoutY="34.0" text="Drag the slider to your preferred start frame:">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Slider fx:id="sliderSeekBar" layoutX="225.0" layoutY="62.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="546.0" />
+            <Button fx:id="playVideoButton" layoutX="45.0" layoutY="54.0" mnemonicParsing="false" onAction="#handlePlayVideo" prefHeight="25.0" prefWidth="92.0" text="Play Video">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Label fx:id="timeLabel" layoutX="782.0" layoutY="59.0" prefHeight="17.0" prefWidth="70.0" text="0:00">
                <font>
                   <Font size="14.0" />
                </font>
