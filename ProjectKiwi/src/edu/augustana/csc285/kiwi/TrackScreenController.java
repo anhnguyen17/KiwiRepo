@@ -92,11 +92,59 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	public void handleBackward() {
+		videoPane.getChildren().removeAll(currentDots);
+		double curFrameNum =  getClearFrameNum() -150;
+		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum );
+		setFrameNum(getClearFrameNum()-150);
 		
+		int minute = (int)(curFrameNum/30)/60;
+		int second = (int)(curFrameNum/30) - minute*60;
+		String time = "";
+		if (second <10) {
+			 time = "0" +minute +":" + "0" + second;
+		} else {
+			time = "0" +minute +":" + second;
+		}
+		timeLabel.setText(time);
+		Mat frame = grabFrame();
+		Image currentImage = mat2Image(frame);
+		
+		
+		Platform.runLater(new Runnable() {
+			public void run() {
+				videoView.setImage(currentImage);
+			}
+
+		});
+
 	}
 	
-public void handleForward() {
+	public void handleForward() {
+		videoPane.getChildren().removeAll(currentDots);
+		double curFrameNum =  getClearFrameNum() +150;
+		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum );
+		setFrameNum(getClearFrameNum()+150);
 		
+		int minute = (int)(curFrameNum/30)/60;
+		int second = (int)(curFrameNum/30) - minute*60;
+		String time = "";
+		if (second <10) {
+			 time = "0" +minute +":" + "0" + second;
+		} else {
+			time = "0" +minute +":" + second;
+		}
+		timeLabel.setText(time);
+		Mat frame = grabFrame();
+		Image currentImage = mat2Image(frame);
+		
+		
+		Platform.runLater(new Runnable() {
+			public void run() {
+				videoView.setImage(currentImage);
+			}
+
+		});
+		handleSlider();
 	}
 	
 	public void drawDot(MouseEvent event) {
