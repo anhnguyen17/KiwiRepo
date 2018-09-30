@@ -71,7 +71,7 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML private BorderPane videoPane;
 	@FXML private ChoiceBox<String> chickChoice;
 	@FXML private AnchorPane trackPane;
-	
+	@FXML private Label choiceBoxLabel;
 	
 	private List<Circle> currentDots = new ArrayList<>(); 
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
@@ -88,6 +88,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	public void drawDot(MouseEvent event) {
+		choiceBoxLabel.setText(" "); 
 		Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 		System.out.println("x = " + event.getX());
 		System.out.println("y = " + event.getY());
@@ -104,13 +105,17 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().add(dot);
 
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
+			if (chickChoice.getSelectionModel().getSelectedIndex() != -1) {
+				choiceBoxLabel.setText(" "); 
+			}
+
 			// System.out.println("dropdown chose: " + newValue.intValue());
 		});
 		
 		
-		//	project.getTracks().add(chick1);
-		//	project.getTracks().add(chick2);
-		//	project.getTracks().add(chick3);
+			//project.getTracks().add(chick1);
+			//project.getTracks().add(chick2);
+			//project.getTracks().add(chick3);
 	}
 	
 	public void setChickNames(ArrayList<String> chickName) {
@@ -155,7 +160,6 @@ public class TrackScreenController implements AutoTrackListener {
 		        playVideoButton.setText("Stop Video"); 
 
 	}
-	
 	
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
