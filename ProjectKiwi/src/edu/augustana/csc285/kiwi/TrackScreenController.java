@@ -1,6 +1,6 @@
 package edu.augustana.csc285.kiwi;
 
-import javafx.application.Platform;   
+import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -63,53 +63,63 @@ public class TrackScreenController implements AutoTrackListener {
 	private VideoCapture capture = new VideoCapture();
 	private int startFrameNum;
 	private String filePath = "";
-	@FXML private ImageView videoView;
-	@FXML private Slider sliderSeekBar;
-	@FXML private Button browseButton;
-	@FXML private Button submitButton;
-	@FXML private Button backwardBtn;
-	@FXML private Button forwardBtn;
-	@FXML private Button playVideoButton;
-	@FXML private BorderPane videoPane;
-	@FXML private ChoiceBox<String> chickChoice;
-	@FXML private AnchorPane trackPane;
-	@FXML private Label choiceBoxLabel;
-	@FXML private Label timeLabel;
-	
-	
-	private List<Circle> currentDots = new ArrayList<>(); 
+	@FXML
+	private ImageView videoView;
+	@FXML
+	private Slider sliderSeekBar;
+	@FXML
+	private Button browseButton;
+	@FXML
+	private Button submitButton;
+	@FXML
+	private Button backwardBtn;
+	@FXML
+	private Button forwardBtn;
+	@FXML
+	private Button playVideoButton;
+	@FXML
+	private BorderPane videoPane;
+	@FXML
+	private ChoiceBox<String> chickChoice;
+	@FXML
+	private AnchorPane trackPane;
+	@FXML
+	private Label choiceBoxLabel;
+	@FXML
+	private Label timeLabel;
+
+	private List<Circle> currentDots = new ArrayList<>();
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
-	
+
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
-	private int colorChoice =0;
+	private int colorChoice = 0;
 	private ScheduledExecutorService timer;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
 	@FXML
 	public void initialize() {
 	}
-	
+
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum =  getClearFrameNum() -150;
-		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum );
-		setFrameNum(getClearFrameNum()-150);
-		
-		int minute = (int)(curFrameNum/30)/60;
-		int second = (int)(curFrameNum/30) - minute*60;
+		double curFrameNum = getClearFrameNum() - 150;
+		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
+		setFrameNum(getClearFrameNum() - 150);
+
+		int minute = (int) (curFrameNum / 30) / 60;
+		int second = (int) (curFrameNum / 30) - minute * 60;
 		String time = "";
-		if (second <10) {
-			 time = "0" +minute +":" + "0" + second;
+		if (second < 10) {
+			time = "0" + minute + ":" + "0" + second;
 		} else {
-			time = "0" +minute +":" + second;
+			time = "0" + minute + ":" + second;
 		}
 		timeLabel.setText(time);
 		Mat frame = grabFrame();
 		Image currentImage = mat2Image(frame);
-		
-		
+
 		Platform.runLater(new Runnable() {
 			public void run() {
 				videoView.setImage(currentImage);
@@ -118,26 +128,26 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 
 	}
-	
+
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum =  getClearFrameNum() +150;
-		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum );
-		setFrameNum(getClearFrameNum()+150);
-		
-		int minute = (int)(curFrameNum/30)/60;
-		int second = (int)(curFrameNum/30) - minute*60;
+		double curFrameNum = getClearFrameNum() + 150;
+	
+		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
+		setFrameNum(getClearFrameNum() + 150);
+
+		int minute = (int) (curFrameNum / 30) / 60;
+		int second = (int) (curFrameNum / 30) - minute * 60;
 		String time = "";
-		if (second <10) {
-			 time = "0" +minute +":" + "0" + second;
+		if (second < 10) {
+			time = "0" + minute + ":" + "0" + second;
 		} else {
-			time = "0" +minute +":" + second;
+			time = "0" + minute + ":" + second;
 		}
 		timeLabel.setText(time);
 		Mat frame = grabFrame();
 		Image currentImage = mat2Image(frame);
-		
-		
+
 		Platform.runLater(new Runnable() {
 			public void run() {
 				videoView.setImage(currentImage);
@@ -146,7 +156,7 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 		handleSlider();
 	}
-	
+
 	public void drawDot(MouseEvent event) {
 		Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 		System.out.println("x = " + event.getX());
@@ -165,72 +175,68 @@ public class TrackScreenController implements AutoTrackListener {
 
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 			if (chickChoice.getSelectionModel().getSelectedIndex() != -1) {
-				choiceBoxLabel.setText(" "); 
+				choiceBoxLabel.setText(" ");
 			}
 
 			// System.out.println("dropdown chose: " + newValue.intValue());
 		});
-		
-		
-			//project.getTracks().add(chick1);
-			//project.getTracks().add(chick2);
-			//project.getTracks().add(chick3);
+
+		// project.getTracks().add(chick1);
+		// project.getTracks().add(chick2);
+		// project.getTracks().add(chick3);
 	}
-	
+
 	public void setChickNames(ArrayList<String> chickName) {
 		this.chickNames = chickName;
-
-		System.out.println(chickNames.size());
-		for (int i=0; i < chickNames.size(); i++) {
-		  chickChoice.getItems().add(chickNames.get(i));
+		for (int i = 0; i < chickNames.size(); i++) {
+			chickChoice.getItems().add(chickNames.get(i));
 		}
-		
+
 		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
 		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
 		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
-		
-		
+
 	}
 
-
-	
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
 	}
-	
-	//Code to autoplay window - need to interact with slider
+
+	// Code to autoplay window - need to interact with slider
 	public void handlePlayVideo(ActionEvent event) {
-		        Runnable frameGrabber = new Runnable() {
-		            public void run() {
-		            	Mat frame = grabFrame();
-		     
-						Image currentImage = mat2Image(frame);
-		                Platform.runLater(new Runnable() {
-		                    @Override public void run() {
-		                    	videoView.setImage(currentImage); 
-		                    	}
-		                });
-		            }
-		        };
-		        this.timer = Executors.newSingleThreadScheduledExecutor();
-		        this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
-		        playVideoButton.setText("Stop Video"); 
-		        
-		   //System.out.println(this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS));
+		Runnable frameGrabber = new Runnable() {
+			public void run() {
+				Mat frame = grabFrame();
+
+				Image currentImage = mat2Image(frame);
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						videoView.setImage(currentImage);
+					}
+				});
+			}
+		};
+		this.timer = Executors.newSingleThreadScheduledExecutor();
+		this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
+		playVideoButton.setText("Stop Video");
+		
+	
+
+		// System.out.println(this.timer.scheduleAtFixedRate(frameGrabber, 0, 10,
+		// TimeUnit.MILLISECONDS));
 
 	}
-	
+
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
 		Window mainWindow = videoView.getScene().getWindow();
 		File chosenFile = fileChooser.showOpenDialog(mainWindow);
-		
 
 		if (chosenFile != null) {
 			this.filePath = chosenFile.getAbsolutePath();
-			System.out.println(filePath);
 			project = new ProjectData(filePath);
 			capture.open(chosenFile.getAbsolutePath());
 			Mat frame = grabFrame();
@@ -245,7 +251,6 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 
-
 	public void handleSlider() {
 
 		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
@@ -254,26 +259,25 @@ public class TrackScreenController implements AutoTrackListener {
 				if (capture.isOpened()) {
 					int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
 							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
-					
+
 					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
-			
-					int minute = (int)(frameNum/30)/60;
-					int second = (int)(frameNum/30) - minute*60;
+
+					int minute = (int) (frameNum / 30) / 60;
+					int second = (int) (frameNum / 30) - minute * 60;
 					String time = "";
-					if (second <10) {
-						 time = "0" +minute +":" + "0" + second;
+					if (second < 10) {
+						time = "0" + minute + ":" + "0" + second;
 					} else {
-						time = "0" +minute +":" + second;
+						time = "0" + minute + ":" + second;
 					}
-					
 					timeLabel.setText(time);
-			
+
 					setFrameNum(frameNum);
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
-					
+
 					videoPane.getChildren().removeAll(currentDots);
-					
+
 					Platform.runLater(new Runnable() {
 						public void run() {
 							videoView.setImage(currentImage);
@@ -285,7 +289,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 		});
 	}
-	
+
 	@FXML
 	public void handleSubmit() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -293,32 +297,33 @@ public class TrackScreenController implements AutoTrackListener {
 			project.getVideo().setYPixelsPerCm(5.5);
 			project.getVideo().setStartFrameNum(startFrameNum);
 			autotracker = new AutoTracker();
-			// Use Observer Pattern to give autotracker a reference to this object, 
+			// Use Observer Pattern to give autotracker a reference to this object,
 			// and call back to methods in this class to update progress.
-			autotracker.addAutoTrackListener(this); 
+			autotracker.addAutoTrackListener(this);
 			// this method will start a new thread to run AutoTracker in the background
 			// so that we don't freeze up the main JavaFX UI thread.
 			autotracker.startAnalysis(project.getVideo());
 			submitButton.setText("CANCEL auto-tracking");
 		} else {
-			autotracker.cancelAnalysis();			
+			autotracker.cancelAnalysis();
 			submitButton.setText("Start auto-tracking");
 		}
-		 
+
 	}
 
-	// this method will get called repeatedly by the Autotracker after it analyzes each frame
+	// this method will get called repeatedly by the Autotracker after it analyzes
+	// each frame
 	@Override
 	public void handleTrackedFrame(Mat frame, int frameNumber, double fractionComplete) {
 		Image imgFrame = UtilsForOpenCV.matToJavaFXImage(frame);
 		// this method is being run by the AutoTracker's thread, so we must
 		// ask the JavaFX UI thread to update some visual properties
-		Platform.runLater(() -> { 
+		Platform.runLater(() -> {
 			videoView.setImage(imgFrame);
-			//progressAutoTrack.setProgress(fractionComplete);
+			// progressAutoTrack.setProgress(fractionComplete);
 			sliderSeekBar.setValue(frameNumber);
-			//textFieldCurFrameNum.setText(String.format("%05d",frameNumber));
-		});		
+			// textFieldCurFrameNum.setText(String.format("%05d",frameNumber));
+		});
 	}
 
 	@Override
@@ -326,16 +331,16 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getUnassignedSegments().clear();
 		project.getUnassignedSegments().addAll(trackedSegments);
 
-		for (AnimalTrack track: trackedSegments) {
+		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
 		}
-		Platform.runLater(() -> { 
-			//progressAutoTrack.setProgress(1.0);
+		Platform.runLater(() -> {
+			// progressAutoTrack.setProgress(1.0);
 			submitButton.setText("Start auto-tracking");
-		});	
-		
+		});
+
 	}
-	
+
 	public double getClearFrameNum() {
 		return startFrameNum;
 	}
@@ -344,17 +349,14 @@ public class TrackScreenController implements AutoTrackListener {
 		this.startFrameNum = (int) clearFrameNum;
 	}
 
-
 	public String getFilePath() {
 		return filePath;
 	}
 
-
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-	
-	
+
 	private Mat grabFrame() {
 		// init everything
 		Mat frame = new Mat();
@@ -401,7 +403,5 @@ public class TrackScreenController implements AutoTrackListener {
 
 		return image;
 	}
-
-	
 
 }
