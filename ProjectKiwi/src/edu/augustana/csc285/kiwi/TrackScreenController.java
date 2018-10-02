@@ -104,9 +104,9 @@ public class TrackScreenController implements AutoTrackListener {
 
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum = getClearFrameNum() - 150;
+		double curFrameNum = getClearFrameNum() - 30;
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() - 150);
+		setFrameNum(getClearFrameNum() - 30);
 
 		int minute = (int) (curFrameNum / 30) / 60;
 		int second = (int) (curFrameNum / 30) - minute * 60;
@@ -131,10 +131,10 @@ public class TrackScreenController implements AutoTrackListener {
 
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum = getClearFrameNum() + 150;
-	
+		double curFrameNum = getClearFrameNum() + 30;
+
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() + 150);
+		setFrameNum(getClearFrameNum() + 30);
 
 		int minute = (int) (curFrameNum / 30) / 60;
 		int second = (int) (curFrameNum / 30) - minute * 60;
@@ -174,11 +174,7 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().add(dot);
 
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
-			if (chickChoice.getSelectionModel().getSelectedIndex() != -1) {
-				choiceBoxLabel.setText(" ");
-			}
 
-			// System.out.println("dropdown chose: " + newValue.intValue());
 		});
 
 		// project.getTracks().add(chick1);
@@ -191,10 +187,6 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int i = 0; i < chickNames.size(); i++) {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
-
-		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
-		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
-		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
 
 	}
 
@@ -221,8 +213,6 @@ public class TrackScreenController implements AutoTrackListener {
 		this.timer = Executors.newSingleThreadScheduledExecutor();
 		this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
 		playVideoButton.setText("Stop Video");
-		
-	
 
 		// System.out.println(this.timer.scheduleAtFixedRate(frameGrabber, 0, 10,
 		// TimeUnit.MILLISECONDS));
@@ -249,6 +239,14 @@ public class TrackScreenController implements AutoTrackListener {
 				capture.release();
 			}
 		}
+
+		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
+		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
+		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
+
+		project.getTracks().add(0, chick1);
+		project.getTracks().add(1, chick2);
+		project.getTracks().add(2, chick3);
 	}
 
 	public void handleSlider() {
