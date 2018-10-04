@@ -103,6 +103,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void handleBackward() {
+		
 		videoPane.getChildren().removeAll(currentDots);
 		double curFrameNum = getClearFrameNum() - 30;
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
@@ -164,14 +165,20 @@ public class TrackScreenController implements AutoTrackListener {
 
 		// TimePoint pt = new TimePoint(event.getX(), event.getY(),
 		// project.getVideo().getCurrentFrameNum());
-		Circle dot = new Circle();
-		dot.setCenterX(event.getX() + videoView.getLayoutX());
-		dot.setCenterY(event.getY() + videoView.getLayoutY());
-		dot.setRadius(5);
-		dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
-		currentDots.add(dot);
-		// add circle to scene
-		videoPane.getChildren().add(dot);
+
+		try {
+			Circle dot = new Circle();
+			dot.setCenterX(event.getX() + videoView.getLayoutX());
+			dot.setCenterY(event.getY() + videoView.getLayoutY());
+			dot.setRadius(5);
+			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
+			currentDots.add(dot);
+			// add circle to scene
+			videoPane.getChildren().add(dot);
+		} catch (Exception e) {
+			System.err.println("Choose a chick");
+
+		}
 
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 
