@@ -1,6 +1,6 @@
 package edu.augustana.csc285.kiwi;
 
-import javafx.application.Platform;
+import javafx.application.Platform; 
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -159,7 +159,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void drawDot(MouseEvent event) {
-		Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+		Color[] color = new Color[] { Color.BLACK ,Color.PURPLE, Color.AQUA, Color.YELLOW };
 		System.out.println("x = " + event.getX());
 		System.out.println("y = " + event.getY());
 
@@ -171,7 +171,7 @@ public class TrackScreenController implements AutoTrackListener {
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
 			dot.setRadius(5);
-			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
+			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()+1]);
 			currentDots.add(dot);
 			// add circle to scene
 			videoPane.getChildren().add(dot);
@@ -202,29 +202,26 @@ public class TrackScreenController implements AutoTrackListener {
 
 	}
 
-	// Code to autoplay window - need to interact with slider
-	public void handlePlayVideo(ActionEvent event) {
-		Runnable frameGrabber = new Runnable() {
-			public void run() {
-				Mat frame = grabFrame();
-
-				Image currentImage = mat2Image(frame);
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						videoView.setImage(currentImage);
-					}
-				});
-			}
-		};
-		this.timer = Executors.newSingleThreadScheduledExecutor();
-		this.timer.scheduleAtFixedRate(frameGrabber, 0, 10, TimeUnit.MILLISECONDS);
-		playVideoButton.setText("Stop Video");
-
-		// System.out.println(this.timer.scheduleAtFixedRate(frameGrabber, 0, 10,
-		// TimeUnit.MILLISECONDS));
-
-	}
+	// Code to calibrate
+	/*public void handleCalibration(MouseEvent event) {
+	
+		Circle dot1 = new Circle();
+		dot1.setCenterX(event.getX() + videoView.getLayoutX());
+		dot1.setCenterY(event.getY() + videoView.getLayoutY());
+		dot1.setRadius(5);
+		dot1.setFill(Color.WHITE);
+		// add circle to scene
+		videoPane.getChildren().add(dot1);
+		
+		Circle dot2 = new Circle();
+		dot2.setCenterX(event.getX() + videoView.getLayoutX());
+		dot2.setCenterY(event.getY() + videoView.getLayoutY());
+		dot2.setRadius(5);
+		dot2.setFill(Color.WHITE);
+		// add circle to scene
+		videoPane.getChildren().add(dot1);
+		
+	}*/
 
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();

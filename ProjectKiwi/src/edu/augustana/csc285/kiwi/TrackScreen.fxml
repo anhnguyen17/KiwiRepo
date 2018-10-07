@@ -55,7 +55,7 @@
                   <Font size="14.0" />
                </font></Label>
             <Slider fx:id="sliderSeekBar" layoutX="225.0" layoutY="62.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="546.0" />
-            <Button fx:id="playVideoButton" layoutX="45.0" layoutY="54.0" mnemonicParsing="false" onAction="#handlePlayVideo" prefHeight="25.0" prefWidth="92.0" text="Play Video">
+            <Button fx:id="playVideoButton" layoutX="45.0" layoutY="54.0" mnemonicParsing="false" onAction="#handleCalibration" prefHeight="25.0" prefWidth="92.0" text="Calibration">
                <font>
                   <Font size="14.0" />
                </font></Button>
