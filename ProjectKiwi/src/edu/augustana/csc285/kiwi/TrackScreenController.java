@@ -63,61 +63,46 @@ public class TrackScreenController implements AutoTrackListener {
 	private VideoCapture capture = new VideoCapture();
 	private int startFrameNum;
 	private String filePath = "";
-	@FXML
-	private ImageView videoView;
-	@FXML
-	private Slider sliderSeekBar;
-	@FXML
-	private Button browseButton;
-	@FXML
-	private Button submitButton;
-	@FXML
-	private Button backwardBtn;
-	@FXML
-	private Button forwardBtn;
-	@FXML
-	private Button playVideoButton;
-	@FXML
-	private BorderPane videoPane;
-	@FXML
-	private ChoiceBox<String> chickChoice;
-	@FXML
-	private AnchorPane trackPane;
-	@FXML
-	private Label choiceBoxLabel;
-	@FXML
-	private Label timeLabel;
+	@FXML private ImageView videoView;
+	@FXML private Slider sliderSeekBar;
+	@FXML private Button browseButton;
+	@FXML private Button submitButton;
+	@FXML private Button backwardBtn;
+	@FXML private Button forwardBtn;
+	@FXML private Button playVideoButton;
+	@FXML private BorderPane videoPane;
+	@FXML private ChoiceBox<String> chickChoice;
+	@FXML private AnchorPane trackPane;
+	@FXML private Label timeLabel;
+	@FXML private ChoiceBox<Integer> timeStepCb;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+	private int[] timeStep = new int[] { 1, 3, 5,10 };
 
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
-	private int colorChoice = 0;
 	private ScheduledExecutorService timer;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
 	@FXML
 	public void initialize() {
+		timeStepCb.getItems().add(1);
+		timeStepCb.getItems().add(3);
+		timeStepCb.getItems().add(5);
+		timeStepCb.getItems().add(10);
+		
 	}
 
 	public void handleBackward() {
-		
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum = getClearFrameNum() - 30;
+		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()-1];
+		double curFrameNum = getClearFrameNum() - 30*time;
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() - 30);
-
-		int minute = (int) (curFrameNum / 30) / 60;
-		int second = (int) (curFrameNum / 30) - minute * 60;
-		String time = "";
-		if (second < 10) {
-			time = "0" + minute + ":" + "0" + second;
-		} else {
-			time = "0" + minute + ":" + second;
-		}
-		timeLabel.setText(time);
+		setFrameNum(getClearFrameNum() - 30*time);
+		setTimeLabel(curFrameNum);
+		
 		Mat frame = grabFrame();
 		Image currentImage = mat2Image(frame);
 
@@ -132,20 +117,12 @@ public class TrackScreenController implements AutoTrackListener {
 
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-		double curFrameNum = getClearFrameNum() + 30;
-
+		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		double curFrameNum = getClearFrameNum() + (30*time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() + 30);
-
-		int minute = (int) (curFrameNum / 30) / 60;
-		int second = (int) (curFrameNum / 30) - minute * 60;
-		String time = "";
-		if (second < 10) {
-			time = "0" + minute + ":" + "0" + second;
-		} else {
-			time = "0" + minute + ":" + second;
-		}
-		timeLabel.setText(time);
+		setFrameNum(getClearFrameNum() + (30*time));
+		setTimeLabel(curFrameNum);
+		
 		Mat frame = grabFrame();
 		Image currentImage = mat2Image(frame);
 
@@ -153,9 +130,7 @@ public class TrackScreenController implements AutoTrackListener {
 			public void run() {
 				videoView.setImage(currentImage);
 			}
-
 		});
-		handleSlider();
 	}
 
 	public void drawDot(MouseEvent event) {
@@ -163,8 +138,6 @@ public class TrackScreenController implements AutoTrackListener {
 		System.out.println("x = " + event.getX());
 		System.out.println("y = " + event.getY());
 
-		// TimePoint pt = new TimePoint(event.getX(), event.getY(),
-		// project.getVideo().getCurrentFrameNum());
 
 		try {
 			Circle dot = new Circle();
@@ -179,7 +152,6 @@ public class TrackScreenController implements AutoTrackListener {
 			System.err.println("Choose a chick");
 
 		}
-
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 
 		});
@@ -202,27 +174,6 @@ public class TrackScreenController implements AutoTrackListener {
 
 	}
 
-	// Code to calibrate
-	/*public void handleCalibration(MouseEvent event) {
-	
-		Circle dot1 = new Circle();
-		dot1.setCenterX(event.getX() + videoView.getLayoutX());
-		dot1.setCenterY(event.getY() + videoView.getLayoutY());
-		dot1.setRadius(5);
-		dot1.setFill(Color.WHITE);
-		// add circle to scene
-		videoPane.getChildren().add(dot1);
-		
-		Circle dot2 = new Circle();
-		dot2.setCenterX(event.getX() + videoView.getLayoutX());
-		dot2.setCenterY(event.getY() + videoView.getLayoutY());
-		dot2.setRadius(5);
-		dot2.setFill(Color.WHITE);
-		// add circle to scene
-		videoPane.getChildren().add(dot1);
-		
-	}*/
-
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
@@ -230,15 +181,12 @@ public class TrackScreenController implements AutoTrackListener {
 		File chosenFile = fileChooser.showOpenDialog(mainWindow);
 
 		if (chosenFile != null) {
-			this.filePath = chosenFile.getAbsolutePath();
-			project = new ProjectData(filePath);
+			project = new ProjectData(chosenFile.getAbsolutePath());
 			capture.open(chosenFile.getAbsolutePath());
 			Mat frame = grabFrame();
 			if (frame.width() != 0) {
-
 				Image imageToShow = mat2Image(frame);
 				videoView.setImage(imageToShow);
-
 			} else {
 				capture.release();
 			}
@@ -263,18 +211,9 @@ public class TrackScreenController implements AutoTrackListener {
 							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
 
 					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
-
-					int minute = (int) (frameNum / 30) / 60;
-					int second = (int) (frameNum / 30) - minute * 60;
-					String time = "";
-					if (second < 10) {
-						time = "0" + minute + ":" + "0" + second;
-					} else {
-						time = "0" + minute + ":" + second;
-					}
-					timeLabel.setText(time);
-
+					setTimeLabel(frameNum);
 					setFrameNum(frameNum);
+					
 					Mat frame = grabFrame();
 					Image currentImage = mat2Image(frame);
 
@@ -350,31 +289,29 @@ public class TrackScreenController implements AutoTrackListener {
 	public void setFrameNum(double clearFrameNum) {
 		this.startFrameNum = (int) clearFrameNum;
 	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	
+	public void setTimeLabel(double curFrameNum) {
+		int minute = (int) (curFrameNum / 30) / 60;
+		int second = (int) (curFrameNum / 30) - minute * 60;
+		String time = "";
+		if (second < 10) {
+			time = "0" + minute + ":" + "0" + second;
+		} else {
+			time = "0" + minute + ":" + second;
+		}
+		timeLabel.setText(time);
 	}
 
 	private Mat grabFrame() {
-		// init everything
 		Mat frame = new Mat();
 
-		// check if the capture is open
 		if (this.capture.isOpened()) {
 			try {
-				// read the current frame
 				this.capture.read(frame);
-
 			} catch (Exception e) {
-				// log the error
 				System.err.println("Exception during the image elaboration: " + e);
 			}
 		}
-
 		return frame;
 	}
 

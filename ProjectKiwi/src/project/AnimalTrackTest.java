@@ -25,7 +25,7 @@ class AnimalTrackTest {
 		
 		assertEquals(pt4, track1.getTimePointAtTime(150));
 		assertEquals(pt3, track1.getTimePointAtTime(120));
-		assertEquals(null, track1.getTimePointAtTime(110));
+		assertEquals(null,track1.getTimePointAtTime(110));
 		assertEquals(pt2, track1.getTimePointAtTime(50));
 		assertEquals(pt1, track1.getTimePointAtTime(10));
 		
