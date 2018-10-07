@@ -88,10 +88,10 @@ public class TrackScreenController implements AutoTrackListener {
 
 	@FXML
 	public void initialize() {
-		timeStepCb.getItems().add(1);
-		timeStepCb.getItems().add(3);
-		timeStepCb.getItems().add(5);
-		timeStepCb.getItems().add(10);
+		for (int i = 0; i < timeStep.length ; i++) {
+			timeStepCb.getItems().add(timeStep[i]);
+		}
+		
 		
 	}
 
@@ -117,6 +117,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
+	
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 		double curFrameNum = getClearFrameNum() + (30*time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
@@ -134,11 +135,6 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void drawDot(MouseEvent event) {
-		Color[] color = new Color[] { Color.BLACK ,Color.PURPLE, Color.AQUA, Color.YELLOW };
-		System.out.println("x = " + event.getX());
-		System.out.println("y = " + event.getY());
-
-
 		try {
 			Circle dot = new Circle();
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
