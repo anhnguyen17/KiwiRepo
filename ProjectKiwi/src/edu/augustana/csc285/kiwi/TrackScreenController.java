@@ -69,7 +69,6 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML private Button submitButton;
 	@FXML private Button backwardBtn;
 	@FXML private Button forwardBtn;
-	@FXML private Button playVideoButton;
 	@FXML private BorderPane videoPane;
 	@FXML private ChoiceBox<String> chickChoice;
 	@FXML private AnchorPane trackPane;
@@ -228,7 +227,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	@FXML
-	public void handleSubmit() {
+	public void handleAutoTracking() {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);

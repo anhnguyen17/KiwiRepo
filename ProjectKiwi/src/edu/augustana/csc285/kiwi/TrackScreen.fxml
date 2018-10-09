@@ -46,7 +46,7 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="418.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
+            <Button fx:id="submitButton" layoutX="418.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleAutoTracking" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
                <font>
                   <Font size="14.0" />
                </font></Button>
