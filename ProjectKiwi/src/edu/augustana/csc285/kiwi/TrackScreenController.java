@@ -91,46 +91,43 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		
+		sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue())); 
 		
+
+	}
+	public void showFrameAt(int frameNum) {
+		if (autotracker == null || !autotracker.isRunning()) {
+			project.getVideo().setCurrentFrameNum(frameNum);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
+			videoView.setImage(curFrame);
+		
+			
+			
+		}		
 	}
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		// can we call the change to seconds method in the Video class?
 		double curFrameNum = getClearFrameNum() - (30*time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		setFrameNum(getClearFrameNum() - 30*time);
 		setTimeLabel(curFrameNum);
-		
-		Mat frame = grabFrame();
-		Image currentImage = mat2Image(frame);
-
-		Platform.runLater(new Runnable() {
-			public void run() {
-				videoView.setImage(currentImage);
-			}
-
-		});
-
+		showFrameAt((int)curFrameNum);
+		sliderSeekBar.setValue((int)curFrameNum);
 	}
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-	
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		// can we call the change to seconds method in the Video class?
 		double curFrameNum = getClearFrameNum() + (30*time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		setFrameNum(getClearFrameNum() + (30*time));
 		setTimeLabel(curFrameNum);
-		
-		Mat frame = grabFrame();
-		Image currentImage = mat2Image(frame);
-
-		Platform.runLater(new Runnable() {
-			public void run() {
-				videoView.setImage(currentImage);
-			}
-		});
+		showFrameAt((int)curFrameNum);
+		sliderSeekBar.setValue((int)curFrameNum);
 	}
 	
 	public void drawDot(MouseEvent event) {
@@ -168,25 +165,15 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
 	}
+
 	@FXML
-	public void handleBrowse() throws FileNotFoundException {
+	public void handleBrowse()  {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
-		Window mainWindow = videoView.getScene().getWindow();
-		File chosenFile = fileChooser.showOpenDialog(mainWindow);
-
+		File chosenFile = fileChooser.showOpenDialog(stage);
 		if (chosenFile != null) {
-			project = new ProjectData(chosenFile.getAbsolutePath());
-			capture.open(chosenFile.getAbsolutePath());
-			Mat frame = grabFrame();
-			if (frame.width() != 0) {
-				Image imageToShow = mat2Image(frame);
-				videoView.setImage(imageToShow);
-			} else {
-				capture.release();
-			}
-		}
-
+			loadVideo(chosenFile.getPath());
+		}	
 		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
 		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
 		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
@@ -194,38 +181,21 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getTracks().add(0, chick1);
 		project.getTracks().add(1, chick2);
 		project.getTracks().add(2, chick3);
+	
 	}
-	@FXML
-	public void handleSlider() {
+	
+	public void loadVideo(String filePath) {
+		try {
+			project = new ProjectData(filePath);
+			Video video = project.getVideo();
+			sliderSeekBar.setMax(video.getTotalNumFrames()-1);
+			showFrameAt(0);
+		} catch (FileNotFoundException e) {			
+			e.printStackTrace();
+		}
 
-		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (capture.isOpened()) {
-					int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
-							* capture.get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
-
-					capture.set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
-					setTimeLabel(frameNum);
-					setFrameNum(frameNum);
-					
-					Mat frame = grabFrame();
-					Image currentImage = mat2Image(frame);
-
-					videoPane.getChildren().removeAll(currentDots);
-
-					Platform.runLater(new Runnable() {
-						public void run() {
-							videoView.setImage(currentImage);
-						}
-
-					});
-				}
-			}
-
-		});
 	}
-
+	//how do we update the label as the tracking happens. 
 	@FXML
 	public void handleAutoTracking() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -276,11 +246,11 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 
 	}
-
+	// Maybe get Empty frame from Video class?
 	public double getClearFrameNum() {
 		return startFrameNum;
 	}
-
+	//same thing for this
 	public void setFrameNum(double clearFrameNum) {
 		this.startFrameNum = (int) clearFrameNum;
 	}
@@ -297,45 +267,5 @@ public class TrackScreenController implements AutoTrackListener {
 		timeLabel.setText(time);
 	}
 
-	private Mat grabFrame() {
-		Mat frame = new Mat();
-
-		if (this.capture.isOpened()) {
-			try {
-				this.capture.read(frame);
-			} catch (Exception e) {
-				System.err.println("Exception during the image elaboration: " + e);
-			}
-		}
-		return frame;
-	}
-
-	public static Image mat2Image(Mat frame) {
-		try {
-			return SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
-		} catch (Exception e) {
-			System.err.println("Cannot convert the Mat obejct: ");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private static BufferedImage matToBufferedImage(Mat original) {
-		// init
-		BufferedImage image = null;
-		int width = original.width(), height = original.height(), channels = original.channels();
-		byte[] sourcePixels = new byte[width * height * channels];
-		original.get(0, 0, sourcePixels);
-
-		if (original.channels() > 1) {
-			image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-		} else {
-			image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_GRAY);
-		}
-		final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
-
-		return image;
-	}
 
 }
