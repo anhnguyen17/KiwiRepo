@@ -94,11 +94,11 @@ public class TrackScreenController implements AutoTrackListener {
 		
 		
 	}
-
+	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()-1];
-		double curFrameNum = getClearFrameNum() - 30*time;
+		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		double curFrameNum = getClearFrameNum() - (30*time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		setFrameNum(getClearFrameNum() - 30*time);
 		setTimeLabel(curFrameNum);
@@ -114,7 +114,7 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 
 	}
-
+	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 	
@@ -133,7 +133,7 @@ public class TrackScreenController implements AutoTrackListener {
 			}
 		});
 	}
-
+	
 	public void drawDot(MouseEvent event) {
 		try {
 			Circle dot = new Circle();
@@ -169,7 +169,7 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
 	}
-
+	@FXML
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
@@ -196,7 +196,7 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getTracks().add(1, chick2);
 		project.getTracks().add(2, chick3);
 	}
-
+	@FXML
 	public void handleSlider() {
 
 		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
@@ -285,7 +285,7 @@ public class TrackScreenController implements AutoTrackListener {
 	public void setFrameNum(double clearFrameNum) {
 		this.startFrameNum = (int) clearFrameNum;
 	}
-	
+
 	public void setTimeLabel(double curFrameNum) {
 		int minute = (int) (curFrameNum / 30) / 60;
 		int second = (int) (curFrameNum / 30) - minute * 60;
