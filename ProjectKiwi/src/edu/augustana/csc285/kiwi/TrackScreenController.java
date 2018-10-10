@@ -62,7 +62,6 @@ public class TrackScreenController implements AutoTrackListener {
 
 	private VideoCapture capture = new VideoCapture();
 	private int startFrameNum;
-	private String filePath = "";
 	@FXML
 	private ImageView videoView;
 	@FXML
@@ -93,7 +92,6 @@ public class TrackScreenController implements AutoTrackListener {
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
-	private ScheduledExecutorService timer;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
 	@FXML
@@ -105,7 +103,10 @@ public class TrackScreenController implements AutoTrackListener {
 		sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue()));
 
 	}
+	public void initializeAfterSceneCreated() {
+		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
+	}
 	public void showFrameAt(int frameNum) {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setCurrentFrameNum(frameNum);
@@ -114,12 +115,10 @@ public class TrackScreenController implements AutoTrackListener {
 
 		}
 	}
-
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		// can we call the change to seconds method in the Video class?
 		double curFrameNum = getClearFrameNum() - (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		setFrameNum(getClearFrameNum() - 30 * time);
@@ -127,12 +126,10 @@ public class TrackScreenController implements AutoTrackListener {
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
 	}
-
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		// can we call the change to seconds method in the Video class?
 		double curFrameNum = getClearFrameNum() + (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		setFrameNum(getClearFrameNum() + (30 * time));
@@ -140,7 +137,6 @@ public class TrackScreenController implements AutoTrackListener {
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
 	}
-
 	public void drawDot(MouseEvent event) {
 		try {
 			Circle dot = new Circle();
@@ -167,12 +163,6 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
-
-	public void initializeAfterSceneCreated() {
-		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
-
-	}
-
 	@FXML
 	public void handleBrowse() {
 		FileChooser fileChooser = new FileChooser();
