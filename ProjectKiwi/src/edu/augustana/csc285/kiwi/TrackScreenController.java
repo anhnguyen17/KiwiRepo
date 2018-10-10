@@ -84,6 +84,10 @@ public class TrackScreenController implements AutoTrackListener {
 	private Label timeLabel;
 	@FXML
 	private ChoiceBox<Integer> timeStepCb;
+	@FXML 
+	private Label availableAuto;
+	@FXML 
+	private ChoiceBox<AnimalTrack> availAutoChoiceBox;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
@@ -112,16 +116,19 @@ public class TrackScreenController implements AutoTrackListener {
 			project.getVideo().setCurrentFrameNum(frameNum);
 			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
 			videoView.setImage(curFrame);
-
 		}
 	}
 	@FXML
 	public void handleBackward() {
-		videoPane.getChildren().removeAll(currentDots);
+		
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum - (30 * time);
+		if(project.getVideo().getCurrentFrameNum()-project.getVideo().convertSecondsToFrameNums((double)time) < 0) {
+			
+		} else {
+		videoPane.getChildren().removeAll(currentDots);
 		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 
 		startFrameNum = (int) curFrameNum;
@@ -129,21 +136,26 @@ public class TrackScreenController implements AutoTrackListener {
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
+		}
 	}
 	@FXML
 	public void handleForward() {
-		videoPane.getChildren().removeAll(currentDots);
+		
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum + (30 * time);
+		if(project.getVideo().getCurrentFrameNum() + project.getVideo().convertSecondsToFrameNums((double) time) > project.getVideo().getTotalNumFrames()){
+			
+		} else {
+		videoPane.getChildren().removeAll(currentDots);
 		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-
 		startFrameNum = (int) curFrameNum;
 
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
+		}
 	}
 	public void drawDot(MouseEvent event) {
 		try {
@@ -237,7 +249,12 @@ public class TrackScreenController implements AutoTrackListener {
 
 		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
+			availAutoChoiceBox.getItems().add(track);
 		}
+		
+		//for (int i = 0; i < chickNames.size(); i++) {
+		//	chickChoice.getItems().add(chickNames.get(i));
+		//}
 		Platform.runLater(() -> {
 			// progressAutoTrack.setProgress(1.0);
 			submitButton.setText("Start auto-tracking");
