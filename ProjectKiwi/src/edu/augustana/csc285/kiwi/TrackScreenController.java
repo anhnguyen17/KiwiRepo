@@ -60,7 +60,6 @@ import org.opencv.imgproc.Imgproc;
 
 public class TrackScreenController implements AutoTrackListener {
 
-	private VideoCapture capture = new VideoCapture();
 	private int startFrameNum;
 	private String filePath = "";
 	@FXML
@@ -121,7 +120,7 @@ public class TrackScreenController implements AutoTrackListener {
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum - (30 * time);
-		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
+		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		
 		startFrameNum = (int) curFrameNum;
 		
@@ -136,7 +135,7 @@ public class TrackScreenController implements AutoTrackListener {
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum + (30 * time);
-		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
+		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
 		
 		startFrameNum = (int) curFrameNum;
 		

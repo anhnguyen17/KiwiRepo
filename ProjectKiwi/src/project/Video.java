@@ -62,6 +62,10 @@ public class Video {
 		return (int) vidCap.get(Videoio.CAP_PROP_FRAME_COUNT);
 	}
 	
+	public VideoCapture getVidCap() {
+		return vidCap;
+	}
+	
 	public int getEmptyFrameNum() {
 		return emptyFrameNum;
 	}
