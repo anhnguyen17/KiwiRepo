@@ -114,7 +114,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 		}
 	}
-
+	
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -122,7 +122,9 @@ public class TrackScreenController implements AutoTrackListener {
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum - (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(startFrameNum - 30 * time);
+		
+		startFrameNum = (int) curFrameNum;
+		
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
@@ -135,7 +137,9 @@ public class TrackScreenController implements AutoTrackListener {
 		// can we call the change to seconds method in the Video class?
 		double curFrameNum = startFrameNum + (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(startFrameNum + (30 * time));
+		
+		startFrameNum = (int) curFrameNum;
+		
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
@@ -245,11 +249,6 @@ public class TrackScreenController implements AutoTrackListener {
 			submitButton.setText("Start auto-tracking");
 		});
 
-	}
-
-	// same thing for this
-	public void setFrameNum(double clearFrameNum) {
-		this.startFrameNum = (int) clearFrameNum;
 	}
 
 	public void setTimeLabel(double curFrameNum) {
