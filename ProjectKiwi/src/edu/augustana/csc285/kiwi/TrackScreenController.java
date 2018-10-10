@@ -18,6 +18,7 @@ import project.TimePoint;
 import project.Video;
 
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -100,6 +101,8 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 
+		timeStepCb.getSelectionModel().selectFirst();
+		
 		sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue()));
 
 	}
@@ -115,6 +118,8 @@ public class TrackScreenController implements AutoTrackListener {
 
 		}
 	}
+	
+	//set default time step to 1
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -129,7 +134,10 @@ public class TrackScreenController implements AutoTrackListener {
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
+
 	}
+	
+	//set default time step to 1
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -144,6 +152,7 @@ public class TrackScreenController implements AutoTrackListener {
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
+		
 	}
 	public void drawDot(MouseEvent event) {
 		try {
