@@ -89,15 +89,16 @@ public class TrackScreenController implements AutoTrackListener {
 	private Label timeLabel;
 
 	private List<Circle> currentDots = new ArrayList<>();
-	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+
 
 	private AutoTracker autotracker;
 	private ProjectData project;
-	private Stage stage;
-	private int colorChoice = 0;
 	private ScheduledExecutorService timer;
-	public ArrayList<String> chickNames = new ArrayList<String>();
-
+	private ArrayList<String> chickNames = new ArrayList<String>();
+	private AnimalTrack chick1;
+	private AnimalTrack chick2;
+	private AnimalTrack chick3;
+	
 	@FXML
 	public void initialize() {
 	}
@@ -187,7 +188,15 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int i = 0; i < chickNames.size(); i++) {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
-
+		
+		chick1 = new AnimalTrack(chickName.get(0));
+		chick2 = new AnimalTrack(chickName.get(1));
+		chick3 = new AnimalTrack(chickName.get(2));
+		
+	//	project.getTracks().add(0, chick1);
+	//	project.getTracks().add(1, chick2);
+	//	project.getTracks().add(2, chick3); 
+		
 	}
 
 	public void initializeAfterSceneCreated() {
@@ -239,14 +248,6 @@ public class TrackScreenController implements AutoTrackListener {
 				capture.release();
 			}
 		}
-
-		AnimalTrack chick1 = new AnimalTrack(chickNames.get(0));
-		AnimalTrack chick2 = new AnimalTrack(chickNames.get(1));
-		AnimalTrack chick3 = new AnimalTrack(chickNames.get(2));
-
-		project.getTracks().add(0, chick1);
-		project.getTracks().add(1, chick2);
-		project.getTracks().add(2, chick3);
 	}
 
 	public void handleSlider() {
