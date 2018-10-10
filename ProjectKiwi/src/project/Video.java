@@ -61,7 +61,7 @@ public class Video {
 	public int getTotalNumFrames() {
 		return (int) vidCap.get(Videoio.CAP_PROP_FRAME_COUNT);
 	}
-
+	
 	public int getEmptyFrameNum() {
 		return emptyFrameNum;
 	}

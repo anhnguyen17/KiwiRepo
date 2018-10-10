@@ -120,9 +120,9 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().removeAll(currentDots);
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 		// can we call the change to seconds method in the Video class?
-		double curFrameNum = getClearFrameNum() - (30 * time);
+		double curFrameNum = startFrameNum - (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() - 30 * time);
+		setFrameNum(startFrameNum - 30 * time);
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
@@ -133,9 +133,9 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().removeAll(currentDots);
 		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 		// can we call the change to seconds method in the Video class?
-		double curFrameNum = getClearFrameNum() + (30 * time);
+		double curFrameNum = startFrameNum + (30 * time);
 		capture.set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-		setFrameNum(getClearFrameNum() + (30 * time));
+		setFrameNum(startFrameNum + (30 * time));
 		setTimeLabel(curFrameNum);
 		showFrameAt((int) curFrameNum);
 		sliderSeekBar.setValue((int) curFrameNum);
@@ -245,11 +245,6 @@ public class TrackScreenController implements AutoTrackListener {
 			submitButton.setText("Start auto-tracking");
 		});
 
-	}
-
-	// Maybe get Empty frame from Video class?
-	public double getClearFrameNum() {
-		return startFrameNum;
 	}
 
 	// same thing for this
