@@ -61,7 +61,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class TrackScreenController implements AutoTrackListener {
 
-	private int startFrameNum;
+	//private int startFrameNum;
 
 	@FXML
 	private ImageView videoView;
@@ -303,6 +303,7 @@ public class TrackScreenController implements AutoTrackListener {
 			FrameBtn.setText("End Frame");
 		}else {
 			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
+			FrameBtn.setText("Start Frame");
 		}
 	}
 
