@@ -121,9 +121,6 @@ public class TrackScreenController implements AutoTrackListener {
 			videoView.setImage(curFrame);
 		}
 	}
-
-
-	//need to add code to set time automatically to 1
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -146,8 +143,6 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-
-		// can we call the change to seconds method in the Video class?
 		int frameNum = project.getVideo().getCurFrameNum() + (30 * time);
 
 		if (frameNum <= project.getVideo().getTotalNumFrames()) {
@@ -194,24 +189,20 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	@FXML
 	public void handleSlider() {
-
+		videoPane.getChildren().removeAll(currentDots);
 		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
 						* project.getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
-
-				//project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
 				showFrameAt(frameNum);
 				setTimeLabel(frameNum);
-
 				project.getVideo().setCurFrameNum(frameNum);
 
 			}
 
 		});
 	}
-
 	public void loadVideo(String filePath) {
 		try {
 			project = new ProjectData(filePath);
@@ -223,7 +214,6 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
-	// how do we update the label as the tracking happens.
 	@FXML
 	public void handleAutoTracking() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -290,6 +280,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeLabel.setText(time);
 	}
+	//this method allows us to set the start and end frame for the auto tracking. 
 	@FXML
 	public void handleFrame() {
 		if (FrameBtn.getText().equals("Start Frame")) {
