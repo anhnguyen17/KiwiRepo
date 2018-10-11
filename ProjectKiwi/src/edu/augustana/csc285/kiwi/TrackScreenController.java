@@ -60,9 +60,6 @@ import autotracking.AutoTracker;
 import org.opencv.imgproc.Imgproc;
 
 public class TrackScreenController implements AutoTrackListener {
-
-	//private int startFrameNum;
-
 	@FXML
 	private ImageView videoView;
 	@FXML
@@ -226,9 +223,6 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
-
-
-
 	// how do we update the label as the tracking happens.
 	@FXML
 	public void handleAutoTracking() {
