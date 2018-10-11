@@ -18,6 +18,7 @@ import project.TimePoint;
 import project.Video;
 
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -84,6 +85,10 @@ public class TrackScreenController implements AutoTrackListener {
 	private Label timeLabel;
 	@FXML
 	private ChoiceBox<Integer> timeStepCb;
+	@FXML 
+	private Label availableAuto;
+	@FXML 
+	private ChoiceBox<AnimalTrack> availAutoChoiceBox;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
@@ -101,10 +106,9 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int i = 0; i < timeStep.length; i++) {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
-
-		//sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue()));
-	
+		timeStepCb.getSelectionModel().selectFirst();
 		
+
 
 	}
 	public void initializeAfterSceneCreated() {
@@ -116,17 +120,16 @@ public class TrackScreenController implements AutoTrackListener {
 			project.getVideo().setCurrentFrameNum(frameNum);
 			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
 			videoView.setImage(curFrame);
-
 		}
 	}
 	
+
 	//need to add code to set time automatically to 1
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-		if (timeStepCb.getSelectionModel().getSelectedIndex() != -1) {
-			time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		}
+	    time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		
 		
 		
 		int frameNum = project.getVideo().getCurFrameNum() - (30 * time);
@@ -137,13 +140,13 @@ public class TrackScreenController implements AutoTrackListener {
 		sliderSeekBar.setValue((int) frameNum);
 		project.getVideo().setCurFrameNum(frameNum); 
 		}
-	}
+}
+	
+	
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-		if (timeStepCb.getSelectionModel().getSelectedIndex() != -1) {
-			time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		}
+		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 
 		// can we call the change to seconds method in the Video class?
 		int frameNum = project.getVideo().getCurFrameNum() + (30 * time);
@@ -268,7 +271,12 @@ public class TrackScreenController implements AutoTrackListener {
 
 		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
+			availAutoChoiceBox.getItems().add(track);
 		}
+		
+		//for (int i = 0; i < chickNames.size(); i++) {
+		//	chickChoice.getItems().add(chickNames.get(i));
+		//}
 		Platform.runLater(() -> {
 			// progressAutoTrack.setProgress(1.0);
 			submitButton.setText("Start auto-tracking");
