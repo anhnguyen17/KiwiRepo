@@ -88,6 +88,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private List<Circle> currentDots = new ArrayList<>();
 	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 	private int[] timeStep = new int[] { 1, 3, 5, 10 };
+	private int time =1;
+
 
 	private AutoTracker autotracker;
 	private ProjectData project;
@@ -100,7 +102,9 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 
-		sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue()));
+		//sliderSeekBar.valueProperty().addListener((obs, oldV, newV) -> showFrameAt(newV.intValue()));
+	
+		
 
 	}
 	public void initializeAfterSceneCreated() {
@@ -115,35 +119,41 @@ public class TrackScreenController implements AutoTrackListener {
 
 		}
 	}
+	
+	//need to add code to set time automatically to 1
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		if (timeStepCb.getSelectionModel().getSelectedIndex() != -1) {
+			time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		}
+		
+		
+		int frameNum = project.getVideo().getCurFrameNum() - (30 * time);
+		if (frameNum >= 0) {
 
-		// can we call the change to seconds method in the Video class?
-		double curFrameNum = startFrameNum - (30 * time);
-		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-
-		startFrameNum = (int) curFrameNum;
-
-		setTimeLabel(curFrameNum);
-		showFrameAt((int) curFrameNum);
-		sliderSeekBar.setValue((int) curFrameNum);
+		setTimeLabel(frameNum);
+		showFrameAt((int) frameNum);
+		sliderSeekBar.setValue((int) frameNum);
+		project.getVideo().setCurFrameNum(frameNum); 
+		}
 	}
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
-		int time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		if (timeStepCb.getSelectionModel().getSelectedIndex() != -1) {
+			time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		}
 
 		// can we call the change to seconds method in the Video class?
-		double curFrameNum = startFrameNum + (30 * time);
-		project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, curFrameNum);
-
-		startFrameNum = (int) curFrameNum;
-
-		setTimeLabel(curFrameNum);
-		showFrameAt((int) curFrameNum);
-		sliderSeekBar.setValue((int) curFrameNum);
+		int frameNum = project.getVideo().getCurFrameNum() + (30 * time);
+		
+		if (frameNum <= project.getVideo().getTotalNumFrames()) {
+			setTimeLabel(frameNum);
+			showFrameAt((int) frameNum);
+			sliderSeekBar.setValue((int) frameNum);
+			project.getVideo().setCurFrameNum(frameNum); 
+		}
 	}
 	public void drawDot(MouseEvent event) {
 		try {
@@ -180,6 +190,25 @@ public class TrackScreenController implements AutoTrackListener {
 			loadVideo(chosenFile.getPath());
 		}
 	}
+	
+	public void handleSlider() {
+
+		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
+							* project.getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
+
+					//project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
+					showFrameAt(frameNum);
+					setTimeLabel(frameNum);
+					
+					project.getVideo().setCurFrameNum(frameNum);
+				
+			}
+
+		});
+	}
 
 	public void loadVideo(String filePath) {
 		try {
@@ -192,6 +221,8 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
+	
+	
 
 	// how do we update the label as the tracking happens.
 	@FXML
@@ -199,7 +230,7 @@ public class TrackScreenController implements AutoTrackListener {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);
-			project.getVideo().setStartFrameNum(startFrameNum);
+			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
 			autotracker = new AutoTracker();
 			// Use Observer Pattern to give autotracker a reference to this object,
 			// and call back to methods in this class to update progress.

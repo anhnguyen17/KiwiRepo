@@ -14,7 +14,7 @@ public class Video {
 	private int emptyFrameNum;
 	private int startFrameNum;
 	private int endFrameNum;
-	
+	private int curFrameNum;
 	private double xPixelsPerCm;
 	private double yPixelsPerCm;
 	private Rectangle arenaBounds; 
@@ -34,6 +34,15 @@ public class Video {
 		int frameWidth = (int)vidCap.get(Videoio.CAP_PROP_FRAME_WIDTH);
 		int frameHeight = (int)vidCap.get(Videoio.CAP_PROP_FRAME_HEIGHT);
 		this.arenaBounds = new Rectangle(0,0,frameWidth,frameHeight);
+	}
+	
+	
+	public int getCurFrameNum() {
+		return curFrameNum;
+	}
+	
+	public void setCurFrameNum(int curFrameNum) {
+		this.curFrameNum = curFrameNum;
 	}
 	
 	public void setCurrentFrameNum(int seekFrame) {
