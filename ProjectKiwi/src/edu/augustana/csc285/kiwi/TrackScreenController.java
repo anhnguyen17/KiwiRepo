@@ -46,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -90,7 +91,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private ChoiceBox<AnimalTrack> availAutoChoiceBox;
 
 	private List<Circle> currentDots = new ArrayList<>();
-	private Color[] color = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+	//add up to 10 colors
+	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 	private int[] timeStep = new int[] { 1, 3, 5, 10 };
 	private int time =1;
 
@@ -114,6 +116,7 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
 	}
+	
 	public void showFrameAt(int frameNum) {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setCurrentFrameNum(frameNum);
@@ -158,7 +161,7 @@ public class TrackScreenController implements AutoTrackListener {
 			dot.setCenterX(event.getX() + videoView.getLayoutX());
 			dot.setCenterY(event.getY() + videoView.getLayoutY());
 			dot.setRadius(5);
-			dot.setFill(color[chickChoice.getSelectionModel().getSelectedIndex()]);
+			dot.setFill(chickColors[chickChoice.getSelectionModel().getSelectedIndex()]);
 			currentDots.add(dot);
 			// add circle to scene
 			videoPane.getChildren().add(dot);
