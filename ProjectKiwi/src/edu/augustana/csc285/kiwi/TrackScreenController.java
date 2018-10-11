@@ -75,6 +75,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private Button backwardBtn;
 	@FXML
 	private Button forwardBtn;
+	@FXML 
+	private Button FrameBtn;
 	@FXML
 	private BorderPane videoPane;
 	@FXML
@@ -107,7 +109,7 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
-		
+
 
 
 	}
@@ -122,27 +124,27 @@ public class TrackScreenController implements AutoTrackListener {
 			videoView.setImage(curFrame);
 		}
 	}
-	
+
 
 	//need to add code to set time automatically to 1
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
-	    time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		
-		
-		
+		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+
+
+
 		int frameNum = project.getVideo().getCurFrameNum() - (30 * time);
 		if (frameNum >= 0) {
 
-		setTimeLabel(frameNum);
-		showFrameAt((int) frameNum);
-		sliderSeekBar.setValue((int) frameNum);
-		project.getVideo().setCurFrameNum(frameNum); 
+			setTimeLabel(frameNum);
+			showFrameAt((int) frameNum);
+			sliderSeekBar.setValue((int) frameNum);
+			project.getVideo().setCurFrameNum(frameNum); 
 		}
-}
-	
-	
+	}
+
+
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -150,7 +152,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 		// can we call the change to seconds method in the Video class?
 		int frameNum = project.getVideo().getCurFrameNum() + (30 * time);
-		
+
 		if (frameNum <= project.getVideo().getTotalNumFrames()) {
 			setTimeLabel(frameNum);
 			showFrameAt((int) frameNum);
@@ -193,21 +195,21 @@ public class TrackScreenController implements AutoTrackListener {
 			loadVideo(chosenFile.getPath());
 		}
 	}
-	
+	@FXML
 	public void handleSlider() {
 
 		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
-							* project.getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
+				int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
+						* project.getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
 
-					//project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
-					showFrameAt(frameNum);
-					setTimeLabel(frameNum);
-					
-					project.getVideo().setCurFrameNum(frameNum);
-				
+				//project.getVideo().getVidCap().set(Videoio.CAP_PROP_POS_FRAMES, frameNum);
+				showFrameAt(frameNum);
+				setTimeLabel(frameNum);
+
+				project.getVideo().setCurFrameNum(frameNum);
+
 			}
 
 		});
@@ -224,8 +226,8 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
-	
-	
+
+
 
 	// how do we update the label as the tracking happens.
 	@FXML
@@ -233,7 +235,6 @@ public class TrackScreenController implements AutoTrackListener {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);
-			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
 			autotracker = new AutoTracker();
 			// Use Observer Pattern to give autotracker a reference to this object,
 			// and call back to methods in this class to update progress.
@@ -273,7 +274,7 @@ public class TrackScreenController implements AutoTrackListener {
 			System.out.println(track);
 			availAutoChoiceBox.getItems().add(track);
 		}
-		
+
 		//for (int i = 0; i < chickNames.size(); i++) {
 		//	chickChoice.getItems().add(chickNames.get(i));
 		//}
@@ -295,4 +296,14 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeLabel.setText(time);
 	}
+	@FXML
+	public void handleFrame() {
+		if (FrameBtn.getText().equals("Start Frame")) {
+			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
+			FrameBtn.setText("End Frame");
+		}else {
+			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
+		}
+	}
+
 }
