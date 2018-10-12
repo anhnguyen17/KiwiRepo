@@ -55,7 +55,7 @@
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Label layoutX="361.0" layoutY="34.0" text="Drag the slider to your preferred start frame:">
+            <Label fx:id="instructionLabel" layoutX="392.0" layoutY="34.0" text="Select your preferred start time:">
                <font>
                   <Font size="14.0" />
                </font></Label>
@@ -73,7 +73,7 @@
             <Button fx:id="Forward" layoutX="711.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
             <ChoiceBox fx:id="timeStepCb" layoutX="225.0" layoutY="116.0" prefHeight="25.0" prefWidth="70.0" />
             <Label layoutX="252.0" layoutY="120.0" text="sec" />
-            <Button fx:id="FrameBtn" layoutX="34.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Frame" />
+            <Button fx:id="FrameBtn" layoutX="34.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
          </children>
       </AnchorPane>
    </bottom>

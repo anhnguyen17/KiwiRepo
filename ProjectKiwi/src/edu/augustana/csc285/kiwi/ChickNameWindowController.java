@@ -23,36 +23,39 @@ public class ChickNameWindowController {
 
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
-	
+
 
 	public void initialize() {
 
 	}
-
-	
 	@FXML 
-	
-	public void handleUpdateNumChicks(ActionEvent event)   {
-		
+	public void handleUpdateNumChicks()   {
+
 		for ( Label lb : chickIDLables) {
 			gridChickNames.getChildren().remove(lb);				
 		}
 		for (TextField tf : chickIDTextFields) {
 			gridChickNames.getChildren().remove(tf);			
-			
+
 		}
 		chickIDTextFields.clear();
+		
+		try {
 		int numChicks = Integer.parseInt(chickNum.getText());
 		for (int i = 0; i < numChicks; i++) {
 			TextField tf = new TextField();
 			Label lb= new Label();
+		
 			chickIDTextFields.add(tf);
 			chickIDLables.add(lb);
 			gridChickNames.add(lb, 0, i);
-			lb.setText("ChickID " + (i+1));
+			lb.setText("CHICKID" + (i+1) + ":");
 			gridChickNames.add(tf, 1, i);			
 		}
-
+		} 
+		catch (NumberFormatException e){
+			
+		}
 	}
 	@FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {

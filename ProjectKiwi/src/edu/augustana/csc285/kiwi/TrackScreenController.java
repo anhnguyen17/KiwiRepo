@@ -4,61 +4,29 @@ import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-
 import autotracking.AutoTrackListener;
 import autotracking.AutoTracker;
 import project.AnimalTrack;
 import project.ProjectData;
-import project.TimePoint;
 import project.Video;
-
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import project.AnimalTrack;
-import project.Video;
 import utils.UtilsForOpenCV;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
-
-import autotracking.AutoTrackListener;
-import autotracking.AutoTracker;
-
-import org.opencv.imgproc.Imgproc;
 
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
@@ -83,6 +51,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private AnchorPane trackPane;
 	@FXML
 	private Label timeLabel;
+	@FXML
+	private Label instructionLabel;
 	@FXML
 	private ChoiceBox<Integer> timeStepCb;
 	@FXML 
@@ -116,7 +86,7 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
 	}
-	
+
 	public void showFrameAt(int frameNum) {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setCurrentFrameNum(frameNum);
@@ -286,12 +256,13 @@ public class TrackScreenController implements AutoTrackListener {
 	//this method allows us to set the start and end frame for the auto tracking. 
 	@FXML
 	public void handleFrame() {
-		if (FrameBtn.getText().equals("Start Frame")) {
+		if (FrameBtn.getText().equals("Start Time")) {
 			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
-			FrameBtn.setText("End Frame");
+			FrameBtn.setText("End Time");
+			instructionLabel.setText("Select your prefered end time:");
 		}else {
 			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
-			FrameBtn.setText("Start Frame");
+			FrameBtn.setText("Start Time");
 		}
 	}
 
