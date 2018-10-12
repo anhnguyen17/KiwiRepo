@@ -182,6 +182,9 @@ public class TrackScreenController implements AutoTrackListener {
 			Video video = project.getVideo();
 			sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 			showFrameAt(0);
+			for(int x = 0; x< chickNames.size(); x++) {
+				project.addToTracks(x, chickNames);	
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

@@ -42,6 +42,10 @@ public class AnimalTrack {
 		return positions.get(positions.size()-1);
 	}
 	
+	public String getID() {
+		return this.animalID;
+	}
+	
 	public String toString() {
 		int startFrame = positions.get(0).getFrameNum();
 		int endFrame = getFinalTimePoint().getFrameNum();

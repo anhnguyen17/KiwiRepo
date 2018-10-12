@@ -26,6 +26,22 @@ public class ProjectData {
 	public List<AnimalTrack> getUnassignedSegments() {
 		return unassignedSegments;
 	}
+	
+	public void addToTracks(int chickNum, ArrayList<String> names) {
+		AnimalTrack tempTrack = null;
+		
+		//see if getting names correctly: Checked
+		//System.out.println(names.get(chickNum));
+		
+		tempTrack = new AnimalTrack(names.get(chickNum));
+		
+		//should be adding the new AnimalTrack to project data tracks.
+		tracks.add(tempTrack);
+		System.out.println(tracks.get(chickNum).getID());
+		//System.out.println(chickNum);
+		//System.out.println(tracks.toString());
+		//System.out.println("Made it");
 
 	
+}
 }
