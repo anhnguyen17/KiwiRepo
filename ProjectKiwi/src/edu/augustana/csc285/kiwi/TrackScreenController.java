@@ -42,7 +42,7 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	private Button forwardBtn;
 	@FXML 
-	private Button FrameBtn;
+	private Button frameBtn;
 	@FXML
 	private BorderPane videoPane;
 	@FXML
@@ -256,13 +256,14 @@ public class TrackScreenController implements AutoTrackListener {
 	//this method allows us to set the start and end frame for the auto tracking. 
 	@FXML
 	public void handleFrame() {
-		if (FrameBtn.getText().equals("Start Time")) {
+		if (frameBtn.getText().equals("Start Time")) {
 			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
-			FrameBtn.setText("End Time");
+			frameBtn.setText("End Time");
 			instructionLabel.setText("Select your prefered end time:");
 		}else {
 			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
-			FrameBtn.setText("Start Time");
+			frameBtn.setText("Start Time");
+			instructionLabel.setText("Select your prefered start time:");
 		}
 	}
 

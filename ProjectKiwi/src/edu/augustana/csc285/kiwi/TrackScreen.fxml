@@ -73,7 +73,7 @@
             <Button fx:id="Forward" layoutX="711.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
             <ChoiceBox fx:id="timeStepCb" layoutX="225.0" layoutY="116.0" prefHeight="25.0" prefWidth="70.0" />
             <Label layoutX="252.0" layoutY="120.0" text="sec" />
-            <Button fx:id="FrameBtn" layoutX="34.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
+            <Button fx:id="frameBtn" layoutX="34.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
          </children>
       </AnchorPane>
    </bottom>
