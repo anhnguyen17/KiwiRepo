@@ -62,7 +62,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	private List<Circle> currentDots = new ArrayList<>();
 	//add up to 10 colors
-	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
+	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW,Color.RED,Color.GREEN,Color.PINK,Color.WHITE,Color.GRAY };
 	private double[] timeStep = new double[] { 0.5, 1, 2, 3, 5 };
 	private double time =1;
 	private String filePath;
