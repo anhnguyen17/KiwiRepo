@@ -1,5 +1,7 @@
 package edu.augustana.csc285.kiwi;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +13,35 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import project.Video;
+import utils.UtilsForOpenCV;
 
 public class ChickNameWindowController {
 	@FXML private Button submitButton;
+	@FXML private Button undoButton;
+	@FXML private Button browseButton;
+	@FXML private ImageView videoView;
 	@FXML private TextField chickNum;
+	@FXML private BorderPane videoPane;
 
 	@FXML private GridPane gridChickNames;
 
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
+	private List<Circle> currentDots = new ArrayList<>();
+	
+	private Video vid;
+	private Window stage;
 
 
 	public void initialize() {
@@ -57,6 +76,33 @@ public class ChickNameWindowController {
 			
 		}
 	}
+	public void handleBrowse() throws FileNotFoundException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Video File");
+		File chosenFile = fileChooser.showOpenDialog(stage);
+		if (chosenFile != null) {
+			vid = new Video(chosenFile.getAbsolutePath());
+			vid.setCurrentFrameNum(0);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(vid.readFrame());
+			videoView.setImage(curFrame);
+		}
+	}
+	
+	public void handleUndo() {
+		videoPane.getChildren().removeAll(currentDots);
+	}
+	
+	public void drawDot(MouseEvent event) {
+			Circle dot = new Circle();
+			dot.setCenterX(event.getX() + videoView.getLayoutX());
+			dot.setCenterY(event.getY() + videoView.getLayoutY());
+			dot.setRadius(3);
+			dot.setFill(Color.BLACK);
+			currentDots.add(dot);
+			videoPane.getChildren().add(dot);
+	}
+
+	
 	@FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
@@ -71,6 +117,7 @@ public class ChickNameWindowController {
 		}
 
 		nextController.setChickNames(chickNames);
+		nextController.setFilePath(vid.getFilePath()); 
 
 
 		Scene nextScene = new Scene(root,root.getPrefWidth(),root.getPrefHeight());

@@ -65,8 +65,10 @@ public class TrackScreenController implements AutoTrackListener {
 	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
 	private int[] timeStep = new int[] { 1, 3, 5, 10 };
 	private int time =1;
+	private String filePath;
 
 
+	
 	private AutoTracker autotracker;
 	private ProjectData project;
 	private Stage stage;
@@ -82,6 +84,15 @@ public class TrackScreenController implements AutoTrackListener {
 
 
 	}
+	
+	public String getFilePath() {
+		return filePath;
+	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 
@@ -98,8 +109,6 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-
-
 
 		int frameNum = project.getVideo().getCurFrameNum() - (30 * time);
 		if (frameNum >= 0) {
@@ -153,12 +162,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	@FXML
 	public void handleBrowse() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Video File");
-		File chosenFile = fileChooser.showOpenDialog(stage);
-		if (chosenFile != null) {
-			loadVideo(chosenFile.getPath());
-		}
+			loadVideo(getFilePath());
 	}
 	@FXML
 	public void handleSlider() {
