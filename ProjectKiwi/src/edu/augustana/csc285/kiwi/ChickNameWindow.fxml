@@ -50,6 +50,17 @@
             <ImageView fx:id="videoView" fitHeight="314.0" fitWidth="387.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" />
          </center>
       </BorderPane>
-      <Button fx:id="undoButton" layoutX="431.0" layoutY="426.0" mnemonicParsing="false" onAction="#handleUndo" text="Undo" />
+      <Button fx:id="undoButton" layoutX="431.0" layoutY="426.0" mnemonicParsing="false" onAction="#handleUndo" text="Undo">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <TextField fx:id="calibrationNum" layoutX="636.0" layoutY="429.0" prefHeight="25.0" prefWidth="111.0" />
+      <Label layoutX="502.0" layoutY="431.0" prefHeight="20.0" prefWidth="122.0" text="Choose calibration:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="755.0" layoutY="433.0" text="cm" />
    </children>
 </AnchorPane>

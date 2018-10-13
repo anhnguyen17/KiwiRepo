@@ -54,7 +54,7 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="418.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleAutoTracking" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
+            <Button fx:id="submitButton" layoutX="490.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleAutoTracking" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
                <font>
                   <Font size="14.0" />
                </font></Button>
@@ -68,11 +68,11 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="backwardBtn" layoutX="225.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
+            <Button fx:id="backwardBtn" layoutX="308.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
             <Button fx:id="Forward" layoutX="711.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
-            <ChoiceBox fx:id="timeStepCb" layoutX="225.0" layoutY="116.0" prefHeight="25.0" prefWidth="70.0" />
-            <Label layoutX="252.0" layoutY="120.0" text="sec" />
-            <Button fx:id="frameBtn" layoutX="34.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
+            <ChoiceBox fx:id="timeStepCb" layoutX="308.0" layoutY="116.0" prefHeight="25.0" prefWidth="70.0" />
+            <Label layoutX="343.0" layoutY="120.0" text="sec" />
+            <Button fx:id="frameBtn" layoutX="225.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
          </children>
       </AnchorPane>
    </bottom>

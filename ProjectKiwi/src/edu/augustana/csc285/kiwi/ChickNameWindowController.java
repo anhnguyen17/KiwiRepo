@@ -32,6 +32,7 @@ public class ChickNameWindowController {
 	@FXML private Button browseButton;
 	@FXML private ImageView videoView;
 	@FXML private TextField chickNum;
+	@FXML private TextField calibrationNum;
 	@FXML private BorderPane videoPane;
 
 	@FXML private GridPane gridChickNames;
@@ -90,6 +91,7 @@ public class ChickNameWindowController {
 	
 	public void handleUndo() {
 		videoPane.getChildren().removeAll(currentDots);
+		currentDots.clear();
 	}
 	
 	public void drawDot(MouseEvent event) {

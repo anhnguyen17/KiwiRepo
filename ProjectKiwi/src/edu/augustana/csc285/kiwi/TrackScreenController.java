@@ -54,7 +54,7 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	private Label instructionLabel;
 	@FXML
-	private ChoiceBox<Integer> timeStepCb;
+	private ChoiceBox<Double> timeStepCb;
 	@FXML 
 	private Label availableAuto;
 	@FXML 
@@ -63,8 +63,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private List<Circle> currentDots = new ArrayList<>();
 	//add up to 10 colors
 	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW };
-	private int[] timeStep = new int[] { 1, 3, 5, 10 };
-	private int time =1;
+	private double[] timeStep = new double[] { 0.5, 1, 2, 3, 5 };
+	private double time =1;
 	private String filePath;
 
 
@@ -80,9 +80,6 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
-
-
-
 	}
 	
 	public String getFilePath() {
@@ -95,7 +92,6 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
-
 	}
 
 	public void showFrameAt(int frameNum) {
@@ -105,12 +101,13 @@ public class TrackScreenController implements AutoTrackListener {
 			videoView.setImage(curFrame);
 		}
 	}
+	
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
 
-		int frameNum = project.getVideo().getCurFrameNum() - (30 * time);
+		int frameNum = project.getVideo().getCurFrameNum() - ((int) (30 * time));
 		if (frameNum >= 0) {
 
 			setTimeLabel(frameNum);
@@ -125,7 +122,9 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		int frameNum = project.getVideo().getCurFrameNum() + (30 * time);
+		int a = (int)(30 * time);
+		System.out.println(a);
+		int frameNum = project.getVideo().getCurFrameNum() + ((int)(30 * time));
 
 		if (frameNum <= project.getVideo().getTotalNumFrames()) {
 			setTimeLabel(frameNum);
@@ -134,6 +133,7 @@ public class TrackScreenController implements AutoTrackListener {
 			project.getVideo().setCurFrameNum(frameNum); 
 		}
 	}
+	
 	public void drawDot(MouseEvent event) {
 		try {
 			Circle dot = new Circle();
@@ -158,12 +158,13 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int i = 0; i < chickNames.size(); i++) {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
-
 	}
+	
 	@FXML
 	public void handleBrowse() {
 			loadVideo(getFilePath());
 	}
+	
 	@FXML
 	public void handleSlider() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -180,6 +181,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 		});
 	}
+	
 	public void loadVideo(String filePath) {
 		try {
 			project = new ProjectData(filePath);
@@ -194,6 +196,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 
 	}
+	
 	@FXML
 	public void handleAutoTracking() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -260,6 +263,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeLabel.setText(time);
 	}
+	
 	//this method allows us to set the start and end frame for the auto tracking. 
 	@FXML
 	public void handleFrame() {
