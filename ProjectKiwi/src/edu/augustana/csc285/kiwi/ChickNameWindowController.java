@@ -71,16 +71,12 @@ public class ChickNameWindowController {
 			chickIDTextFields.add(tf);
 			chickIDLables.add(lb);
 			gridChickNames.add(lb, 0, i);
-			lb.setText("CHICKID" + (i+1) + ":");
+			lb.setText("CHICK ID " + (i+1) + ": ");
 			gridChickNames.add(tf, 1, i);			
 		}
 		} 
 		catch (NumberFormatException e){
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
-			alert.setHeaderText(null);
-			alert.setContentText("THAT IS NOT A NUMBER!");
-			alert.showAndWait();
+			alertWindow("Enter a number");
 		}
 	}
 	public void handleBrowse() throws FileNotFoundException {
@@ -109,10 +105,19 @@ public class ChickNameWindowController {
 			currentDots.add(dot);
 			videoPane.getChildren().add(dot);
 	}
+	
+	public void alertWindow(String message) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 
 	
 	@FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
+		try { 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
 
 		BorderPane root = (BorderPane)loader.load();
@@ -133,6 +138,10 @@ public class ChickNameWindowController {
 
 		Stage primary = (Stage) submitButton.getScene().getWindow();
 		primary.setScene(nextScene);
+	} catch (NullPointerException e) {
+		alertWindow("Choose a file");
+	}
+		
 	}
 
 }
