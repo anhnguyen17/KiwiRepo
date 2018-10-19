@@ -123,8 +123,7 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-		int a = (int)(30 * time);
-		System.out.println(a);
+
 		int frameNum = project.getVideo().getCurFrameNum() + ((int)(30 * time));
 
 		if (frameNum <= project.getVideo().getTotalNumFrames()) {

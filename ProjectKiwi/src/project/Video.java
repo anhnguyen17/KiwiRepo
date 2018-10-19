@@ -36,6 +36,13 @@ public class Video {
 		this.arenaBounds = new Rectangle(0,0,frameWidth,frameHeight);
 	}
 	
+	synchronized void connectVideoCapture() throws FileNotFoundException {
+		this.vidCap = new VideoCapture(filePath);
+		if (!vidCap.isOpened()) {
+			throw new FileNotFoundException("Unable to open video file: " + filePath);
+		}
+	}
+	
 	
 	public int getCurFrameNum() {
 		return curFrameNum;
