@@ -33,14 +33,13 @@ public class ProjectData {
 		//see if getting names correctly: Checked
 		//System.out.println(names.get(chickNum));
 		
+		//creates a new temporary track and sets the name to the name of the text field
 		tempTrack = new AnimalTrack(names.get(chickNum));
 		
-		//should be adding the new AnimalTrack to project data tracks.
+		//adds the track to the project data tracks.
 		tracks.add(tempTrack);
 		System.out.println(tracks.get(chickNum).getID());
-		//System.out.println(chickNum);
 		//System.out.println(tracks.toString());
-		//System.out.println("Made it");
 
 	
 }
