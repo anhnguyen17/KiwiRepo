@@ -14,6 +14,9 @@ import java.util.Scanner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
+
 public class ProjectData {
 	private Video video;
 	private List<AnimalTrack> tracks;
@@ -66,6 +69,7 @@ public class ProjectData {
 	}
 	
 	public static ProjectData loadFromFile(File loadFile) throws FileNotFoundException {
+		@SuppressWarnings("resource")
 		String json = new Scanner(loadFile).useDelimiter("\\Z").next();
 		return fromJSON(json);
 	}
