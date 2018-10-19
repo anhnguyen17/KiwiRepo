@@ -10,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -74,7 +76,11 @@ public class ChickNameWindowController {
 		}
 		} 
 		catch (NumberFormatException e){
-			
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("THAT IS NOT A NUMBER!");
+			alert.showAndWait();
 		}
 	}
 	public void handleBrowse() throws FileNotFoundException {
