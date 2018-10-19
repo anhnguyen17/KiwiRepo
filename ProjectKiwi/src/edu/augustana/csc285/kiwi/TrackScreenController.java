@@ -11,6 +11,7 @@ import project.AnimalTrack;
 import project.ProjectData;
 import project.Video;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -145,7 +146,11 @@ public class TrackScreenController implements AutoTrackListener {
 			// add circle to scene
 			videoPane.getChildren().add(dot);
 		} catch (Exception e) {
-			System.err.println("Choose a chick");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("First Choose a chick!");
+			alert.showAndWait();
 
 		}
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
