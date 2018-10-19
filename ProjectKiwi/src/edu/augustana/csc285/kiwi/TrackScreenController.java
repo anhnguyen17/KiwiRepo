@@ -30,11 +30,15 @@ import org.opencv.videoio.Videoio;
 
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
+	private Label blankFrameLabel;
+	@FXML 
+	private TextField blankFrameTextField;
+	@FXML
 	private ImageView videoView;
 	@FXML
 	private Slider sliderSeekBar;
 	@FXML
-	private Button browseButton;
+	private Button loadButton;
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -66,12 +70,9 @@ public class TrackScreenController implements AutoTrackListener {
 	private double[] timeStep = new double[] { 0.5, 1, 2, 3, 5 };
 	private double time =1;
 	private String filePath;
-
-
 	
 	private AutoTracker autotracker;
 	private ProjectData project;
-	private Stage stage;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
 	@FXML
@@ -160,7 +161,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	@FXML
-	public void handleBrowse() {
+	public void handleLoad() {
 			loadVideo(getFilePath());
 	}
 	

@@ -5,14 +5,15 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
    <top>
-      <Button fx:id="browseButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBrowse" prefHeight="33.0" prefWidth="92.0" text="Load Video" BorderPane.alignment="CENTER">
+      <Button fx:id="loadButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleBrowse" prefHeight="33.0" prefWidth="92.0" text="Load Video" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets right="10.0" />
          </opaqueInsets>
@@ -35,17 +36,17 @@
          <left>
             <AnchorPane prefHeight="420.0" prefWidth="54.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="choiceBoxLabel" layoutX="-13.0" layoutY="190.0" prefHeight="17.0" prefWidth="147.0" text="      Choose a chick">
+                  <Label fx:id="choiceBoxLabel" layoutX="5.0" layoutY="88.0" prefHeight="17.0" prefWidth="147.0" text="Choose a chick:">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="chickChoice" layoutX="8.0" layoutY="210.0" prefWidth="150.0" />
-                  <Label fx:id="availableAuto" layoutX="8.0" layoutY="288.0" prefHeight="21.0" prefWidth="150.0" text="Available Auto-Tracks:">
+                  <ChoiceBox fx:id="chickChoice" layoutX="4.0" layoutY="108.0" prefWidth="150.0" />
+                  <Label fx:id="availableAuto" layoutX="7.0" layoutY="233.0" prefHeight="21.0" prefWidth="150.0" text="Available Auto-Tracks:">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <ChoiceBox fx:id="availAutoChoiceBox" layoutX="7.0" layoutY="310.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="availAutoChoiceBox" layoutX="4.0" layoutY="255.0" prefWidth="150.0" />
                </children>
             </AnchorPane>
          </left>
@@ -54,25 +55,31 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="submitButton" layoutX="490.0" layoutY="86.0" mnemonicParsing="false" onAction="#handleAutoTracking" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
+            <Button fx:id="submitButton" layoutX="459.0" layoutY="125.0" mnemonicParsing="false" onAction="#handleAutoTracking" prefHeight="25.0" prefWidth="161.0" text="Start Auto-Tracking">
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Label fx:id="instructionLabel" layoutX="392.0" layoutY="34.0" text="Select your preferred start time:">
+            <Label fx:id="instructionLabel" layoutX="400.0" layoutY="79.0" text="Select your preferred start time:">
                <font>
                   <Font size="14.0" />
                </font></Label>
-            <Slider fx:id="sliderSeekBar" layoutX="225.0" layoutY="62.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="546.0" />
-            <Label fx:id="timeLabel" layoutX="782.0" layoutY="59.0" prefHeight="17.0" prefWidth="70.0" text="0:00">
+            <Slider fx:id="sliderSeekBar" layoutX="225.0" layoutY="102.0" maxWidth="640.0" onDragDetected="#handleSlider" prefHeight="14.0" prefWidth="546.0" />
+            <Label fx:id="timeLabel" layoutX="782.0" layoutY="99.0" prefHeight="17.0" prefWidth="70.0" text="0:00">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="backwardBtn" layoutX="308.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
-            <Button fx:id="Forward" layoutX="711.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
-            <ChoiceBox fx:id="timeStepCb" layoutX="308.0" layoutY="116.0" prefHeight="25.0" prefWidth="70.0" />
-            <Label layoutX="343.0" layoutY="120.0" text="sec" />
-            <Button fx:id="frameBtn" layoutX="225.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
+            <Button fx:id="backwardBtn" layoutX="308.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
+            <Button fx:id="Forward" layoutX="711.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
+            <ChoiceBox fx:id="timeStepCb" layoutX="308.0" layoutY="165.0" prefHeight="25.0" prefWidth="70.0" />
+            <Label layoutX="336.0" layoutY="169.0" text="sec" />
+            <Button fx:id="frameBtn" layoutX="225.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
+            <TextField fx:id="blankFrameTextField" layoutX="345.0" layoutY="41.0" prefHeight="26.0" prefWidth="65.0" />
+            <Label fx:id="blankFrameLabel" layoutX="225.0" layoutY="45.0" prefHeight="20.0" prefWidth="118.0" text="Blank Frame Time:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </bottom>
