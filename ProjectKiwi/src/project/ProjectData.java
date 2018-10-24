@@ -48,12 +48,8 @@ public class ProjectData {
 		
 		tempTrack = new AnimalTrack(names.get(chickNum));
 		
-		//should be adding the new AnimalTrack to project data tracks.
 		tracks.add(tempTrack);
 		System.out.println(tracks.get(chickNum).getID());
-		//System.out.println(chickNum);
-		//System.out.println(tracks.toString());
-		//System.out.println("Made it");
 	}
 	
 	public void saveToFile(File saveFile) throws FileNotFoundException {

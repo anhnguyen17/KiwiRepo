@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.videoio.Videoio;
+import manualtracking.ManualTrack;
 
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
@@ -71,6 +72,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	
 	private AutoTracker autotracker;
+	private ManualTrack track;
 	private ProjectData project;
 	private Stage stage;
 	public ArrayList<String> chickNames = new ArrayList<String>();
@@ -82,12 +84,19 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeStepCb.getSelectionModel().selectFirst();
 		
-		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(project.getUnassignedSegments()));
+		
+		for(int x = 0; x< chickNames.size(); x++) {
+			project.addToTracks(x, chickNames);	
+		}
+		
+		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
 	}
 	
-	public void drawAutoTracks(List<AnimalTrack> tracks) {
-		for(int x = 0; x < tracks.size(); x++) {
-			drawDot(tracks.get(x).getTimePointAtIndex(x).getY(),50);
+	public void drawAutoTracks(AnimalTrack tracks) {
+		videoPane.getChildren().removeAll(currentDots);
+		for(int x = 0; x < tracks.getTotalTimePoints(); x++) {
+			//drawDot(tracks.get(x).getTimePointAtIndex(x).getX(),tracks.get(x).getTimePointAtIndex(x).getY());
+			drawDot(tracks.getTimePointAtIndex(x).getX()+175, tracks.getTimePointAtIndex(x).getY());
 		}
 	}
 	public String getFilePath() {
@@ -144,8 +153,9 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	
 	public void mouseClick(MouseEvent event) {
-		
+		//track.trackPoint(), xCord, yCord, frameNum);
 		drawDot(event.getX() + videoView.getLayoutX(), event.getY()+ videoView.getLayoutY());
+		//ManualTrack.trackPoint(null, time, time, 0);
 	}
 	public void drawDot(double x, double y) {
 		try {
@@ -205,9 +215,11 @@ public class TrackScreenController implements AutoTrackListener {
 			Video video = project.getVideo();
 			sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 			showFrameAt(0);
-			for(int x = 0; x< chickNames.size(); x++) {
-				project.addToTracks(x, chickNames);	
-			}
+			//for(int x = 0; x< chickNames.size(); x++) {
+			//	project.addToTracks(x, chickNames);	
+			//}
+
+		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
