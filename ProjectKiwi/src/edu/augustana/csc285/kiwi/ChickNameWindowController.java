@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -75,19 +77,20 @@ public class ChickNameWindowController {
 		chickIDTextFields.clear();
 
 		try {
-			int numChicks = Integer.parseInt(chickNum.getText());
-			for (int i = 0; i < numChicks; i++) {
-				TextField tf = new TextField();
-				Label lb = new Label();
-
-				chickIDTextFields.add(tf);
-				chickIDLables.add(lb);
-				gridChickNames.add(lb, 0, i);
-				lb.setText("CHICK ID " + (i + 1) + ":");
-				gridChickNames.add(tf, 1, i);
-			}
-		} catch (NumberFormatException e) {
-
+		int numChicks = Integer.parseInt(chickNum.getText());
+		for (int i = 0; i < numChicks; i++) {
+			TextField tf = new TextField();
+			Label lb= new Label();
+		
+			chickIDTextFields.add(tf);
+			chickIDLables.add(lb);
+			gridChickNames.add(lb, 0, i);
+			lb.setText("CHICK ID " + (i+1) + ": ");
+			gridChickNames.add(tf, 1, i);			
+		}
+		} 
+		catch (NumberFormatException e){
+			alertWindow("Enter a number");
 		}
 	}
 	
@@ -119,9 +122,18 @@ public class ChickNameWindowController {
 		currentDots.add(dot);
 		videoPane.getChildren().add(dot);
 	}
+	
+	public void alertWindow(String message) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 
-	@FXML
-	public void handleSubmit(ActionEvent event) throws IOException {
+	@FXML 
+	public void handleSubmit(ActionEvent event) throws IOException  {
+		try { 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
 
 		BorderPane root = (BorderPane) loader.load();
@@ -141,5 +153,9 @@ public class ChickNameWindowController {
 
 		Stage primary = (Stage) submitButton.getScene().getWindow();
 		primary.setScene(nextScene);
+	} catch (NullPointerException e) {
+		alertWindow("Choose a file");
+	}
+		
 	}
 }

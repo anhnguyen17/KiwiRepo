@@ -11,6 +11,7 @@ import project.AnimalTrack;
 import project.ProjectData;
 import project.Video;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -81,8 +82,15 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
+		
+		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(project.getUnassignedSegments()));
 	}
 	
+	public void drawAutoTracks(List<AnimalTrack> tracks) {
+		for(int x = 0; x < tracks.size(); x++) {
+			drawDot(tracks.get(x).getTimePointAtIndex(x).getY(),50);
+		}
+	}
 	public String getFilePath() {
 		return filePath;
 	}
@@ -119,6 +127,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 
+
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -134,18 +143,27 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 	
-	public void drawDot(MouseEvent event) {
+	
+	public void mouseClick(MouseEvent event) {
+		
+		drawDot(event.getX() + videoView.getLayoutX(), event.getY()+ videoView.getLayoutY());
+	}
+	public void drawDot(double x, double y) {
 		try {
 			Circle dot = new Circle();
-			dot.setCenterX(event.getX() + videoView.getLayoutX());
-			dot.setCenterY(event.getY() + videoView.getLayoutY());
+			dot.setCenterX(x);
+			dot.setCenterY(y);
 			dot.setRadius(5);
 			dot.setFill(chickColors[chickChoice.getSelectionModel().getSelectedIndex()]);
 			currentDots.add(dot);
 			// add circle to scene
 			videoPane.getChildren().add(dot);
 		} catch (Exception e) {
-			System.err.println("Choose a chick");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("First Choose a chick!");
+			alert.showAndWait();
 
 		}
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
@@ -241,7 +259,9 @@ public class TrackScreenController implements AutoTrackListener {
 			System.out.println(track);
 			availAutoChoiceBox.getItems().add(track);
 		}
-
+		
+		
+		// ignore for now
 		//for (int i = 0; i < chickNames.size(); i++) {
 		//	chickChoice.getItems().add(chickNames.get(i));
 		//}
