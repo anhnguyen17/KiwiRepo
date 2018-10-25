@@ -135,6 +135,7 @@ public class ChickNameWindowController {
 		ArrayList<String> chickNames = new ArrayList<String>();
 
 		for (TextField tf : chickIDTextFields) {
+			
 			chickNames.add(tf.getText());
 		}
 

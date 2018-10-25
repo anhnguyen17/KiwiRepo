@@ -85,11 +85,6 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
-
-		for (int x = 0; x < chickNames.size(); x++) {
-			project.addToTracks(x, chickNames);
-		}
-
 		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
 	}
 
@@ -148,17 +143,24 @@ public class TrackScreenController implements AutoTrackListener {
 	
 
 	public void mouseClick(MouseEvent event) {
-		// track.trackPoint(), xCord, yCord, frameNum);
-		try {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		if (selectedChickIndex >= 0) {
+			AnimalTrack selectedTrack = project.getTracks().get(selectedChickIndex);
+			int curFrameNum = (int) sliderSeekBar.getValue();
 			Color c = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];
-			drawDot(event.getX() + videoView.getLayoutX(), event.getY() + videoView.getLayoutY(), c);
-		} catch (Exception e) {
+			double x = event.getX() + videoView.getLayoutX();
+			double y = event.getY() + videoView.getLayoutY();
+			drawDot(x, y, c);
+			selectedTrack.setTimePointAtTime(x, y, curFrameNum);
+			System.out.println(selectedTrack); 
+		} else {
 			new Alert(AlertType.WARNING, "You must CHOOSE a chick first!").showAndWait();
 		}
 		
-		jumpFrame(1);
+		jumpFrame(.5);
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
+		
 
 		
 
@@ -187,6 +189,11 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	public void handleLoad() {
 		loadVideo(getFilePath());
+		for (int x = 0; x < chickNames.size(); x++) {
+			String chickName = chickNames.get(x);
+			project.getTracks().add(new AnimalTrack(chickName));
+			
+		}
 	}
 
 	@FXML

@@ -1,7 +1,10 @@
 package project;
 
 import java.util.ArrayList; 
+
 import java.util.List;
+
+import project.TimePoint;
 
 public class AnimalTrack {
 	private String animalID;
@@ -36,6 +39,19 @@ public class AnimalTrack {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Create (or modify, if existing) a timepoint for the specified time & place.
+	 */
+	public void setTimePointAtTime(double x, double y, int frameNum) {
+		TimePoint oldPt = getTimePointAtTime(frameNum);
+		if (oldPt != null) {
+			oldPt.setX(x);
+			oldPt.setY(y);
+		} else {
+			add(new TimePoint(x, y, frameNum));
+		}
 	}
 	
 	public TimePoint getFinalTimePoint() {
