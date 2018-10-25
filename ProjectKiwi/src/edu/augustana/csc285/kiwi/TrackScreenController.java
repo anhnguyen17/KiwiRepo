@@ -33,7 +33,7 @@ import manualtracking.ManualTrack;
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	private Label blankFrameLabel;
-	@FXML 
+	@FXML
 	private TextField blankFrameTextField;
 	@FXML
 	private ImageView videoView;
@@ -47,7 +47,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private Button backwardBtn;
 	@FXML
 	private Button forwardBtn;
-	@FXML 
+	@FXML
 	private Button frameBtn;
 	@FXML
 	private BorderPane videoPane;
@@ -61,18 +61,19 @@ public class TrackScreenController implements AutoTrackListener {
 	private Label instructionLabel;
 	@FXML
 	private ChoiceBox<Double> timeStepCb;
-	@FXML 
+	@FXML
 	private Label availableAuto;
-	@FXML 
+	@FXML
 	private ChoiceBox<AnimalTrack> availAutoChoiceBox;
 
 	private List<Circle> currentDots = new ArrayList<>();
-	//add up to 10 colors
-	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW,Color.RED,Color.GREEN,Color.PINK,Color.WHITE,Color.GRAY };
+	// add up to 10 colors
+	private Color[] chickColors = new Color[] { Color.PURPLE, Color.AQUA, Color.YELLOW, Color.RED, Color.GREEN,
+			Color.PINK, Color.WHITE, Color.GRAY };
 	private double[] timeStep = new double[] { 0.5, 1, 2, 3, 5 };
-	private double time =1;
+	private double time = 1;
 	private String filePath;
-	
+
 	private AutoTracker autotracker;
 	private ManualTrack track;
 	private ProjectData project;
@@ -84,30 +85,30 @@ public class TrackScreenController implements AutoTrackListener {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
-		
-		
-		for(int x = 0; x< chickNames.size(); x++) {
-			project.addToTracks(x, chickNames);	
+
+		for (int x = 0; x < chickNames.size(); x++) {
+			project.addToTracks(x, chickNames);
 		}
-		
+
 		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
 	}
-	
+
 	public void drawAutoTracks(AnimalTrack tracks) {
 		videoPane.getChildren().removeAll(currentDots);
-		for(int x = 0; x < tracks.getTotalTimePoints(); x++) {
-			//drawDot(tracks.get(x).getTimePointAtIndex(x).getX(),tracks.get(x).getTimePointAtIndex(x).getY());
-			drawDot(tracks.getTimePointAtIndex(x).getX()+175, tracks.getTimePointAtIndex(x).getY());
+		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
+			// drawDot(tracks.get(x).getTimePointAtIndex(x).getX(),tracks.get(x).getTimePointAtIndex(x).getY());
+			drawDot(tracks.getTimePointAtIndex(x).getX() + 150, tracks.getTimePointAtIndex(x).getY(), Color.WHITE);
 		}
 	}
+
 	public String getFilePath() {
 		return filePath;
 	}
-	
+
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-	
+
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 	}
@@ -120,65 +121,60 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 	
-	@FXML
-	public void handleBackward() {
-		videoPane.getChildren().removeAll(currentDots);
-		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-
-		int frameNum = project.getVideo().getCurFrameNum() - ((int) (30 * time));
-		if (frameNum >= 0) {
-
+	public void jumpFrame(double time) {
+		int frameNum = project.getVideo().getCurFrameNum() + ((int) (30 * time));
+		if (frameNum <= project.getVideo().getTotalNumFrames() && frameNum >= 0) {
 			setTimeLabel(frameNum);
 			showFrameAt((int) frameNum);
 			sliderSeekBar.setValue((int) frameNum);
-			project.getVideo().setCurFrameNum(frameNum); 
+			project.getVideo().setCurFrameNum(frameNum);
 		}
 	}
 
-
+	@FXML
+	public void handleBackward() {
+		videoPane.getChildren().removeAll(currentDots);
+		time = -timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
+		jumpFrame(time);
+	}
 
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
 		time = timeStep[timeStepCb.getSelectionModel().getSelectedIndex()];
-
-		int frameNum = project.getVideo().getCurFrameNum() + ((int)(30 * time));
-
-		if (frameNum <= project.getVideo().getTotalNumFrames()) {
-			setTimeLabel(frameNum);
-			showFrameAt((int) frameNum);
-			sliderSeekBar.setValue((int) frameNum);
-			project.getVideo().setCurFrameNum(frameNum); 
-		}
+		jumpFrame(time);
 	}
 	
 	
+
 	public void mouseClick(MouseEvent event) {
-		//track.trackPoint(), xCord, yCord, frameNum);
-		drawDot(event.getX() + videoView.getLayoutX(), event.getY()+ videoView.getLayoutY());
-		//ManualTrack.trackPoint(null, time, time, 0);
-	}
-	public void drawDot(double x, double y) {
+		// track.trackPoint(), xCord, yCord, frameNum);
 		try {
-			Circle dot = new Circle();
-			dot.setCenterX(x);
-			dot.setCenterY(y);
-			dot.setRadius(5);
-			dot.setFill(chickColors[chickChoice.getSelectionModel().getSelectedIndex()]);
-			currentDots.add(dot);
-			// add circle to scene
-			videoPane.getChildren().add(dot);
+			Color c = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];
+			drawDot(event.getX() + videoView.getLayoutX(), event.getY() + videoView.getLayoutY(), c);
 		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error Dialog");
-			alert.setHeaderText(null);
-			alert.setContentText("First Choose a chick!");
-			alert.showAndWait();
-
+			new Alert(AlertType.WARNING, "You must CHOOSE a chick first!").showAndWait();
 		}
+		
+		jumpFrame(1);
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
-
 		});
+
+		
+
+		// ManualTrack.trackPoint(null, time, time, 0);
+	}
+
+	public void drawDot(double x, double y, Color color) {
+		Circle dot = new Circle();
+		dot.setCenterX(x);
+		dot.setCenterY(y);
+		dot.setRadius(5);
+		dot.setFill(color);
+		currentDots.add(dot);
+		// add circle to scene
+		videoPane.getChildren().add(dot);
+
 	}
 
 	public void setChickNames(ArrayList<String> chickName) {
@@ -187,12 +183,12 @@ public class TrackScreenController implements AutoTrackListener {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
 	}
-	
+
 	@FXML
 	public void handleLoad() {
-			loadVideo(getFilePath());
+		loadVideo(getFilePath());
 	}
-	
+
 	@FXML
 	public void handleSlider() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -209,24 +205,23 @@ public class TrackScreenController implements AutoTrackListener {
 
 		});
 	}
-	
+
 	public void loadVideo(String filePath) {
 		try {
 			project = new ProjectData(filePath);
 			Video video = project.getVideo();
 			sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 			showFrameAt(0);
-			//for(int x = 0; x< chickNames.size(); x++) {
-			//	project.addToTracks(x, chickNames);	
-			//}
+			// for(int x = 0; x< chickNames.size(); x++) {
+			// project.addToTracks(x, chickNames);
+			// }
 
-		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	@FXML
 	public void handleAutoTracking() {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -271,12 +266,11 @@ public class TrackScreenController implements AutoTrackListener {
 			System.out.println(track);
 			availAutoChoiceBox.getItems().add(track);
 		}
-		
-		
+
 		// ignore for now
-		//for (int i = 0; i < chickNames.size(); i++) {
-		//	chickChoice.getItems().add(chickNames.get(i));
-		//}
+		// for (int i = 0; i < chickNames.size(); i++) {
+		// chickChoice.getItems().add(chickNames.get(i));
+		// }
 		Platform.runLater(() -> {
 			// progressAutoTrack.setProgress(1.0);
 			submitButton.setText("Start auto-tracking");
@@ -295,15 +289,15 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeLabel.setText(time);
 	}
-	
-	//this method allows us to set the start and end frame for the auto tracking. 
+
+	// this method allows us to set the start and end frame for the auto tracking.
 	@FXML
 	public void handleFrame() {
 		if (frameBtn.getText().equals("Start Time")) {
 			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
 			frameBtn.setText("End Time");
 			instructionLabel.setText("Select your prefered end time:");
-		}else {
+		} else {
 			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
 			frameBtn.setText("Start Time");
 			instructionLabel.setText("Select your prefered start time:");

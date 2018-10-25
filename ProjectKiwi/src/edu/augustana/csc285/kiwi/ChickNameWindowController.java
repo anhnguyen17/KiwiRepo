@@ -90,7 +90,7 @@ public class ChickNameWindowController {
 		}
 		} 
 		catch (NumberFormatException e){
-			alertWindow("Enter a number");
+			new Alert(AlertType.WARNING, "Enter a number").showAndWait();
 		}
 	}
 	
@@ -123,13 +123,6 @@ public class ChickNameWindowController {
 		videoPane.getChildren().add(dot);
 	}
 	
-	public void alertWindow(String message) {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Warning Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-		alert.showAndWait();
-	}
 
 	@FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
@@ -154,7 +147,7 @@ public class ChickNameWindowController {
 		Stage primary = (Stage) submitButton.getScene().getWindow();
 		primary.setScene(nextScene);
 	} catch (NullPointerException e) {
-		alertWindow("Choose a file");
+		new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();;
 	}
 		
 	}

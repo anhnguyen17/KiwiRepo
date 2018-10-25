@@ -78,6 +78,14 @@ public class Video {
 		return (int) vidCap.get(Videoio.CAP_PROP_FRAME_COUNT);
 	}
 	
+	public synchronized int getFrameWidth() {
+		return (int) vidCap.get(Videoio.CAP_PROP_FRAME_WIDTH);
+	}
+
+	public synchronized int getFrameHeight() {
+		return (int) vidCap.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+	}
+	
 	public VideoCapture getVidCap() {
 		return vidCap;
 	}
