@@ -75,7 +75,6 @@ public class TrackScreenController implements AutoTrackListener {
 	private double[] timeStep = new double[] { 0.5, 1, 2, 3, 5 };
 	private double time = 1;
 	private String filePath;
-
 	private AutoTracker autotracker;
 	private AnimalTrack animalTrack;
 	private ManualTrack track;
@@ -143,7 +142,6 @@ public class TrackScreenController implements AutoTrackListener {
 		jumpFrame(time);
 	}
 	
-	
 	@FXML
 	public void handleAutoTrackMerge() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -162,8 +160,6 @@ public class TrackScreenController implements AutoTrackListener {
 		} else {
 		   new Alert(AlertType.ERROR, "Merge Cancelled By User").showAndWait();
 		}
-		
-		
 	}
 	
 	@FXML
@@ -192,9 +188,6 @@ public class TrackScreenController implements AutoTrackListener {
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
 		
-
-		
-
 		// ManualTrack.trackPoint(null, time, time, 0);
 	}
 
@@ -216,6 +209,29 @@ public class TrackScreenController implements AutoTrackListener {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
 	}
+	
+	public void addChick() {
+		TextInputDialog dialog = new TextInputDialog("Tran");
+		 
+		dialog.setTitle("Add new chick");
+		dialog.setHeaderText("Enter chick Name");
+		dialog.setContentText("Name:");
+		 
+		Optional<String> result = dialog.showAndWait();
+		
+		result.ifPresent(name -> {
+			String temp = (String)result.get();
+			for(int x = 0; x < project.getTracks().size(); x++) {
+				if(project.getTracks().get(x).getID().equals(temp)) {
+					new Alert(AlertType.ERROR, "Chick with desired name already exists!");
+					return;
+				}
+			}
+		    project.getTracks().add(new AnimalTrack(temp));
+		    chickChoice.getItems().add(temp);
+		});
+	}
+	
 
 	@FXML
 	public void handleLoad() {
@@ -223,7 +239,6 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int x = 0; x < chickNames.size(); x++) {
 			String chickName = chickNames.get(x);
 			project.getTracks().add(new AnimalTrack(chickName));
-			
 		}
 	}
 
@@ -250,9 +265,6 @@ public class TrackScreenController implements AutoTrackListener {
 			Video video = project.getVideo();
 			sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 			showFrameAt(0);
-			// for(int x = 0; x< chickNames.size(); x++) {
-			// project.addToTracks(x, chickNames);
-			// }
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -299,21 +311,14 @@ public class TrackScreenController implements AutoTrackListener {
 	public void trackingComplete(List<AnimalTrack> trackedSegments) {
 		project.getUnassignedSegments().clear();
 		project.getUnassignedSegments().addAll(trackedSegments);
-
 		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
 			availAutoChoiceBox.getItems().add(track);
 		}
-
-		// ignore for now
-		// for (int i = 0; i < chickNames.size(); i++) {
-		// chickChoice.getItems().add(chickNames.get(i));
-		// }
 		Platform.runLater(() -> {
 			// progressAutoTrack.setProgress(1.0);
 			submitButton.setText("Start auto-tracking");
 		});
-
 	}
 
 	public void setTimeLabel(double curFrameNum) {
@@ -341,5 +346,4 @@ public class TrackScreenController implements AutoTrackListener {
 			instructionLabel.setText("Select your prefered start time:");
 		}
 	}
-
 }
