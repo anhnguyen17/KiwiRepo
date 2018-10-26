@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.Videoio;
 import manualtracking.ManualTrack;
@@ -144,13 +146,24 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	@FXML
 	public void handleAutoTrackMerge() {
-		int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
-		AnimalTrack temp = project.getTracks().get(currentChick);
-		temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
-		for (int x = 0; x < project.getTracks().size(); x++) {
-			System.out.println(project.getTracks().get(x));
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText("Merging will overwrite any previous track points during the frames automatically tracked. ");
+		alert.setContentText("Are you sure you wish to continue?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
+			AnimalTrack temp = project.getTracks().get(currentChick);
+			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
+			for (int x = 0; x < project.getTracks().size(); x++) {
+				System.out.println(project.getTracks().get(x));
+			}
+			System.out.println("done");
+		} else {
+		   new Alert(AlertType.ERROR, "Merge Cancelled By User").showAndWait();
 		}
-		System.out.println("done");
+		
+		
 	}
 	
 	
