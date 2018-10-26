@@ -211,7 +211,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	public void addChick() {
-		TextInputDialog dialog = new TextInputDialog("Tran");
+		TextInputDialog dialog = new TextInputDialog("Enter Chick Name");
 		 
 		dialog.setTitle("Add new chick");
 		dialog.setHeaderText("Enter chick Name");
@@ -220,10 +220,10 @@ public class TrackScreenController implements AutoTrackListener {
 		Optional<String> result = dialog.showAndWait();
 		
 		result.ifPresent(name -> {
-			String temp = (String)result.get();
+			String temp = result.get();
 			for(int x = 0; x < project.getTracks().size(); x++) {
 				if(project.getTracks().get(x).getID().equals(temp)) {
-					new Alert(AlertType.ERROR, "Chick with desired name already exists!");
+					new Alert(AlertType.ERROR, "Chick with desired name already exists!").showAndWait();
 					return;
 				}
 			}
