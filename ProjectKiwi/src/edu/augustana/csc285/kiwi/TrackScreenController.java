@@ -81,6 +81,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 
+	
 	@FXML
 	public void initialize() {
 		for (int i = 0; i < timeStep.length; i++) {

@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -52,6 +53,8 @@ public class ChickNameWindowController {
 	private BorderPane videoPane;
 	@FXML
 	private GridPane gridChickNames;
+	@FXML 
+	private ChoiceBox<String> callibrationChoice;
 
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
@@ -61,7 +64,7 @@ public class ChickNameWindowController {
 	private Window stage;
 
 	public void initialize() {
-
+		addToCallibrationBox();
 	}
 
 	@FXML
@@ -123,6 +126,12 @@ public class ChickNameWindowController {
 		videoPane.getChildren().add(dot);
 	}
 	
+	public void addToCallibrationBox() {
+		callibrationChoice.getItems().add("Origin: (0,0)");
+		callibrationChoice.getItems().add("Vertical");
+		callibrationChoice.getItems().add("Horizontal");
+		callibrationChoice.getItems().add("Arena Rectangle");
+	}
 
 	@FXML 
 	public void handleSubmit(ActionEvent event) throws IOException  {
