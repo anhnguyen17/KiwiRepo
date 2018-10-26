@@ -210,6 +210,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 	
+	@FXML
 	public void addChick() {
 		TextInputDialog dialog = new TextInputDialog("Enter Chick Name");
 		 
@@ -230,6 +231,12 @@ public class TrackScreenController implements AutoTrackListener {
 		    project.getTracks().add(new AnimalTrack(temp));
 		    chickChoice.getItems().add(temp);
 		});
+	}
+	
+	@FXML
+	public void removeChick() {
+		project.removeChick(chickChoice.getSelectionModel().getSelectedItem());
+		chickChoice.getItems().remove(chickChoice.getSelectionModel().getSelectedItem());
 	}
 	
 
