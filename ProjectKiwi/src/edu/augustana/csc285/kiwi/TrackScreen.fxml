@@ -1,36 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
-   <top>
-      <Button fx:id="loadButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleLoad" prefHeight="33.0" prefWidth="92.0" text="Load Video" BorderPane.alignment="CENTER">
-         <opaqueInsets>
-            <Insets right="10.0" />
-         </opaqueInsets>
-         <BorderPane.margin>
-            <Insets bottom="60.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
    <center>
       <BorderPane fx:id="videoPane">
          <center>
@@ -58,6 +41,40 @@
                </children>
             </AnchorPane>
          </left>
+         <top>
+            <AnchorPane prefHeight="78.0" prefWidth="836.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="loadButton" alignment="CENTER_RIGHT" layoutX="380.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleLoad" prefHeight="33.0" prefWidth="92.0" text="Load Video">
+                     <opaqueInsets>
+                        <Insets right="10.0" />
+                     </opaqueInsets>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <MenuBar layoutX="27.0" layoutY="31.0" prefHeight="33.0" prefWidth="150.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#handleExport" text="Export Project" />
+                              <MenuItem mnemonicParsing="false" text="Import Project" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </AnchorPane>
+         </top>
       </BorderPane>
    </center>
    <bottom>

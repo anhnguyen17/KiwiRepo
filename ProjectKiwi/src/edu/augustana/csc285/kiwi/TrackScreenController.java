@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import utils.UtilsForOpenCV;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,6 +81,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private ManualTrack track;
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
+	private Window stage;
 
 	@FXML
 	public void initialize() {
@@ -232,6 +234,17 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 	}
 	
+	@FXML
+	public void handleExport() throws FileNotFoundException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Video File");
+		File chosenFile = fileChooser.showOpenDialog(stage);
+		if (chosenFile != null) {
+			project.saveToFile(chosenFile); 
+		} 
+	
+		
+	}
 
 	@FXML
 	public void handleLoad() {
