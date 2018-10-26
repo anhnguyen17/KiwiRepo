@@ -30,14 +30,15 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="chickChoice" layoutX="24.0" layoutY="108.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="chickChoice" layoutX="25.0" layoutY="108.0" prefWidth="150.0" />
                   <Label fx:id="availableAuto" layoutX="24.0" layoutY="233.0" prefHeight="21.0" prefWidth="150.0" text="Available Auto-Tracks:">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
                   <ChoiceBox fx:id="availAutoChoiceBox" layoutX="24.0" layoutY="254.0" prefWidth="150.0" />
                   <Button layoutX="22.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAutoTrackMerge" text="Assign to Current Chick" />
-                  <Button layoutX="26.0" layoutY="139.0" mnemonicParsing="false" onAction="#addChick" text="Add" />
+                  <Button layoutX="24.0" layoutY="57.0" mnemonicParsing="false" onAction="#addChick" prefHeight="31.0" prefWidth="63.0" text="Add" />
+                  <Button layoutX="99.0" layoutY="57.0" mnemonicParsing="false" onAction="#removeChick" text="Remove" />
                </children>
             </AnchorPane>
          </left>
