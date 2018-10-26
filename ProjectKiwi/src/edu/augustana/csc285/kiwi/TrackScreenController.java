@@ -235,8 +235,19 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	@FXML
 	public void removeChick() {
-		project.removeChick(chickChoice.getSelectionModel().getSelectedItem());
-		chickChoice.getItems().remove(chickChoice.getSelectionModel().getSelectedItem());
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Chick Removal");
+		alert.setHeaderText("You are about to remove chick: " + 
+				chickChoice.getSelectionModel().getSelectedItem() + ". This action cannot be undone. Are you sure you wish to continue?");
+		alert.setContentText("Are you sure you wish to continue?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			project.removeChick(chickChoice.getSelectionModel().getSelectedItem());
+			chickChoice.getItems().remove(chickChoice.getSelectionModel().getSelectedItem());
+		} else {
+		   new Alert(AlertType.ERROR, chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
+		}
+		
 	}
 	
 
