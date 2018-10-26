@@ -41,6 +41,19 @@ public class AnimalTrack {
 		return null;
 	}
 	
+	
+	/**
+	 * Adds auto-tracked segments to the currently selected chick
+	 * Will overwrite any existing manual points! *Notify user in pop-up
+	 */
+	public void mergeAutoTracks(AnimalTrack track) {
+		for(int x = 0; x < track.getTotalTimePoints(); x++) {
+			double xVal = track.getTimePointAtIndex(x).getX();
+			double yVal = track.getTimePointAtIndex(x).getY();
+			int frameNum = track.getTimePointAtIndex(x).getFrameNum();
+			setTimePointAtTime(xVal,yVal,frameNum);
+		}
+	}
 	/**
 	 * Create (or modify, if existing) a timepoint for the specified time & place.
 	 */

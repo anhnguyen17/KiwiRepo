@@ -75,6 +75,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private String filePath;
 
 	private AutoTracker autotracker;
+	private AnimalTrack animalTrack;
 	private ManualTrack track;
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
@@ -141,7 +142,18 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	
-
+	@FXML
+	public void handleAutoTrackMerge() {
+		int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
+		AnimalTrack temp = project.getTracks().get(currentChick);
+		temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
+		for (int x = 0; x < project.getTracks().size(); x++) {
+			System.out.println(project.getTracks().get(x));
+		}
+		System.out.println("done");
+	}
+	
+	
 	public void mouseClick(MouseEvent event) {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
 		if (selectedChickIndex >= 0) {

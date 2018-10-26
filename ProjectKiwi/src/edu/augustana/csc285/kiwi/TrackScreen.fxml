@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
    <top>
       <Button fx:id="loadButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleLoad" prefHeight="33.0" prefWidth="92.0" text="Load Video" BorderPane.alignment="CENTER">
          <opaqueInsets>
@@ -42,17 +42,18 @@
          <left>
             <AnchorPane prefHeight="420.0" prefWidth="54.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="choiceBoxLabel" layoutX="5.0" layoutY="88.0" prefHeight="17.0" prefWidth="147.0" text="Choose a chick:">
+                  <Label fx:id="choiceBoxLabel" layoutX="26.0" layoutY="88.0" prefHeight="17.0" prefWidth="147.0" text="Choose a chick:">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="chickChoice" layoutX="4.0" layoutY="108.0" prefWidth="150.0" />
-                  <Label fx:id="availableAuto" layoutX="7.0" layoutY="233.0" prefHeight="21.0" prefWidth="150.0" text="Available Auto-Tracks:">
+                  <ChoiceBox fx:id="chickChoice" layoutX="24.0" layoutY="108.0" prefWidth="150.0" />
+                  <Label fx:id="availableAuto" layoutX="24.0" layoutY="233.0" prefHeight="21.0" prefWidth="150.0" text="Available Auto-Tracks:">
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <ChoiceBox fx:id="availAutoChoiceBox" layoutX="4.0" layoutY="255.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="availAutoChoiceBox" layoutX="24.0" layoutY="254.0" prefWidth="150.0" />
+                  <Button layoutX="22.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAutoTrackMerge" text="Assign to Current Chick" />
                </children>
             </AnchorPane>
          </left>
