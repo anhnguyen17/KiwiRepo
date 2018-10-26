@@ -156,7 +156,7 @@ public class TrackScreenController implements AutoTrackListener {
 			AnimalTrack temp = project.getTracks().get(currentChick);
 			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
 			for (int x = 0; x < project.getTracks().size(); x++) {
-				System.out.println(project.getTracks().get(x));
+				System.out.println(temp);
 			}
 			System.out.println("done");
 		} else {

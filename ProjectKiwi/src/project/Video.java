@@ -94,7 +94,7 @@ public class Video {
 		return emptyFrameNum;
 	}
 
-	public void setEmptyFrameNum(int emptyFrameNum) {
+	public void setq(int emptyFrameNum) {
 		this.emptyFrameNum = emptyFrameNum;
 	}
 		
@@ -148,6 +148,11 @@ public class Video {
 
 	public int convertSecondsToFrameNums(double numSecs) {
 		return (int) Math.round(numSecs * getFrameRate());
+	}
+
+	public void setEmptyFrameNum(int newEmptyFrame) {
+		this.emptyFrameNum = newEmptyFrame;
+		
 	}
 
 }
