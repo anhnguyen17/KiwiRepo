@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import utils.UtilsForOpenCV;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,6 +81,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private ManualTrack track;
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
+	private Window stage;
 
 	
 	@FXML
@@ -211,6 +213,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 	
+	@FXML
 	public void addChick() {
 		TextInputDialog dialog = new TextInputDialog("Enter Chick Name");
 		 
@@ -233,6 +236,34 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 	}
 	
+	@FXML
+	public void handleExport() throws FileNotFoundException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Video File");
+		File chosenFile = fileChooser.showOpenDialog(stage);
+		if (chosenFile != null) {
+			project.saveToFile(chosenFile); 
+		} 
+	
+		
+	}
+
+	public void removeChick() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Chick Removal");
+		alert.setHeaderText("You are about to remove chick: " + 
+				chickChoice.getSelectionModel().getSelectedItem() + ". This action cannot be undone. Are you sure you wish to continue?");
+		alert.setContentText("Are you sure you wish to continue?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			project.removeChick(chickChoice.getSelectionModel().getSelectedItem());
+			chickChoice.getItems().remove(chickChoice.getSelectionModel().getSelectedItem());
+		} else {
+		   new Alert(AlertType.ERROR, chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
+		}
+		
+	}
+
 
 	@FXML
 	public void handleLoad() {

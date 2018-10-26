@@ -52,6 +52,15 @@ public class ProjectData {
 		System.out.println(tracks.get(chickNum).getID());
 	}
 	
+	public void removeChick(String chickToRemove) {
+		for(int x = 0; x < tracks.size(); x++) {
+			if(tracks.get(x).getID().equals(chickToRemove)){
+				tracks.remove(x);
+				return;
+			}
+		}
+	}
+	
 	public void saveToFile(File saveFile) throws FileNotFoundException {
 		String json = toJSON();
 		PrintWriter out = new PrintWriter(saveFile);
