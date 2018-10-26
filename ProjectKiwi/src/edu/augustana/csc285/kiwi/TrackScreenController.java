@@ -166,6 +166,12 @@ public class TrackScreenController implements AutoTrackListener {
 		
 	}
 	
+	@FXML
+	public void handleSetEmptyFrame() {
+		project.getVideo().setEmptyFrameNum(project.getVideo().getCurFrameNum());
+		new Alert(AlertType.INFORMATION, "Success! The empty frame has been updated.").showAndWait();
+	}
+	
 	
 	public void mouseClick(MouseEvent event) {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();

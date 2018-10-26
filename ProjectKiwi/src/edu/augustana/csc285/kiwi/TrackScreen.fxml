@@ -81,12 +81,7 @@
             <ChoiceBox fx:id="timeStepCb" layoutX="308.0" layoutY="165.0" prefHeight="25.0" prefWidth="70.0" />
             <Label layoutX="336.0" layoutY="169.0" text="sec" />
             <Button fx:id="frameBtn" layoutX="225.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
-            <TextField fx:id="blankFrameTextField" layoutX="345.0" layoutY="41.0" prefHeight="26.0" prefWidth="65.0" />
-            <Label fx:id="blankFrameLabel" layoutX="225.0" layoutY="45.0" prefHeight="20.0" prefWidth="118.0" text="Blank Frame Time:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
+            <Button layoutX="474.0" layoutY="164.0" mnemonicParsing="false" onAction="#handleSetEmptyFrame" text="Set Empty Frame" />
          </children>
       </AnchorPane>
    </bottom>
