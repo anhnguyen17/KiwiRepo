@@ -96,11 +96,13 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void drawAutoTracks(AnimalTrack tracks) {
+		if(!availAutoChoiceBox.getItems().isEmpty()) {
 		videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
 			drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
 			//drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.2)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio), Color.WHITE);
+		}
 		}
 	}
 	
@@ -165,6 +167,9 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	@FXML
 	public void handleAutoTrackMerge() {
+		if(availAutoChoiceBox.getSelectionModel().getSelectedItem() == null || chickChoice.getItems().isEmpty()) {
+			new Alert(AlertType.ERROR, "Unable to add tracks: chick selection or auto track is null").showAndWait();
+		} else {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation Dialog");
 		alert.setHeaderText("Merging will overwrite any previous track points during the frames automatically tracked. ");
@@ -177,9 +182,11 @@ public class TrackScreenController implements AutoTrackListener {
 			for (int x = 0; x < project.getTracks().size(); x++) {
 				System.out.println(temp);
 			}
-			System.out.println("done");
+			availAutoChoiceBox.getItems().remove(availAutoChoiceBox.getSelectionModel().getSelectedItem());
+			new Alert(AlertType.INFORMATION, "The tracks have been assigned sucesfully");
 		} else {
 		   new Alert(AlertType.ERROR, "Merge Cancelled By User").showAndWait();
+		}
 		}
 	}
 	
@@ -355,7 +362,11 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getUnassignedSegments().addAll(trackedSegments);
 		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
-			availAutoChoiceBox.getItems().add(track);
+			if(track.getTotalTimePoints() < 15) {
+				project.getUnassignedSegments().remove(track);
+			} else {
+				availAutoChoiceBox.getItems().add(track);
+			}
 		}
 		Platform.runLater(() -> {
 			// progressAutoTrack.setProgress(1.0);
