@@ -43,8 +43,6 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	private Slider sliderSeekBar;
 	@FXML
-	private Button loadButton;
-	@FXML
 	private Button submitButton;
 	@FXML
 	private Button backwardBtn;
@@ -68,6 +66,10 @@ public class TrackScreenController implements AutoTrackListener {
 	private Label availableAuto;
 	@FXML
 	private ChoiceBox<AnimalTrack> availAutoChoiceBox;
+	@FXML
+	private AnchorPane sideBarPane;
+	@FXML
+	private AnchorPane topBarPane;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	// add up to 10 colors
@@ -83,23 +85,29 @@ public class TrackScreenController implements AutoTrackListener {
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
 
-	
 	@FXML
 	public void initialize() {
+		
 		for (int i = 0; i < timeStep.length; i++) {
 			timeStepCb.getItems().add(timeStep[i]);
 		}
 		timeStepCb.getSelectionModel().selectFirst();
 		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
-		loadButton.setDisable(true);
 	}
 
 	public void drawAutoTracks(AnimalTrack tracks) {
 		videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
-			// drawDot(tracks.get(x).getTimePointAtIndex(x).getX(),tracks.get(x).getTimePointAtIndex(x).getY());
-			drawDot(tracks.getTimePointAtIndex(x).getX() + 150, tracks.getTimePointAtIndex(x).getY(), Color.WHITE);
+			double scalingRatio = getImageScalingRatio();
+			drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
+			//drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.2)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio), Color.WHITE);
 		}
+	}
+	
+	private double getImageScalingRatio() {
+		double widthRatio = videoPane.getWidth() / project.getVideo().getFrameWidth();
+		double heightRatio = videoPane.getHeight() / project.getVideo().getFrameHeight();
+		return Math.min(widthRatio, heightRatio);
 	}
 
 	public String getFilePath() {
@@ -134,6 +142,7 @@ public class TrackScreenController implements AutoTrackListener {
 		int frameNum = project.getVideo().getCurFrameNum() + ((int) (30 * time));
 		if (frameNum <= project.getVideo().getTotalNumFrames() && frameNum >= 0) {
 			setTimeLabel(frameNum);
+			
 			showFrameAt((int) frameNum);
 			sliderSeekBar.setValue((int) frameNum);
 			project.getVideo().setCurFrameNum(frameNum);
@@ -180,7 +189,6 @@ public class TrackScreenController implements AutoTrackListener {
 		new Alert(AlertType.INFORMATION, "Success! The empty frame has been updated.").showAndWait();
 	}
 	
-	
 	public void mouseClick(MouseEvent event) {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
 		if (selectedChickIndex >= 0) {
@@ -189,6 +197,7 @@ public class TrackScreenController implements AutoTrackListener {
 			Color c = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];
 			double x = event.getX() + videoView.getLayoutX();
 			double y = event.getY() + videoView.getLayoutY();
+			System.out.println(x + " y: " + y);
 			drawDot(x, y, c);
 			selectedTrack.setTimePointAtTime(x, y, curFrameNum);
 			System.out.println(selectedTrack);
@@ -275,15 +284,6 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	@FXML
-	public void handleLoad() {
-		loadVideo(getFilePath());
-		for (int x = 0; x < chickNames.size(); x++) {
-			String chickName = chickNames.get(x);
-			project.getTracks().add(new AnimalTrack(chickName));
-		}
-	}
-
-	@FXML
 	public void handleSlider() {
 		videoPane.getChildren().removeAll(currentDots);
 		sliderSeekBar.valueProperty().addListener(new ChangeListener<Number>() {
@@ -294,9 +294,7 @@ public class TrackScreenController implements AutoTrackListener {
 				showFrameAt(frameNum);
 				setTimeLabel(frameNum);
 				project.getVideo().setCurFrameNum(frameNum);
-
 			}
-
 		});
 	}
 
