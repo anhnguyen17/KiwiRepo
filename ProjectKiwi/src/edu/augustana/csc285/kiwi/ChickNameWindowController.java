@@ -55,7 +55,9 @@ public class ChickNameWindowController {
 	private GridPane gridChickNames;
 	@FXML 
 	private ChoiceBox<String> callibrationChoice;
-
+	@FXML
+	private Button saveBtn;
+	
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
@@ -115,6 +117,11 @@ public class ChickNameWindowController {
 	public void handleUndo() {
 		videoPane.getChildren().removeAll(currentDots);
 		currentDots.clear();
+	}
+	
+	@FXML
+	public void handleSaveBtn() {
+		
 	}
 
 	public void drawDot(MouseEvent event) {
