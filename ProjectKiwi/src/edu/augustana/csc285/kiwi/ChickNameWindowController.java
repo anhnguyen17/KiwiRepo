@@ -151,12 +151,16 @@ public class ChickNameWindowController {
 
 		nextController.setChickNames(chickNames);
 		nextController.setFilePath(vid.getFilePath());
+		
 
 		Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		Stage primary = (Stage) submitButton.getScene().getWindow();
 		primary.setScene(nextScene);
+		
+		nextController.initializeAfterSceneCreated();
+		
 	} catch (NullPointerException e) {
 		new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();;
 	}

@@ -91,6 +91,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeStepCb.getSelectionModel().selectFirst();
 		availAutoChoiceBox.setOnAction(e -> drawAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
+		loadButton.setDisable(true);
 	}
 
 	public void drawAutoTracks(AnimalTrack tracks) {
@@ -110,7 +111,14 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void initializeAfterSceneCreated() {
-		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
+		//videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
+		
+		loadVideo(getFilePath());
+		for (int x = 0; x < chickNames.size(); x++) {
+			String chickName = chickNames.get(x);
+			project.getTracks().add(new AnimalTrack(chickName));
+		}
+		
 		System.out.println("done");
 	}
 
@@ -184,7 +192,6 @@ public class TrackScreenController implements AutoTrackListener {
 			drawDot(x, y, c);
 			selectedTrack.setTimePointAtTime(x, y, curFrameNum);
 			System.out.println(selectedTrack);
-			videoPane.getChildren().removeAll(currentDots);
 			
 		} else {
 			new Alert(AlertType.WARNING, "You must CHOOSE a chick first!").showAndWait();
@@ -194,7 +201,6 @@ public class TrackScreenController implements AutoTrackListener {
 		jumpFrame(timeStepCb.getValue());
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
-		
 		// ManualTrack.trackPoint(null, time, time, 0);
 	}
 
@@ -250,6 +256,9 @@ public class TrackScreenController implements AutoTrackListener {
 		} 
 	}
 
+	/*
+	 * Removes the currently selected chick\
+	 */
 	public void removeChick() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirm Chick Removal");
