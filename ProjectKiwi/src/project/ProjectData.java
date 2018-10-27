@@ -61,6 +61,34 @@ public class ProjectData {
 		}
 	}
 	
+	/**
+	 * This method returns the unassigned segment that contains a TimePoint (between
+	 * startFrame and endFrame) that is closest to the given x,y location
+	 * 
+	 * @param x          - x coordinate to search near
+	 * @param y          - y coordinate to search near
+	 * @param startFrame - (inclusive)
+	 * @param endFrame   - (inclusive)
+	 * @return the unassigned segment (AnimalTrack) that contained the nearest point
+	 *         within the given time interval, or *null* if there is NO unassigned
+	 *         segment that contains any TimePoints within the given range.
+	 */
+	public AnimalTrack getNearestUnassignedSegment(double x, double y, int startFrame, int endFrame) {
+		double minDistance = Double.POSITIVE_INFINITY;
+		AnimalTrack nearest = null;
+		for (AnimalTrack segment : unassignedSegments) {
+			List<TimePoint> ptsInInterval = segment.getTimePointsWithinInterval(startFrame, endFrame);
+			for (TimePoint pt : ptsInInterval) {
+				double dist = pt.getDistanceTo(x, y);
+				if (dist < minDistance) {
+					minDistance = dist;
+					nearest = segment;
+				}
+			}
+		}
+		return nearest;
+	}
+	
 	public void saveToFile(File saveFile) throws FileNotFoundException {
 		String json = toJSON();
 		PrintWriter out = new PrintWriter(saveFile);
