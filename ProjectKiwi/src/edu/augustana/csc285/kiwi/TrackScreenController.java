@@ -259,11 +259,13 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleExport() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
-		File chosenFile = fileChooser.showOpenDialog(stage);
+		File chosenFile = fileChooser.showSaveDialog(stage);
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
 		} 
 	}
+	
+	
 
 	/*
 	 * Removes the currently selected chick\
