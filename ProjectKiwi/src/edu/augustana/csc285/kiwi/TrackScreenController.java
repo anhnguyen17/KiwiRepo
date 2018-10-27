@@ -190,6 +190,7 @@ public class TrackScreenController implements AutoTrackListener {
 			new Alert(AlertType.WARNING, "You must CHOOSE a chick first!").showAndWait();
 		}
 		
+		//Changed to jump by the currently selected time interval instead of the previous value of .5
 		jumpFrame(timeStepCb.getValue());
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
@@ -206,7 +207,6 @@ public class TrackScreenController implements AutoTrackListener {
 		currentDots.add(dot);
 		// add circle to scene
 		videoPane.getChildren().add(dot);
-
 	}
 
 	public void setChickNames(ArrayList<String> chickName) {
