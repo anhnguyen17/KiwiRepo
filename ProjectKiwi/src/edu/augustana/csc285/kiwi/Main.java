@@ -25,7 +25,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			
 			ChickNameWindowController controller = loader.getController();
-			//controller.initializeAfterSceneCreated();
+			//.initializeAfterSceneCreated();
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -111,6 +111,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
+		System.out.println("done");
 	}
 
 	public void showFrameAt(int frameNum) {
@@ -244,7 +245,6 @@ public class TrackScreenController implements AutoTrackListener {
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
 		} 
-	
 		
 	}
 
@@ -261,9 +261,7 @@ public class TrackScreenController implements AutoTrackListener {
 		} else {
 		   new Alert(AlertType.ERROR, chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
 		}
-		
 	}
-
 
 	@FXML
 	public void handleLoad() {
@@ -335,7 +333,7 @@ public class TrackScreenController implements AutoTrackListener {
 			videoView.setImage(imgFrame);
 			// progressAutoTrack.setProgress(fractionComplete);
 			sliderSeekBar.setValue(frameNumber);
-			// textFieldCurFrameNum.setText(String.format("%05d",frameNumber));
+			setTimeLabel(frameNumber);
 		});
 	}
 

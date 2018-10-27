@@ -62,6 +62,7 @@ public class ChickNameWindowController {
 
 	private Video vid;
 	private Window stage;
+	private TrackScreenController trackScreen;
 
 	public void initialize() {
 		addToCallibrationBox();
