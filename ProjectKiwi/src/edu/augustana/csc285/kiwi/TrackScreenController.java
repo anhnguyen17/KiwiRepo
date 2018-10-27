@@ -315,6 +315,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	@FXML
 	public void handleAutoTracking() {
+		videoPane.getChildren().removeAll(currentDots);
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getVideo().setXPixelsPerCm(5.5);
 			project.getVideo().setYPixelsPerCm(5.5);
