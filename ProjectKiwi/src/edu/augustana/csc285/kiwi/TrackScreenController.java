@@ -183,12 +183,14 @@ public class TrackScreenController implements AutoTrackListener {
 			double y = event.getY() + videoView.getLayoutY();
 			drawDot(x, y, c);
 			selectedTrack.setTimePointAtTime(x, y, curFrameNum);
-			System.out.println(selectedTrack); 
+			System.out.println(selectedTrack);
+			videoPane.getChildren().removeAll(currentDots);
+			
 		} else {
 			new Alert(AlertType.WARNING, "You must CHOOSE a chick first!").showAndWait();
 		}
 		
-		jumpFrame(.5);
+		jumpFrame(timeStepCb.getValue());
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
 		
@@ -212,6 +214,7 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int i = 0; i < chickNames.size(); i++) {
 			chickChoice.getItems().add(chickNames.get(i));
 		}
+		chickChoice.getSelectionModel().select(0);
 	}
 	
 	@FXML
@@ -245,7 +248,6 @@ public class TrackScreenController implements AutoTrackListener {
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
 		} 
-		
 	}
 
 	public void removeChick() {
