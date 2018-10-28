@@ -69,6 +69,7 @@ public class ChickNameWindowController {
 	private Window stage;
 	private TrackScreenController trackScreen;
 	private Rectangle arenaBounds;
+	private TimePoint origin;
 
 	public void initialize() {
 		addToCalibrationBox();
@@ -179,19 +180,7 @@ public class ChickNameWindowController {
 		} else {
 			return new Rectangle((int)currentDots.get(1).getCenterX(), (int)currentDots.get(1).getCenterY(), rectWidth, rectHeight);
 		}
-	//	arenaRect.setFill(Color.GREEN); 
 	} 
-	
-	//to test if code for creating arena rect is correct
-//	public void drawArenaRect() {
-//		currentRectangles.add(arenaRect);
-//		videoPane.getChildren().add(arenaRect);
-//	}
-	
-	public TimePoint createOriginPoint() {
-		TimePoint origin = new TimePoint(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), 0);
-		return origin;
-	}
 	
 	@FXML
 	public void handleSaveBtn() {
@@ -200,10 +189,14 @@ public class ChickNameWindowController {
 			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
-			new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
-			project.getVideo().setOriginPoint(createOriginPoint()); 
+			if (currentDots.size() ==1) {
+				new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
+				origin = new TimePoint(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), 0);
+			} else {
+				removeDots();
+				new Alert(AlertType.WARNING, "Please choose ONE point only").showAndWait();
+			}
 
-			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
 			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
 			
@@ -224,21 +217,18 @@ public class ChickNameWindowController {
 			TrackScreenController nextController = loader.getController();
 
 
-			nextController.setFilePath(vid.getFilePath());
-			nextController.setArenaBounds(arenaBounds); 
-			System.out.println(arenaBounds); 
-
+			nextController.setFilePath(vid.getFilePath()); 
+	
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 			nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			Stage primary = (Stage) submitButton.getScene().getWindow();
 			primary.setScene(nextScene);
 
-			nextController.initializeAfterSceneCreated();
+			nextController.initializeAfterSceneCreated(arenaBounds, origin);
 
 		} catch (NullPointerException e) {
 			new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();
-			;
 		}
 
 	}

@@ -90,7 +90,6 @@ public class TrackScreenController implements AutoTrackListener {
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
-	private Rectangle arenaBounds;
 
 	@FXML
 	public void initialize() {
@@ -154,10 +153,6 @@ public class TrackScreenController implements AutoTrackListener {
 		return filePath;
 	}
 
-	public void setArenaBounds(Rectangle arenaBounds) {
-		this.arenaBounds =arenaBounds;
-	}
-
 	/** this method changes a chick dot color to the user selected color */
 	public void handleChickColorChange() {
 		AnimalTrack temp = project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
@@ -165,11 +160,13 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	
-	public void initializeAfterSceneCreated() {
+	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin) {
 		//videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
-		project.getVideo().setArenaBounds(arenaBounds); 
+		//project.getVideo().setArenaBounds(arenaBounds); 
+		project.getVideo().setOriginPoint(origin); 
+		System.out.println("done");
 	}
 	
 	//This method has not work yet
