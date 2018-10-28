@@ -121,13 +121,13 @@ public class TrackScreenController implements AutoTrackListener {
 	 * this method draw the user selected AutoTrack on top of the video pane
 	 * @param tracks the AnimalTrack to be drawn
 	 */
-	public void showSelectedAutoTrack(AnimalTrack tracks) {
+	public void showSelectedAutoTrack(AnimalTrack track) {
 		if(!availAutoChoiceBox.getItems().isEmpty()) {
 		videoPane.getChildren().removeAll(currentDots);
-		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
+		for (int x = 0; x < track.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
-			//drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
-			drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio *1.2), Color.WHITE);
+			TimePoint temp = track.getTimePointAtIndex(x);
+			drawDot(temp.getX()*scalingRatio-2 + sideBarPane.getWidth(), temp.getY()*scalingRatio-7 + topBarPane.getHeight()-7, Color.DARKGREY);
 		}
 		}
 	}
