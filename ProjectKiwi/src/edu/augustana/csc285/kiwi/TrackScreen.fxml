@@ -54,6 +54,7 @@
                         <items>
                           <MenuItem mnemonicParsing="false" onAction="#handleExport" text="Export Project" />
                               <MenuItem mnemonicParsing="false" text="Import Project" />
+                              <MenuItem mnemonicParsing="false" onAction="#ExportToCSVItem" text="Save as CSV" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Edit">
@@ -63,7 +64,7 @@
                       </Menu>
                       <Menu mnemonicParsing="false" text="Help">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="About" />
+                          <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Analysis">

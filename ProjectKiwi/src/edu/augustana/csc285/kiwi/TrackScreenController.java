@@ -4,6 +4,7 @@ import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import autotracking.AutoTrackListener;
 import autotracking.AutoTracker;
@@ -11,7 +12,7 @@ import project.AnimalTrack;
 import project.ProjectData;
 import project.Video;
 import project.TimePoint;
-import javafx.scene.canvas.GraphicsContext;
+
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -27,6 +28,7 @@ import javafx.stage.Window;
 import utils.UtilsForOpenCV;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -116,8 +118,8 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
-			drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
-			//drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.2)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio), Color.WHITE);
+			//drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
+			drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio *1.1), Color.WHITE);
 		}
 		}
 	}
@@ -352,7 +354,16 @@ public class TrackScreenController implements AutoTrackListener {
 		} 
 	}
 	
-	
+	@FXML
+	public void ExportToCSVItem(ActionEvent e) throws IOException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Exporting to CSV file");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
+		File file = fileChooser.showSaveDialog(stage);
+		if (file != null) {
+			project.exportToCSV(file);
+		}
+	}
 
 	/** this method removes the currently selected chicks */ 
 	public void removeChick() {
