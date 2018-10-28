@@ -42,6 +42,8 @@ public class ChickNameWindowController {
 	@FXML
 	private Button submitButton;
 	@FXML
+	private Button importBtn;
+	@FXML
 	private Button undoButton;
 	@FXML
 	private Button browseButton;
@@ -71,6 +73,7 @@ public class ChickNameWindowController {
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
+		importBtn.setDisable(true);
 	}
 
 	@FXML
@@ -138,6 +141,26 @@ public class ChickNameWindowController {
 		calibrationChoice.getItems().add("Origin: (0,0)");
 		calibrationChoice.getItems().add("Vertical");
 		calibrationChoice.getItems().add("Horizontal");
+	}
+	
+	@FXML 
+	public void handleImport (ActionEvent event) throws IOException  {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Video File");
+		File chosenFile = fileChooser.showOpenDialog(stage);
+
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
+
+		BorderPane root = (BorderPane) loader.load();
+		TrackScreenController nextController = loader.getController();
+
+		Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
+		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+		Stage primary = (Stage) importBtn.getScene().getWindow();
+		primary.setScene(nextScene);
+		
+		nextController.initializeAfterSceneCreated(chosenFile);
 	}
 
 	public void giveCalibrationInstructions() {
