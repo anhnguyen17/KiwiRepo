@@ -349,9 +349,10 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method export the current working progress to JSon format*/ 
 	@FXML
-	public void handleExport() throws FileNotFoundException {
+	public void handleSaveProgress() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Video File");
+		fileChooser.setTitle("Saving the project");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON file", "*.json"));
 		File chosenFile = fileChooser.showSaveDialog(stage);
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
@@ -360,7 +361,7 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method exports all the tracking data to a CSV file. */
 	@FXML
-	public void ExportToCSVItem(ActionEvent e) throws IOException {
+	public void ExportToCSVFile(ActionEvent e) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Exporting to CSV file");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
