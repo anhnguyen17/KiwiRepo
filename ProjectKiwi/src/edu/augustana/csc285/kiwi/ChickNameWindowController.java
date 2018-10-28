@@ -56,14 +56,10 @@ public class ChickNameWindowController {
 	@FXML
 	private BorderPane videoPane;
 	@FXML
-	private GridPane gridChickNames;
-	@FXML
 	private ChoiceBox<String> calibrationChoice;
 	@FXML
 	private Button saveBtn;
 
-	private List<TextField> chickIDTextFields = new ArrayList<>();
-	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
 	private List<Rectangle> currentRectangles = new ArrayList<>();
 
@@ -78,36 +74,6 @@ public class ChickNameWindowController {
 		giveCalibrationInstructions();
 		importBtn.setDisable(true);
 	}
-
-	@FXML
-	public void handleUpdateNumChicks() {
-
-		for (Label lb : chickIDLables) {
-			gridChickNames.getChildren().remove(lb);
-		}
-		for (TextField tf : chickIDTextFields) {
-			gridChickNames.getChildren().remove(tf);
-
-		}
-		chickIDTextFields.clear();
-
-		try {
-			int numChicks = Integer.parseInt(chickNum.getText());
-			for (int i = 0; i < numChicks; i++) {
-				TextField tf = new TextField();
-				Label lb = new Label();
-
-				chickIDTextFields.add(tf);
-				chickIDLables.add(lb);
-				gridChickNames.add(lb, 0, i);
-				lb.setText("CHICK ID " + (i + 1) + ": ");
-				gridChickNames.add(tf, 1, i);
-			}
-		} catch (NumberFormatException e) {
-			new Alert(AlertType.WARNING, "Enter a number").showAndWait();
-		}
-	}
-
 	@FXML
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -276,14 +242,7 @@ public class ChickNameWindowController {
 			BorderPane root = (BorderPane) loader.load();
 			TrackScreenController nextController = loader.getController();
 
-			ArrayList<String> chickNames = new ArrayList<String>();
 
-			for (TextField tf : chickIDTextFields) {
-
-				chickNames.add(tf.getText());
-			}
-
-			nextController.setChickNames(chickNames);
 			nextController.setFilePath(vid.getFilePath());
 
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
