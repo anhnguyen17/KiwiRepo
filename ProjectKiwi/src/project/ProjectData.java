@@ -40,6 +40,10 @@ public class ProjectData {
 		return unassignedSegments;
 	}
 	
+	/**
+	 * @param chickNum
+	 * @param names
+	 */
 	public void addToTracks(int chickNum, ArrayList<String> names) {
 		AnimalTrack tempTrack = null;
 		
@@ -49,9 +53,11 @@ public class ProjectData {
 		tempTrack = new AnimalTrack(names.get(chickNum));
 		
 		tracks.add(tempTrack);
-		System.out.println(tracks.get(chickNum).getID());
 	}
 	
+	/** This method removes all the information including the tracks of the selected chick
+	 * @param chickToRemove represents the ID of the chick to be removed
+	 */
 	public void removeChick(String chickToRemove) {
 		for(int x = 0; x < tracks.size(); x++) {
 			if(tracks.get(x).getID().equals(chickToRemove)){
@@ -61,6 +67,10 @@ public class ProjectData {
 		}
 	}
 	
+	/** This method give the average speed of the selected chick after tracking process
+	 * @param chickNum represents the index number of a chick
+	 * @return the average speed of that chick
+	 */
 	public double getAveSpeed(int chickNum) {
 		double distance =  getTracks().get(chickNum).getTotalDistance();
 		int numFramesTracked = getTracks().get(chickNum).getTotalNumFrames();

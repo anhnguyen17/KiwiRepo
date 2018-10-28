@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.Videoio;
-import manualtracking.ManualTrack;
 
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
@@ -84,7 +83,6 @@ public class TrackScreenController implements AutoTrackListener {
 	private String filePath;
 	private AutoTracker autotracker;
 	private AnimalTrack animalTrack;
-	private ManualTrack track;
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
@@ -213,6 +211,10 @@ public class TrackScreenController implements AutoTrackListener {
 		}		
 	}
 	
+	
+	/** jumpFrame method 
+	 * @param time the selected amount of time changed
+	 */
 	public void jumpFrame(double time) {
 		int frameNum = project.getVideo().getCurFrameNum() + ((int) (30 * time));
 		if (frameNum <= project.getVideo().getTotalNumFrames() && frameNum >= 0) {
@@ -224,6 +226,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 
+	/** this method rewinds the video by the selected amount of time when the user clicks on Backward button*/
 	@FXML
 	public void handleBackward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -231,6 +234,7 @@ public class TrackScreenController implements AutoTrackListener {
 		jumpFrame(time);
 	}
 
+	/** this method fasts forward the video by the selected amount of time when the user clicks on Forward button*/
 	@FXML
 	public void handleForward() {
 		videoPane.getChildren().removeAll(currentDots);
@@ -238,6 +242,7 @@ public class TrackScreenController implements AutoTrackListener {
 		jumpFrame(time);
 	}
 	
+	/** this method assigns a chosen auto track to the selected chick*/
 	@FXML
 	public void handleAutoTrackMerge() {
 		if(availAutoChoiceBox.getSelectionModel().getSelectedItem() == null || chickChoice.getItems().isEmpty()) {
@@ -269,6 +274,7 @@ public class TrackScreenController implements AutoTrackListener {
 		new Alert(AlertType.INFORMATION, "Success! The empty frame has been updated.").showAndWait();
 	}
 	
+	/** this method draws and saves the TimePoint of a chick in manual tracking*/ 
 	public void mouseClick(MouseEvent event) {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
 		if (selectedChickIndex >= 0) {
@@ -288,9 +294,9 @@ public class TrackScreenController implements AutoTrackListener {
 		jumpFrame(timeStepCb.getValue());
 		chickChoice.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> {
 		});
-		// ManualTrack.trackPoint(null, time, time, 0);
 	}
 
+	
 	public void drawDot(double x, double y, Color color) {
 		Circle dot = new Circle();
 		dot.setCenterX(x);
@@ -310,6 +316,8 @@ public class TrackScreenController implements AutoTrackListener {
 		chickChoice.getSelectionModel().select(0);
 	}
 	
+	
+	/** this method export the current working progress to JSon format*/ 
 	@FXML
 	public void addChick() {
 		TextInputDialog dialog = new TextInputDialog("Enter Chick Name");
@@ -333,6 +341,7 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 	}
 	
+	/** this method export the current working progress to JSon format*/ 
 	@FXML
 	public void handleExport() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -345,9 +354,7 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	
 
-	/*
-	 * Removes the currently selected chick\
-	 */
+	/** this method removes the currently selected chicks */ 
 	public void removeChick() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirm Chick Removal");
@@ -378,6 +385,7 @@ public class TrackScreenController implements AutoTrackListener {
 		});
 	}
 
+	/** this method loads the Video and create a new Project */ 
 	public void loadVideo(String filePath) {
 		try {
 			project = new ProjectData(filePath);
@@ -395,9 +403,7 @@ public class TrackScreenController implements AutoTrackListener {
 		project = ProjectData.loadFromFile(chosenFile);
 		Video video = project.getVideo();
 		sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
-		showFrameAt(0);
-		
-		
+		showFrameAt(0);	
 	}
 
 	@FXML
@@ -453,7 +459,9 @@ public class TrackScreenController implements AutoTrackListener {
 			submitButton.setText("Start auto-tracking");
 		});
 	}
-
+	
+	
+	/** this method updates time label as the current frame change */
 	public void setTimeLabel(double curFrameNum) {
 		int minute = (int) (curFrameNum / 30) / 60;
 		int second = (int) (curFrameNum / 30) - minute * 60;
@@ -466,7 +474,7 @@ public class TrackScreenController implements AutoTrackListener {
 		timeLabel.setText(time);
 	}
 
-	// this method allows us to set the start and end frame for the auto tracking.
+	/** this method allows user to set the start and end frame for the auto tracking. */
 	@FXML
 	public void handleFrame() {
 		if (frameBtn.getText().equals("Start Time")) {
@@ -480,6 +488,7 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 	}
 	
+	/** this method calculates and shows the total distance one chick travels after finish tracking */ 
 	@FXML
 	public void handleTotalDistance() {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
@@ -489,6 +498,7 @@ public class TrackScreenController implements AutoTrackListener {
 		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}
 	
+	/** this method calculates and shows the average speed of one chick during tracked time */ 
 	@FXML
 	public void handleAverageVelocity() {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
