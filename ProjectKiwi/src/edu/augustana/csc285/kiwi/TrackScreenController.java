@@ -163,8 +163,8 @@ public class TrackScreenController implements AutoTrackListener {
 	public void initializeAfterSceneCreated() {
 		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
 		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
-		videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
-		videoView.fitHeightProperty().addListener((obs, oldV, newV) -> repaintCanvas());
+		//videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
+		//videoView.fitHeightProperty().addListener((obs, oldV, newV) -> repaintCanvas());
 		
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
