@@ -138,32 +138,21 @@ public class ChickNameWindowController {
 	public void giveCalibrationInstructions() {
 		calibrationChoice.setOnAction(e ->
 		{
+			removeDots();
 			if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
-				removeDots();
-				Alert alert = new Alert(AlertType.INFORMATION, "The arena rectangle is the area where tracking will occur. "
-						+ "Click on the image where you want the upper left corner and the lower right corner of the rectangle to be. "
-						+ "Click the Save button when you are done.");
-				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.showAndWait();
+				new Alert(AlertType.INFORMATION, "The arena rectangle is the area where tracking will occur. "
+						+ "\nClick on the image where you want the upper left corner and the lower right corner of the rectangle to be. "
+						+ "\n\tClick the Save button when you are done.").showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
-				removeDots();
-				Alert alert = new Alert(AlertType.INFORMATION, "Click on the image where you want the origin point to be. Click the Save "
-						+ "button when you are done.");
-				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.showAndWait();
+				new Alert(AlertType.INFORMATION, "Click on the image where you want the origin point to be. Click the Save "
+						+ "button when you are done.").showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-				removeDots();
-				Alert alert = new Alert(AlertType.INFORMATION, "");
-				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.showAndWait();
+				new Alert(AlertType.INFORMATION, "").showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-				removeDots();
-				Alert alert = new Alert(AlertType.INFORMATION, "");
-				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.showAndWait();
+				new Alert(AlertType.INFORMATION, "").showAndWait();
 			}
 		});
 	}
