@@ -9,6 +9,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -17,6 +18,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.TrackScreenController">
@@ -45,6 +47,8 @@
                   <Button layoutX="22.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAutoTrackMerge" text="Assign to Current Chick" />
                   <Button layoutX="24.0" layoutY="57.0" mnemonicParsing="false" onAction="#addChick" prefHeight="31.0" prefWidth="63.0" text="Add" />
                   <Button layoutX="99.0" layoutY="57.0" mnemonicParsing="false" onAction="#removeChick" text="Remove" />
+                  <ColorPicker fx:id="chickColor" layoutX="78.0" layoutY="147.0" onAction="#handleChickColorChange" />
+                  <Label layoutX="26.0" layoutY="152.0" prefHeight="21.0" prefWidth="45.0" text="Color:" />
                </children>
             </AnchorPane>
          </left>
