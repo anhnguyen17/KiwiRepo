@@ -61,6 +61,13 @@ public class ProjectData {
 		}
 	}
 	
+	public double getAveSpeed(int chickNum) {
+		double distance =  getTracks().get(chickNum).getTotalDistance();
+		int numFramesTracked = getTracks().get(chickNum).getTotalNumFrames();
+		double timeTracked =  getVideo().convertFrameNumsToSeconds(numFramesTracked);
+		return (int) (distance / timeTracked);
+	}
+	
 	/**
 	 * This method returns the unassigned segment that contains a TimePoint (between
 	 * startFrame and endFrame) that is closest to the given x,y location

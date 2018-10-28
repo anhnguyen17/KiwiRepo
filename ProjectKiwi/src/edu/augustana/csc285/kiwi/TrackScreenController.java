@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.Videoio;
-import manualtracking.ManualTrack;
 
 public class TrackScreenController implements AutoTrackListener {
 	@FXML
@@ -84,7 +83,6 @@ public class TrackScreenController implements AutoTrackListener {
 	private String filePath;
 	private AutoTracker autotracker;
 	private AnimalTrack animalTrack;
-	private ManualTrack track;
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;

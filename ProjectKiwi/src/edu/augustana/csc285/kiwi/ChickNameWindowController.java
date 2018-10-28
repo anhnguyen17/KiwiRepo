@@ -27,16 +27,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import project.ProjectData;
 import project.Video;
 import utils.UtilsForOpenCV;
-
-import java.awt.Rectangle;
 
 public class ChickNameWindowController {
 	@FXML
@@ -56,58 +56,24 @@ public class ChickNameWindowController {
 	@FXML
 	private BorderPane videoPane;
 	@FXML
-	private GridPane gridChickNames;
-	@FXML
 	private ChoiceBox<String> calibrationChoice;
 	@FXML
 	private Button saveBtn;
 
-	private List<TextField> chickIDTextFields = new ArrayList<>();
-	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
-	private ProjectData project;
+	private List<Rectangle> currentRectangles = new ArrayList<>();
 
 	private Video vid;
+	private ProjectData project;
 	private Window stage;
 	private TrackScreenController trackScreen;
-	
+	private Rectangle arenaRect;
 
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
 		importBtn.setDisable(true);
 	}
-	
-
-	@FXML
-	public void handleUpdateNumChicks() {
-
-		for (Label lb : chickIDLables) {
-			gridChickNames.getChildren().remove(lb);
-		}
-		for (TextField tf : chickIDTextFields) {
-			gridChickNames.getChildren().remove(tf);
-
-		}
-		chickIDTextFields.clear();
-
-		try {
-			int numChicks = Integer.parseInt(chickNum.getText());
-			for (int i = 0; i < numChicks; i++) {
-				TextField tf = new TextField();
-				Label lb = new Label();
-
-				chickIDTextFields.add(tf);
-				chickIDLables.add(lb);
-				gridChickNames.add(lb, 0, i);
-				lb.setText("CHICK ID " + (i + 1) + ": ");
-				gridChickNames.add(tf, 1, i);
-			}
-		} catch (NumberFormatException e) {
-			new Alert(AlertType.WARNING, "Enter a number").showAndWait();
-		}
-	}
-
 	@FXML
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -123,11 +89,13 @@ public class ChickNameWindowController {
 
 	@FXML
 	public void handleUndo() {
+		removeDots();
+	}
+	
+	public void removeDots() {
 		videoPane.getChildren().removeAll(currentDots);
 		currentDots.clear();
 	}
-
-	//mouseTrackEvent
 	
 	public void drawDot(MouseEvent event) {
 		Circle dot = new Circle();
@@ -137,7 +105,7 @@ public class ChickNameWindowController {
 		dot.setFill(Color.RED);
 		currentDots.add(dot);
 		videoPane.getChildren().add(dot);
-	}
+	} 
 
 	public void addToCalibrationBox() {
 		calibrationChoice.getItems().add("Arena Rectangle");
@@ -168,24 +136,38 @@ public class ChickNameWindowController {
 
 	public void giveCalibrationInstructions() {
 		calibrationChoice.setOnAction(e ->
-
 		{
 			if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
-				new Alert(AlertType.INFORMATION, "Arena Rect Info").showAndWait();
+				removeDots();
+				Alert alert = new Alert(AlertType.INFORMATION, "The arena rectangle is the area where tracking will occur. "
+						+ "Click on the image where you want the upper left corner and the lower right corner of the rectangle to be. "
+						+ "Click the Save button when you are done.");
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
-				new Alert(AlertType.INFORMATION, "Origin Info").showAndWait();
+				removeDots();
+				Alert alert = new Alert(AlertType.INFORMATION, "Click on the image where you want the origin point to be. Click the Save "
+						+ "button when you are done.");
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-				new Alert(AlertType.INFORMATION, "Vertical Info").showAndWait();
+				removeDots();
+				Alert alert = new Alert(AlertType.INFORMATION, "");
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-				new Alert(AlertType.INFORMATION, "Horizontal Info").showAndWait();
+				removeDots();
+				Alert alert = new Alert(AlertType.INFORMATION, "");
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
 			}
 		});
 	}
 	
-	//coordinate with the smallest x and the smallest y 
+	//coordinate with the smallest x
 	public Circle findUpperLeftCircle() {
 		
 	Circle upperLeft = null;
@@ -204,19 +186,41 @@ public class ChickNameWindowController {
 	return upperLeft;
 	}
 	
+	public int calculateRectWidth() {
+		int rectWidth = (int) Math.round(Math.abs(currentDots.get(0).getCenterX() - currentDots.get(1).getCenterX()));
+
+		return rectWidth;
+	}
+	
+	public int calculateRectHeight() {
+		int rectHeight =(int) Math.round(Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY()));
+		return rectHeight;
+	}
+	
+	public void createArenaRect() {	
+		Circle upperLeft = findUpperLeftCircle();
+		int upperLeftX = (int) Math.round(upperLeft.getCenterX());
+		int upperLeftY = (int) Math.round(upperLeft.getCenterY());
+		int rectWidth = calculateRectWidth();
+		int rectHeight = calculateRectHeight();
+		arenaRect = new Rectangle(upperLeftX, upperLeftY, rectWidth, rectHeight);
+		arenaRect.setFill(Color.GREEN); 
+	} 
+	
+	//to test if code for creating arena rect is correct
+	public void drawArenaRect() {
+		currentRectangles.add(arenaRect);
+		videoPane.getChildren().add(arenaRect);
+	}
+	
 	@FXML
 	public void handleSaveBtn() {
-		Rectangle arenaRect = new Rectangle();
-		Circle upperLeft = findUpperLeftCircle();
-		double upperLeftX = upperLeft.getCenterX();
-		double upperLeftY = upperLeft.getCenterY();
-		
-//		arenaRect.setBounds(upperLeftX, upperLeftY, width, height); 
-		
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
-			System.out.println(currentDots.toString());
+			//System.out.println(currentDots.toString());
+			createArenaRect();
+			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
+			drawArenaRect();
 			
-
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
 			
 			
@@ -229,6 +233,7 @@ public class ChickNameWindowController {
 		}
 	}
 
+	
 	@FXML
 	public void handleSubmit(ActionEvent event) throws IOException {
 		try {
@@ -237,14 +242,7 @@ public class ChickNameWindowController {
 			BorderPane root = (BorderPane) loader.load();
 			TrackScreenController nextController = loader.getController();
 
-			ArrayList<String> chickNames = new ArrayList<String>();
 
-			for (TextField tf : chickIDTextFields) {
-
-				chickNames.add(tf.getText());
-			}
-
-			nextController.setChickNames(chickNames);
 			nextController.setFilePath(vid.getFilePath());
 
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
@@ -262,3 +260,4 @@ public class ChickNameWindowController {
 
 	}
 }
+

@@ -38,8 +38,8 @@
                      </font></Label>
                   <ChoiceBox fx:id="availAutoChoiceBox" layoutX="24.0" layoutY="254.0" prefWidth="150.0" />
                   <Button layoutX="22.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAutoTrackMerge" text="Assign to Current Chick" />
-                  <Button layoutX="24.0" layoutY="57.0" mnemonicParsing="false" onAction="#addChick" prefHeight="31.0" prefWidth="63.0" text="Add" />
-                  <Button layoutX="99.0" layoutY="57.0" mnemonicParsing="false" onAction="#removeChick" text="Remove" />
+                  <Button layoutX="24.0" layoutY="57.0" mnemonicParsing="false" onAction="#addChick" prefHeight="25.0" prefWidth="65.0" text="Add" />
+                  <Button layoutX="108.0" layoutY="57.0" mnemonicParsing="false" onAction="#removeChick" prefHeight="25.0" prefWidth="65.0" text="Remove" />
                   <ColorPicker fx:id="chickColor" layoutX="78.0" layoutY="147.0" onAction="#handleChickColorChange" />
                   <Label layoutX="26.0" layoutY="152.0" prefHeight="21.0" prefWidth="45.0" text="Color:" />
                </children>
@@ -48,7 +48,7 @@
          <top>
             <AnchorPane fx:id="topBarPane" prefHeight="78.0" prefWidth="836.0" BorderPane.alignment="CENTER">
                <children>
-                  <MenuBar layoutX="27.0" layoutY="31.0" prefHeight="33.0" prefWidth="150.0">
+                  <MenuBar layoutX="27.0" layoutY="31.0" prefHeight="33.0" prefWidth="199.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
@@ -66,6 +66,12 @@
                           <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
                         </items>
                       </Menu>
+                        <Menu mnemonicParsing="false" text="Analysis">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleTotalDistance" text="Total Distance" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleAverageVelocity" text="Average Velocity" />
+                          </items>
+                        </Menu>
                     </menus>
                   </MenuBar>
                </children>
@@ -93,7 +99,7 @@
             <Button fx:id="backwardBtn" layoutX="308.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleBackward" prefHeight="25.0" prefWidth="69.0" text="Backward" />
             <Button fx:id="Forward" layoutX="711.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleForward" text="Forward" />
             <ChoiceBox fx:id="timeStepCb" layoutX="308.0" layoutY="165.0" prefHeight="25.0" prefWidth="70.0" />
-            <Label layoutX="336.0" layoutY="169.0" text="sec" />
+            <Label layoutX="340.0" layoutY="169.0" text="sec" />
             <Button fx:id="frameBtn" layoutX="225.0" layoutY="128.0" mnemonicParsing="false" onAction="#handleFrame" text="Start Time" />
             <Button layoutX="474.0" layoutY="164.0" mnemonicParsing="false" onAction="#handleSetEmptyFrame" text="Set Empty Frame" />
          </children>

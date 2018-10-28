@@ -1,6 +1,6 @@
 package project;
 
-import java.awt.Rectangle;
+import javafx.scene.shape.Rectangle;
 import java.io.FileNotFoundException;
 
 import org.opencv.core.Mat;
@@ -142,6 +142,14 @@ public class Video {
 		this.arenaBounds = arenaBounds;
 	}
 	
+//	public Point getOriginPoint() {
+//		return 
+//	}
+//	
+//	public void setOriginPoint() {
+//		
+//	}
+	
 	public double convertFrameNumsToSeconds(int numFrames) {
 		return numFrames / getFrameRate();
 	}
@@ -154,5 +162,6 @@ public class Video {
 		this.emptyFrameNum = newEmptyFrame;
 		
 	}
+	
 
 }
