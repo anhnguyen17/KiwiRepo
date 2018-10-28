@@ -88,6 +88,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private AutoTracker autotracker;
 	private AnimalTrack animalTrack;
 	private ProjectData project;
+	private ChickNameWindowController firstWindow;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
 
@@ -129,7 +130,8 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int x = 0; x < track.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
 			TimePoint temp = track.getTimePointAtIndex(x);
-			drawDot(temp.getX()*scalingRatio-2 + sideBarPane.getWidth(), temp.getY()*scalingRatio-7 + topBarPane.getHeight()-7, Color.DARKGREY);
+//			drawDot(temp.getX()*scalingRatio-5 + sideBarPane.getWidth(), temp.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
+			drawDot(temp.getX()*scalingRatio-5 + sideBarPane.getWidth(), temp.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
 		}
 		}
 	}
@@ -141,8 +143,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private double getImageScalingRatio() {
 		double widthRatio = (videoPane.getWidth() - (sideBarPane.getWidth()*.5)) / project.getVideo().getFrameWidth();
 		double heightRatio = (videoPane.getHeight() - (topBarPane.getHeight()*.5)) / project.getVideo().getFrameHeight();
-		//return Math.min(widthRatio, heightRatio);
-		return heightRatio;
+		return Math.min(widthRatio, heightRatio);
+		//return heightRatio;
 	}
 	
 	public void setFilePath(String filePath) {
@@ -160,13 +162,27 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	
+
 	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin) {
-		//videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
+		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
+		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
+		//videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
+		//videoView.fitHeightProperty().addListener((obs, oldV, newV) -> repaintCanvas());
+		
+		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
-		//project.getVideo().setArenaBounds(arenaBounds); 
+		
+		double x = arenaBounds.x + sideBarPane.getWidth();
+		double y = arenaBounds.y + sideBarPane.getHeight();
+		arenaBounds.setLocation((int)x, (int)y);
+		project.getVideo().setArenaBounds(arenaBounds);
 		project.getVideo().setOriginPoint(origin); 
 		System.out.println("done");
+	}
+	
+	public void repaintCanvas() {
+		showFrameAt(project.getVideo().getCurFrameNum());
 	}
 	
 	//This method has not work yet
@@ -178,6 +194,8 @@ public class TrackScreenController implements AutoTrackListener {
 		for (AnimalTrack track : project.getUnassignedSegments()) {
 				availAutoChoiceBox.getItems().add(track);
 		}
+		
+		
 		
 	}
 
@@ -202,16 +220,16 @@ public class TrackScreenController implements AutoTrackListener {
 			} else {
 			trackColor = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];;
 			}
-			Color trackPrevColor = trackColor.deriveColor(0, 0.5, 1.5, 1.0); // subtler variant
+			Color trackPrevColor = trackColor.deriveColor(0, 0.5, 2.5, 1.0); // subtler variant
 
 			// draw chick's recent trail from the last few seconds 
 			for (project.TimePoint prevPt : track.getTimePointsWithinInterval(frameNum-90, frameNum)) {
-				drawDot(prevPt.getX()*scalingRatio-3, prevPt.getY()*scalingRatio-3, trackPrevColor);
+				drawDot(prevPt.getX()*scalingRatio-5, prevPt.getY()*scalingRatio-5, trackPrevColor);
 			}
 			// draw the current point (if any) as a larger dot
 			TimePoint currPt = track.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-7, currPt.getY()*scalingRatio-7, trackColor);
+				drawDot(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, trackColor);
 			}
 		}		
 	}
@@ -220,12 +238,12 @@ public class TrackScreenController implements AutoTrackListener {
 		for (AnimalTrack segment: project.getUnassignedSegments()) {
 			// draw this segments recent past & near future locations 
 			for (TimePoint prevPt : segment.getTimePointsWithinInterval(frameNum-30, frameNum+30)) {
-				drawDot(prevPt.getX()*scalingRatio-2 + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-7 + topBarPane.getHeight()-7, Color.DARKGREY);
+				drawDot(prevPt.getX()*scalingRatio + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
 			}
 			// draw the current point (if any) as a larger square
 			TimePoint currPt = segment.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-3 + topBarPane.getWidth(), currPt.getY()*scalingRatio-7 +topBarPane.getHeight()-7, Color.GREEN);
+				drawDot(currPt.getX()*scalingRatio + sideBarPane.getWidth(), currPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.GREEN);
 			}
 		}		
 	}
@@ -354,9 +372,10 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method export the current working progress to JSon format*/ 
 	@FXML
-	public void handleExport() throws FileNotFoundException {
+	public void handleSaveProgress() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Video File");
+		fileChooser.setTitle("Saving the project");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON file", "*.json"));
 		File chosenFile = fileChooser.showSaveDialog(stage);
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
@@ -365,7 +384,7 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method exports all the tracking data to a CSV file. */
 	@FXML
-	public void ExportToCSVItem(ActionEvent e) throws IOException {
+	public void ExportToCSVFile(ActionEvent e) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Exporting to CSV file");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
@@ -457,6 +476,7 @@ public class TrackScreenController implements AutoTrackListener {
 		// this method is being run by the AutoTracker's thread, so we must
 		// ask the JavaFX UI thread to update some visual properties
 		Platform.runLater(() -> {
+			
 			videoView.setImage(imgFrame);
 			// progressAutoTrack.setProgress(fractionComplete);
 			sliderSeekBar.setValue(frameNumber);
