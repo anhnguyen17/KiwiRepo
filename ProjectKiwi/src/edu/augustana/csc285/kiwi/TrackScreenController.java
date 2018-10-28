@@ -11,7 +11,7 @@ import project.AnimalTrack;
 import project.ProjectData;
 import project.Video;
 import project.TimePoint;
-import javafx.scene.canvas.GraphicsContext;
+
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -104,6 +104,7 @@ public class TrackScreenController implements AutoTrackListener {
 		about += "\n\tTeam members: \n\t\tAnh Nguyen \n\t\tAJ Housholder"
 				+ " \n\t\tGenesis Sarmiento \n\t\tThomas Ayele";
 		about += "\n\tProject Supervisor: Dr. Forrest Stondedahl";
+		about += "\nCSC 285 - Augustana College";
 		new Alert(AlertType.INFORMATION, about).showAndWait();
 	}
 
@@ -111,15 +112,12 @@ public class TrackScreenController implements AutoTrackListener {
 		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
 	}
 	public void showSelectedAutoTrack(AnimalTrack tracks) {
-		if(!(availAutoChoiceBox.getItems().isEmpty())) {
-		//videoPane.getChildren().removeAll(currentDots);
+		if(!availAutoChoiceBox.getItems().isEmpty()) {
+		videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
-			double currPt = tracks.getTimePointAtIndex(x).getFrameNum();
-					//(tracks.getTimePointAtIndex(x).getFrameNum());
-			System.out.println(tracks.getTimePointAtIndex(x).getFrameNum());
-			//drawDot(currPt.getX()*scalingRatio + topBarPane.getWidth(), currPt.getY()*scalingRatio +topBarPane.getHeight(), Color.GREEN);
-			drawDot(tracks.getTimePointAtIndex(x).getX()*scalingRatio + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY()*scalingRatio + videoView.getLayoutY() / (scalingRatio*1.1), Color.WHITE);
+			//drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
+			drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio *1.1), Color.WHITE);
 		}
 		}
 	}
@@ -478,5 +476,23 @@ public class TrackScreenController implements AutoTrackListener {
 			frameBtn.setText("Start Time");
 			instructionLabel.setText("Select your prefered start time:");
 		}
+	}
+	
+	@FXML
+	public void handleTotalDistance() {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		int distance = (int) project.getTracks().get(selectedChickIndex).getTotalDistance();
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+				"travels a total distance of "+ distance;
+		new Alert(AlertType.INFORMATION, message).showAndWait();
+	}
+	
+	@FXML
+	public void handleAverageVelocity() {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		int aveSpeed =  (int) project.getAveSpeed(selectedChickIndex);
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+				"travels with an average velocity of "+ aveSpeed;
+		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}
 }
