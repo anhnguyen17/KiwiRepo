@@ -26,6 +26,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import utils.UtilsForOpenCV;
+
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -89,6 +91,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private ChickNameWindowController firstWindow;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
+	private Rectangle arenaBounds;
 
 	@FXML
 	public void initialize() {
@@ -144,13 +147,17 @@ public class TrackScreenController implements AutoTrackListener {
 		return Math.min(widthRatio, heightRatio);
 		//return heightRatio;
 	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 
 	public String getFilePath() {
 		return filePath;
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public void setArenaBounds(Rectangle arenaBounds) {
+		this.arenaBounds =arenaBounds;
 	}
 
 	/** this method changes a chick dot color to the user selected color */
@@ -169,6 +176,7 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
+		project.getVideo().setArenaBounds(arenaBounds); 
 	}
 	
 	public void repaintCanvas() {
@@ -362,9 +370,10 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method export the current working progress to JSon format*/ 
 	@FXML
-	public void handleExport() throws FileNotFoundException {
+	public void handleSaveProgress() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Video File");
+		fileChooser.setTitle("Saving the project");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON file", "*.json"));
 		File chosenFile = fileChooser.showSaveDialog(stage);
 		if (chosenFile != null) {
 			project.saveToFile(chosenFile); 
@@ -373,7 +382,7 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	/** this method exports all the tracking data to a CSV file. */
 	@FXML
-	public void ExportToCSVItem(ActionEvent e) throws IOException {
+	public void ExportToCSVFile(ActionEvent e) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Exporting to CSV file");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
