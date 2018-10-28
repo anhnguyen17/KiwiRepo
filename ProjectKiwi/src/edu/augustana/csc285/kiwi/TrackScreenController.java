@@ -99,6 +99,16 @@ public class TrackScreenController implements AutoTrackListener {
 		availAutoChoiceBox.setOnAction(e -> showSelectedAutoTrack(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
 		
 	}
+	
+	@FXML
+	public void handleAbout() {
+		String about ="Chicken Tracking Software - By Kiwi Team";
+		about += "\n\tTeam members: \n\t\tAnh Nguyen \n\t\tAJ Housholder"
+				+ " \n\t\tGenesis Sarmiento \n\t\tThomas Ayele";
+		about += "\n\tProject Supervisor: Dr. Forrest Stondedahl";
+		about += "\nCSC 285 - Augustana College";
+		new Alert(AlertType.INFORMATION, about).showAndWait();
+	}
 
 	public void updateColor() {
 		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
@@ -468,5 +478,23 @@ public class TrackScreenController implements AutoTrackListener {
 			frameBtn.setText("Start Time");
 			instructionLabel.setText("Select your prefered start time:");
 		}
+	}
+	
+	@FXML
+	public void handleTotalDistance() {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		int distance = (int) project.getTracks().get(selectedChickIndex).getTotalDistance();
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+				"travels a total distance of "+ distance;
+		new Alert(AlertType.INFORMATION, message).showAndWait();
+	}
+	
+	@FXML
+	public void handleAverageVelocity() {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		int aveSpeed =  (int) project.getAveSpeed(selectedChickIndex);
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+				"travels with an average velocity of "+ aveSpeed;
+		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}
 }

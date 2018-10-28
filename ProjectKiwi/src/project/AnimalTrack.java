@@ -25,6 +25,17 @@ public class AnimalTrack {
 		this.color = Color.WHITE;
 	}
 	
+	public double getTotalDistance() {
+		double totalDistance = 0;
+		for (int i =0; i < positions.size()-1; i++) {
+			TimePoint pt1 = positions.get(i);
+			TimePoint pt2 = positions.get(i+1);
+			totalDistance += pt2.getDistanceTo(pt1);
+		}
+			
+		return totalDistance;
+	}
+	
 	public void add(TimePoint pt) {
 		positions.add(pt);
 	}
@@ -117,5 +128,11 @@ public class AnimalTrack {
 	public int getTotalTimePoints() {
 		return positions.size();
 		
+	}
+	public int getTotalNumFrames() {
+		TimePoint pt2 = getFinalTimePoint();
+		TimePoint pt1 = positions.get(0);
+		
+		return pt2.getFrameNum() - pt1.getFrameNum();
 	}
 }
