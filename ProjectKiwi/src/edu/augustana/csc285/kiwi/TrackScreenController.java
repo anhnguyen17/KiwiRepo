@@ -72,6 +72,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private AnchorPane sideBarPane;
 	@FXML
 	private AnchorPane topBarPane;
+	@FXML
+	private ColorPicker chickColor;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	// add up to 10 colors
@@ -95,8 +97,12 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeStepCb.getSelectionModel().selectFirst();
 		availAutoChoiceBox.setOnAction(e -> showSelectedAutoTrack(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
+		
 	}
 
+	public void updateColor() {
+		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
+	}
 	public void showSelectedAutoTrack(AnimalTrack tracks) {
 		if(!availAutoChoiceBox.getItems().isEmpty()) {
 		videoPane.getChildren().removeAll(currentDots);
@@ -109,9 +115,10 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	private double getImageScalingRatio() {
-		double widthRatio = videoPane.getWidth() / project.getVideo().getFrameWidth();
-		double heightRatio = videoPane.getHeight() / project.getVideo().getFrameHeight();
-		return Math.min(widthRatio, heightRatio);
+		double widthRatio = (videoPane.getWidth() - (sideBarPane.getWidth()*.5)) / project.getVideo().getFrameWidth();
+		double heightRatio = (videoPane.getHeight() - (topBarPane.getHeight()*.5)) / project.getVideo().getFrameHeight();
+		//return Math.min(widthRatio, heightRatio);
+		return heightRatio;
 	}
 
 	public String getFilePath() {
@@ -121,10 +128,15 @@ public class TrackScreenController implements AutoTrackListener {
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
+	
+	public void handleChickColorChange() {
+		AnimalTrack temp = project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
+		temp.setColor(chickColor.getValue());
+	}
 
 	public void initializeAfterSceneCreated() {
 		//videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
-		
+		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
 		for (int x = 0; x < chickNames.size(); x++) {
 			String chickName = chickNames.get(x);
@@ -157,7 +169,12 @@ public class TrackScreenController implements AutoTrackListener {
 	private void drawAssignedAnimalTracks(double scalingRatio, int frameNum) {
 		for (int i = 0; i < project.getTracks().size(); i++) {
 			AnimalTrack track = project.getTracks().get(i);
-			Color trackColor = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];;
+			Color trackColor = null;
+			if(track.getColor() != null) {
+				trackColor = track.getColor();
+			} else {
+			trackColor = chickColors[chickChoice.getSelectionModel().getSelectedIndex()];;
+			}
 			Color trackPrevColor = trackColor.deriveColor(0, 0.5, 1.5, 1.0); // subtler variant
 
 			// draw chick's recent trail from the last few seconds 
@@ -165,7 +182,7 @@ public class TrackScreenController implements AutoTrackListener {
 				drawDot(prevPt.getX()*scalingRatio-3, prevPt.getY()*scalingRatio-3, trackPrevColor);
 			}
 			// draw the current point (if any) as a larger dot
-			project.TimePoint currPt = track.getTimePointAtTime(frameNum);
+			TimePoint currPt = track.getTimePointAtTime(frameNum);
 			if (currPt != null) {
 				drawDot(currPt.getX()*scalingRatio-7, currPt.getY()*scalingRatio-7, trackColor);
 			}
@@ -174,15 +191,14 @@ public class TrackScreenController implements AutoTrackListener {
 	
 	private void drawUnassignedSegments(double scalingRatio, int frameNum) {
 		for (AnimalTrack segment: project.getUnassignedSegments()) {
-			
 			// draw this segments recent past & near future locations 
 			for (TimePoint prevPt : segment.getTimePointsWithinInterval(frameNum-30, frameNum+30)) {
-				drawDot(prevPt.getX()*scalingRatio-1, prevPt.getY()*scalingRatio-1, Color.DARKGREY);
+				drawDot(prevPt.getX()*scalingRatio-2 + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-7 + topBarPane.getHeight()-7, Color.DARKGREY);
 			}
 			// draw the current point (if any) as a larger square
 			TimePoint currPt = segment.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, Color.LIGHTGREY);
+				drawDot(currPt.getX()*scalingRatio-3 + topBarPane.getWidth(), currPt.getY()*scalingRatio-7 +topBarPane.getHeight()-7, Color.GREEN);
 			}
 		}		
 	}

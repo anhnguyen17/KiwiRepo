@@ -1,6 +1,7 @@
 package project;
 
-import java.util.ArrayList; 
+import javafx.scene.paint.*;
+import java.util.ArrayList;  
 
 import java.util.List;
 
@@ -8,16 +9,28 @@ import project.TimePoint;
 
 public class AnimalTrack {
 	private String animalID;
+	private Color color;
 	
 	private List<TimePoint> positions;
+	
+	public AnimalTrack(String id, Color color) {
+		this.animalID = id;
+		positions = new ArrayList<TimePoint>();
+		this.color = color;
+	}
 	
 	public AnimalTrack(String id) {
 		this.animalID = id;
 		positions = new ArrayList<TimePoint>();
+		this.color = Color.WHITE;
 	}
 	
 	public void add(TimePoint pt) {
 		positions.add(pt);
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public TimePoint getTimePointAtIndex(int index) {
@@ -89,6 +102,10 @@ public class AnimalTrack {
 	
 	public String getID() {
 		return this.animalID;
+	}
+	
+	public Color getColor() {
+		return this.color;
 	}
 	
 	public String toString() {
