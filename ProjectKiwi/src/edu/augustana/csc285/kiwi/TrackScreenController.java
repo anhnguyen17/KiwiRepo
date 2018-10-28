@@ -26,6 +26,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import utils.UtilsForOpenCV;
+
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -88,6 +90,7 @@ public class TrackScreenController implements AutoTrackListener {
 	private ProjectData project;
 	public ArrayList<String> chickNames = new ArrayList<String>();
 	private Window stage;
+	private Rectangle arenaBounds;
 
 	@FXML
 	public void initialize() {
@@ -142,13 +145,17 @@ public class TrackScreenController implements AutoTrackListener {
 		//return Math.min(widthRatio, heightRatio);
 		return heightRatio;
 	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 
 	public String getFilePath() {
 		return filePath;
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public void setArenaBounds(Rectangle arenaBounds) {
+		this.arenaBounds =arenaBounds;
 	}
 
 	/** this method changes a chick dot color to the user selected color */
@@ -162,6 +169,7 @@ public class TrackScreenController implements AutoTrackListener {
 		//videoView.fitWidthProperty().bind(videoView.getScene().widthProperty());
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
+		project.getVideo().setArenaBounds(arenaBounds); 
 	}
 	
 	//This method has not work yet
