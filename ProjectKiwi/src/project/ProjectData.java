@@ -146,21 +146,5 @@ public class ProjectData {
 		}
 		out.close();
 	}
-	public String toJSON() {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();		
-		return gson.toJson(this);
-	}
-
-	public static ProjectData loadFromFile(File loadFile) throws FileNotFoundException {
-		@SuppressWarnings("resource")
-		String json = new Scanner(loadFile).useDelimiter("\\Z").next();
-		return fromJSON(json);
-	}
-
-	public static ProjectData fromJSON(String jsonText) throws FileNotFoundException {
-		Gson gson = new Gson();
-		ProjectData data = gson.fromJson(jsonText, ProjectData.class);
-		data.getVideo().connectVideoCapture();
-		return data;
-	}
+	
 }
