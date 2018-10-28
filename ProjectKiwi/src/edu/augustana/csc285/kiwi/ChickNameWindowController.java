@@ -243,6 +243,7 @@ public class ChickNameWindowController {
 
 			Stage primary = (Stage) submitButton.getScene().getWindow();
 			primary.setScene(nextScene);
+			primary.setResizable(false);
 
 			nextController.initializeAfterSceneCreated();
 
