@@ -25,6 +25,9 @@ public class AnimalTrack {
 		this.color = Color.WHITE;
 	}
 	
+	/** This method calculates the total distance traveled by a selected chick
+	 * @return the total distance a chick went
+	 */
 	public double getTotalDistance() {
 		double totalDistance = 0;
 		for (int i =0; i < positions.size()-1; i++) {
@@ -129,10 +132,11 @@ public class AnimalTrack {
 		return positions.size();
 		
 	}
+	
+	/** This method returns the total number of frames between the first and last TimePoint
+	 * @return the total num Frames of an animalTrack
+	 */
 	public int getTotalNumFrames() {
-		TimePoint pt2 = getFinalTimePoint();
-		TimePoint pt1 = positions.get(0);
-		
-		return pt2.getFrameNum() - pt1.getFrameNum();
+		return getFinalTimePoint().getFrameNum() - positions.get(0).getFrameNum();
 	}
 }
