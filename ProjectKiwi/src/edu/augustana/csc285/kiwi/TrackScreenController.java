@@ -99,6 +99,15 @@ public class TrackScreenController implements AutoTrackListener {
 		availAutoChoiceBox.setOnAction(e -> showSelectedAutoTrack(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
 		
 	}
+	
+	@FXML
+	public void handleAbout() {
+		String about ="Chicken Tracking Software - By Kiwi Team";
+		about += "\n\tTeam members: \n\t\tAnh Nguyen \n\t\tAJ Housholder"
+				+ " \n\t\tGenesis Sarmiento \n\t\tThomas Ayele";
+		about += "\n\tProject Supervisor: Dr. Forrest Stondedahl";
+		new Alert(AlertType.INFORMATION, about).showAndWait();
+	}
 
 	public void updateColor() {
 		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
