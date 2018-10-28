@@ -163,7 +163,7 @@ public class TrackScreenController implements AutoTrackListener {
 
 	
 
-	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin) {
+	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin, double xPixelsPerCm, double yPixelsPerCm) {
 		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
 		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
 		//videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
@@ -178,6 +178,8 @@ public class TrackScreenController implements AutoTrackListener {
 		arenaBounds.setLocation((int)x, (int)y);
 		project.getVideo().setArenaBounds(arenaBounds);
 		project.getVideo().setOriginPoint(origin); 
+		project.getVideo().setXPixelsPerCm(xPixelsPerCm);
+		project.getVideo().setXPixelsPerCm(yPixelsPerCm);
 		System.out.println("done");
 	}
 	

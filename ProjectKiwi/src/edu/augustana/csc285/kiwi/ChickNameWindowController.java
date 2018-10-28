@@ -215,12 +215,20 @@ public class ChickNameWindowController {
 			}
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-			new Alert(AlertType.INFORMATION, "Successfully set the vertical calibration").showAndWait();
-			yPixelsPerCm = calculateYPixelsPerCm();
+			try {
+				yPixelsPerCm = calculateYPixelsPerCm();
+				new Alert(AlertType.INFORMATION, "Successfully set the vertical calibration").showAndWait();
+			} catch (NumberFormatException e){
+				new Alert(AlertType.WARNING, "Please enter the corresponding length").showAndWait();
+			}
 		
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-			new Alert(AlertType.INFORMATION, "Successfully set the horizontal calibration").showAndWait();
-			xPixelsPerCm = calculateXPixelsPerCm();
+			try {
+				xPixelsPerCm = calculateXPixelsPerCm();
+				new Alert(AlertType.INFORMATION, "Successfully set the horizontal calibration").showAndWait();
+			} catch (NumberFormatException e){
+				new Alert(AlertType.WARNING, "Please enter the corresponding length").showAndWait();
+			}
 		}
 		removeDots();
 		calibrationNum.clear();
@@ -245,10 +253,9 @@ public class ChickNameWindowController {
 			primary.setScene(nextScene);
 			primary.setResizable(false);
 
-			nextController.initializeAfterSceneCreated(arenaBounds, origin);
+			nextController.initializeAfterSceneCreated(arenaBounds, origin, xPixelsPerCm, yPixelsPerCm);
 
 		} catch (NullPointerException e) {
-			new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();
 		}
 	}
 }
