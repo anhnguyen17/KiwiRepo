@@ -4,6 +4,7 @@ import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import autotracking.AutoTrackListener;
 import autotracking.AutoTracker;
@@ -27,6 +28,7 @@ import javafx.stage.Window;
 import utils.UtilsForOpenCV;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -341,7 +343,16 @@ public class TrackScreenController implements AutoTrackListener {
 		} 
 	}
 	
-	
+	@FXML
+	public void ExportToCSVItem(ActionEvent e) throws IOException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Exporting to CSV file");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
+		File file = fileChooser.showSaveDialog(stage);
+		if (file != null) {
+			project.exportToCSV(file);
+		}
+	}
 
 	/*
 	 * Removes the currently selected chick\
