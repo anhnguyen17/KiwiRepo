@@ -51,8 +51,6 @@ public class ChickNameWindowController {
 	@FXML
 	private ImageView videoView;
 	@FXML
-	private TextField chickNum;
-	@FXML
 	private TextField calibrationNum;
 	@FXML
 	private BorderPane videoPane;
@@ -70,6 +68,8 @@ public class ChickNameWindowController {
 	private TrackScreenController trackScreen;
 	private Rectangle arenaBounds;
 	private TimePoint origin;
+	private double yPixelsPerCm;
+	private double xPixelsPerCm;
 
 	public void initialize() {
 		addToCalibrationBox();
@@ -141,8 +141,6 @@ public class ChickNameWindowController {
 	}
 
 	public void giveCalibrationInstructions() {
-		
-
 		calibrationChoice.setOnAction(e ->
 		{
 			removeDots();
@@ -160,16 +158,20 @@ public class ChickNameWindowController {
 						alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-				Alert alert = new Alert(AlertType.INFORMATION, "");
+				Alert alert = new Alert(AlertType.INFORMATION, "Click on the image where you want the vertical line "
+						+ "to begin and end. Once you are satisfied with the location of the two dots, enter a number "
+						+ "for the amount of centimeters that you want that line to be, and click the Save button.");
 						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 						alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-				Alert alert = new Alert(AlertType.INFORMATION, "");
+				Alert alert = new Alert(AlertType.INFORMATION, "Click on the image where you want the horizontal line"
+						+ " to begin and end. Once you are satisfied with the location of the two dots, enter a number " 
+						+ "for the amount of centimeters that you want that line to be, and click the Save button.");
 						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 						alert.showAndWait();
 			}
-		});
+		}); 
 	}
 	
 	public Rectangle createArenaRect() {	
@@ -182,6 +184,22 @@ public class ChickNameWindowController {
 		}
 	} 
 	
+	public double calculateYPixelsPerCm() {
+		double yDistance = Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY());
+		double enteredAmount = (double) Integer.parseInt(calibrationNum.getText());
+		double yPixelsPerCm = yDistance / enteredAmount ;
+		
+		return yPixelsPerCm;
+	}
+	
+	public double calculateXPixelsPerCm() {
+		double xDistance = Math.abs(currentDots.get(0).getCenterX() - currentDots.get(1).getCenterX());
+		double enteredAmount = (double) Integer.parseInt(calibrationNum.getText());
+		double xPixelsPerCm = xDistance / enteredAmount ;
+		
+		return xPixelsPerCm;
+	}
+	
 	@FXML
 	public void handleSaveBtn() {
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
@@ -193,18 +211,19 @@ public class ChickNameWindowController {
 				new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
 				origin = new TimePoint(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), 0);
 			} else {
-				removeDots();
 				new Alert(AlertType.WARNING, "Please choose ONE point only").showAndWait();
 			}
-
+			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
-			
+			new Alert(AlertType.INFORMATION, "Successfully set the vertical calibration").showAndWait();
+			yPixelsPerCm = calculateYPixelsPerCm();
+		
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
-			
+			new Alert(AlertType.INFORMATION, "Successfully set the horizontal calibration").showAndWait();
+			xPixelsPerCm = calculateXPixelsPerCm();
 		}
-		currentDots.clear();
+		removeDots();
+		calibrationNum.clear();
 	}
 
 	
@@ -231,6 +250,5 @@ public class ChickNameWindowController {
 		} catch (NullPointerException e) {
 			new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();
 		}
-
 	}
 }
