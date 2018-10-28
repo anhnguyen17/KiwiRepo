@@ -1,13 +1,13 @@
 package project;
 
 import javafx.scene.paint.*;
-import java.util.ArrayList;  
-
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import project.TimePoint;
 
-public class AnimalTrack {
+public class AnimalTrack implements Iterable<TimePoint>{
 	private String animalID;
 	private Color color;
 	
@@ -138,5 +138,10 @@ public class AnimalTrack {
 	 */
 	public int getTotalNumFrames() {
 		return getFinalTimePoint().getFrameNum() - positions.get(0).getFrameNum();
+	}
+
+	@Override
+	public Iterator<TimePoint> iterator() {
+		return positions.iterator();
 	}
 }
