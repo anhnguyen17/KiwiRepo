@@ -484,8 +484,17 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleTotalDistance() {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
 		int distance = (int) project.getTracks().get(selectedChickIndex).getTotalDistance();
-		String a = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
 				"travels a total distance of "+ distance;
-		new Alert(AlertType.INFORMATION, a).showAndWait();
+		new Alert(AlertType.INFORMATION, message).showAndWait();
+	}
+	
+	@FXML
+	public void handleAverageVelocity() {
+		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
+		int aveSpeed =  (int) project.getAveSpeed(selectedChickIndex);
+		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+				"travels with an average velocity of "+ aveSpeed;
+		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}
 }

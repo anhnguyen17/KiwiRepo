@@ -69,7 +69,7 @@
                         <Menu mnemonicParsing="false" text="Analysis">
                           <items>
                             <MenuItem mnemonicParsing="false" onAction="#handleTotalDistance" text="Total Distance" />
-                              <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleAverageVelocity" text="Average Velocity" />
                           </items>
                         </Menu>
                     </menus>

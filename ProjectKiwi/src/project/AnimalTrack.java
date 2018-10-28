@@ -129,4 +129,10 @@ public class AnimalTrack {
 		return positions.size();
 		
 	}
+	public int getTotalNumFrames() {
+		TimePoint pt2 = getFinalTimePoint();
+		TimePoint pt1 = positions.get(0);
+		
+		return pt2.getFrameNum() - pt1.getFrameNum();
+	}
 }
