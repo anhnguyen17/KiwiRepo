@@ -63,7 +63,7 @@
          </font>
       </Label>
       <Label layoutX="706.0" layoutY="453.0" text="cm" />
-      <ChoiceBox fx:id="callibrationChoice" layoutX="418.0" layoutY="449.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="calibrationChoice" layoutX="418.0" layoutY="449.0" prefWidth="150.0" />
       <Button fx:id="saveBtn" layoutX="469.0" layoutY="485.0" mnemonicParsing="false" onAction="#handleSaveBtn" text="Save">
          <font>
             <Font size="14.0" />

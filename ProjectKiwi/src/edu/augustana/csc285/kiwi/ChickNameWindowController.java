@@ -36,6 +36,8 @@ import project.ProjectData;
 import project.Video;
 import utils.UtilsForOpenCV;
 
+import java.awt.Rectangle;
+
 public class ChickNameWindowController {
 	@FXML
 	private Button submitButton;
@@ -53,11 +55,11 @@ public class ChickNameWindowController {
 	private BorderPane videoPane;
 	@FXML
 	private GridPane gridChickNames;
-	@FXML 
-	private ChoiceBox<String> callibrationChoice;
+	@FXML
+	private ChoiceBox<String> calibrationChoice;
 	@FXML
 	private Button saveBtn;
-	
+
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
@@ -67,7 +69,8 @@ public class ChickNameWindowController {
 	private TrackScreenController trackScreen;
 
 	public void initialize() {
-		addToCallibrationBox();
+		addToCalibrationBox();
+		giveCalibrationInstructions();
 	}
 
 	@FXML
@@ -83,23 +86,22 @@ public class ChickNameWindowController {
 		chickIDTextFields.clear();
 
 		try {
-		int numChicks = Integer.parseInt(chickNum.getText());
-		for (int i = 0; i < numChicks; i++) {
-			TextField tf = new TextField();
-			Label lb= new Label();
-		
-			chickIDTextFields.add(tf);
-			chickIDLables.add(lb);
-			gridChickNames.add(lb, 0, i);
-			lb.setText("CHICK ID " + (i+1) + ": ");
-			gridChickNames.add(tf, 1, i);			
-		}
-		} 
-		catch (NumberFormatException e){
+			int numChicks = Integer.parseInt(chickNum.getText());
+			for (int i = 0; i < numChicks; i++) {
+				TextField tf = new TextField();
+				Label lb = new Label();
+
+				chickIDTextFields.add(tf);
+				chickIDLables.add(lb);
+				gridChickNames.add(lb, 0, i);
+				lb.setText("CHICK ID " + (i + 1) + ": ");
+				gridChickNames.add(tf, 1, i);
+			}
+		} catch (NumberFormatException e) {
 			new Alert(AlertType.WARNING, "Enter a number").showAndWait();
 		}
 	}
-	
+
 	@FXML
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -118,12 +120,9 @@ public class ChickNameWindowController {
 		videoPane.getChildren().removeAll(currentDots);
 		currentDots.clear();
 	}
-	
-	@FXML
-	public void handleSaveBtn() {
-		
-	}
 
+	//mouseTrackEvent
+	
 	public void drawDot(MouseEvent event) {
 		Circle dot = new Circle();
 		dot.setCenterX(event.getX() + videoView.getLayoutX());
@@ -133,44 +132,107 @@ public class ChickNameWindowController {
 		currentDots.add(dot);
 		videoPane.getChildren().add(dot);
 	}
-	
-	public void addToCallibrationBox() {
-		callibrationChoice.getItems().add("Origin: (0,0)");
-		callibrationChoice.getItems().add("Vertical");
-		callibrationChoice.getItems().add("Horizontal");
-		callibrationChoice.getItems().add("Arena Rectangle");
+
+	public void addToCalibrationBox() {
+		calibrationChoice.getItems().add("Arena Rectangle");
+		calibrationChoice.getItems().add("Origin: (0,0)");
+		calibrationChoice.getItems().add("Vertical");
+		calibrationChoice.getItems().add("Horizontal");
 	}
 
-	@FXML 
-	public void handleSubmit(ActionEvent event) throws IOException  {
-		try { 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
+	public void giveCalibrationInstructions() {
+		calibrationChoice.setOnAction(e ->
 
-		BorderPane root = (BorderPane) loader.load();
-		TrackScreenController nextController = loader.getController();
+		{
+			if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
+				new Alert(AlertType.INFORMATION, "Arena Rect Info").showAndWait();
 
-		ArrayList<String> chickNames = new ArrayList<String>();
+			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
+				new Alert(AlertType.INFORMATION, "Origin Info").showAndWait();
 
-		for (TextField tf : chickIDTextFields) {
+			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
+				new Alert(AlertType.INFORMATION, "Vertical Info").showAndWait();
+
+			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
+				new Alert(AlertType.INFORMATION, "Horizontal Info").showAndWait();
+			}
+		});
+	}
+	
+	//coordinate with the smallest x and the smallest y 
+	public Circle findUpperLeftCircle() {
+		
+	Circle upperLeft = null;
+	double minX = Integer.MAX_VALUE;
+	
+	for(int i = 0; i < currentDots.size(); i++) {
+		
+		if(currentDots.get(i).getCenterX() < minX) {
+			minX = currentDots.get(i).getCenterX();
+		}
+		
+		if(currentDots.get(i).getCenterX() == minX) {
+			upperLeft = currentDots.get(i);
+		}
+	}	
+	return upperLeft;
+	}
+	
+	@FXML
+	public void handleSaveBtn() {
+		Rectangle arenaRect = new Rectangle();
+		Circle upperLeft = findUpperLeftCircle();
+		double upperLeftX = upperLeft.getCenterX();
+		double upperLeftY = upperLeft.getCenterY();
+		
+//		arenaRect.setBounds(upperLeftX, upperLeftY, width, height); 
+		
+		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
+			System.out.println(currentDots.toString());
 			
-			chickNames.add(tf.getText());
+
+		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
+			
+			
+		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
+			
+			
+		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
+			
+			
+		}
+	}
+
+	@FXML
+	public void handleSubmit(ActionEvent event) throws IOException {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
+
+			BorderPane root = (BorderPane) loader.load();
+			TrackScreenController nextController = loader.getController();
+
+			ArrayList<String> chickNames = new ArrayList<String>();
+
+			for (TextField tf : chickIDTextFields) {
+
+				chickNames.add(tf.getText());
+			}
+
+			nextController.setChickNames(chickNames);
+			nextController.setFilePath(vid.getFilePath());
+
+			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
+			nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+			Stage primary = (Stage) submitButton.getScene().getWindow();
+			primary.setScene(nextScene);
+
+			nextController.initializeAfterSceneCreated();
+
+		} catch (NullPointerException e) {
+			new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();
+			;
 		}
 
-		nextController.setChickNames(chickNames);
-		nextController.setFilePath(vid.getFilePath());
-		
-
-		Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
-		nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
-		Stage primary = (Stage) submitButton.getScene().getWindow();
-		primary.setScene(nextScene);
-		
-		nextController.initializeAfterSceneCreated();
-		
-	} catch (NullPointerException e) {
-		new Alert(AlertType.WARNING, "You must CHOOSE a file first").showAndWait();;
-	}
-		
 	}
 }
