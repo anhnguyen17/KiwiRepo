@@ -14,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -67,7 +68,7 @@ public class ChickNameWindowController {
 	private ProjectData project;
 	private Window stage;
 	private TrackScreenController trackScreen;
-	private Rectangle arenaRect;
+	private Rectangle2D arenaRect;
 
 	public void initialize() {
 		addToCalibrationBox();
@@ -203,15 +204,15 @@ public class ChickNameWindowController {
 		int upperLeftY = (int) Math.round(upperLeft.getCenterY());
 		int rectWidth = calculateRectWidth();
 		int rectHeight = calculateRectHeight();
-		arenaRect = new Rectangle(upperLeftX, upperLeftY, rectWidth, rectHeight);
-		arenaRect.setFill(Color.GREEN); 
+		arenaRect = new Rectangle2D(upperLeftX, upperLeftY, rectWidth, rectHeight);
+	//	arenaRect.setFill(Color.GREEN); 
 	} 
 	
 	//to test if code for creating arena rect is correct
-	public void drawArenaRect() {
-		currentRectangles.add(arenaRect);
-		videoPane.getChildren().add(arenaRect);
-	}
+//	public void drawArenaRect() {
+//		currentRectangles.add(arenaRect);
+//		videoPane.getChildren().add(arenaRect);
+//	}
 	
 	@FXML
 	public void handleSaveBtn() {
@@ -219,7 +220,8 @@ public class ChickNameWindowController {
 			//System.out.println(currentDots.toString());
 			createArenaRect();
 			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
-			drawArenaRect();
+	//		drawArenaRect();
+			project.getVideo().setArenaBounds(arenaRect);
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
 			
