@@ -133,6 +133,14 @@ public class TrackScreenController implements AutoTrackListener {
 		
 		System.out.println("done");
 	}
+	
+	public void initializeAfterSceneCreated(File chosenFile) throws FileNotFoundException {
+		loadProject(chosenFile);
+		System.out.println(project.getTracks().size()); 
+		for (int i =0; i < project.getTracks().size(); i++) {
+			
+		}
+	}
 
 	public void showFrameAt(int frameNum) {
 		if (autotracker == null || !autotracker.isRunning()) {
@@ -355,6 +363,15 @@ public class TrackScreenController implements AutoTrackListener {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void loadProject(File chosenFile) throws FileNotFoundException {
+		project = ProjectData.loadFromFile(chosenFile);
+		Video video = project.getVideo();
+		sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
+		showFrameAt(0);
+		
+		
 	}
 
 	@FXML
