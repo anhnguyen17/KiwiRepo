@@ -136,23 +136,33 @@ public class ChickNameWindowController {
 	}
 
 	public void giveCalibrationInstructions() {
+		
+
 		calibrationChoice.setOnAction(e ->
 		{
 			removeDots();
 			if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
-				new Alert(AlertType.INFORMATION, "The arena rectangle is the area where tracking will occur. "
+				Alert alert = new Alert(AlertType.INFORMATION, "The arena rectangle is the area where tracking will occur. "
 						+ "\nClick on the image where you want the upper left corner and the lower right corner of the rectangle to be. "
-						+ "\n\tClick the Save button when you are done.").showAndWait();
+						+ "\n\tClick the Save button when you are done.");
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
-				new Alert(AlertType.INFORMATION, "Click on the image where you want the origin point to be. Click the Save "
-						+ "button when you are done.").showAndWait();
+				Alert alert = new Alert(AlertType.INFORMATION, "Click on the image where you want the origin point to be. Click the Save "
+						+ "button when you are done.");
+						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);	
+						alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-				new Alert(AlertType.INFORMATION, "").showAndWait();
+				Alert alert = new Alert(AlertType.INFORMATION, "");
+						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+						alert.showAndWait();
 
 			} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-				new Alert(AlertType.INFORMATION, "").showAndWait();
+				Alert alert = new Alert(AlertType.INFORMATION, "");
+						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+						alert.showAndWait();
 			}
 		});
 	}
@@ -215,13 +225,14 @@ public class ChickNameWindowController {
 			currentDots.clear();
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
-			
+			new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
+		//	project.getVideo().setOriginPoint(currentDots.get(0));
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
-			
+			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 3) {
-			
+			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
 			
 		}
 	}
