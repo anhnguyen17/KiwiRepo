@@ -1,6 +1,6 @@
 package project;
 
-import javafx.geometry.Rectangle2D;
+import java.awt.Rectangle;
 import java.io.FileNotFoundException;
 
 import org.opencv.core.Mat;
@@ -17,9 +17,9 @@ public class Video {
 	private int curFrameNum;
 	private double xPixelsPerCm;
 	private double yPixelsPerCm;
-	private Rectangle2D arenaBounds; 
-	
-		
+	private TimePoint origin;
+	private Rectangle arenaBounds; 
+
 	public Video(String filePath) throws FileNotFoundException {
 		this.filePath = filePath;
 		this.vidCap = new VideoCapture(filePath);
@@ -33,7 +33,8 @@ public class Video {
 		
 		int frameWidth = (int)vidCap.get(Videoio.CAP_PROP_FRAME_WIDTH);
 		int frameHeight = (int)vidCap.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-		this.arenaBounds = new Rectangle2D(0,0,frameWidth,frameHeight);
+		this.arenaBounds = new Rectangle(0,0,frameWidth,frameHeight);
+		this.origin = new TimePoint(0, 0, 0);
 	}
 	
 	synchronized void connectVideoCapture() throws FileNotFoundException {
@@ -93,11 +94,11 @@ public class Video {
 	public int getEmptyFrameNum() {
 		return emptyFrameNum;
 	}
-
-	public void setq(int emptyFrameNum) {
-		this.emptyFrameNum = emptyFrameNum;
-	}
 		
+	public void setEmptyFrameNum(int newEmptyFrame) {
+		this.emptyFrameNum = newEmptyFrame;
+	}
+	
 	public int getStartFrameNum() {
 		return startFrameNum;
 	}
@@ -112,7 +113,7 @@ public class Video {
 
 	public void setEndFrameNum(int endFrameNum) {
 		this.endFrameNum = endFrameNum;
-	}
+	}	
 
 	public double getXPixelsPerCm() {
 		return xPixelsPerCm;
@@ -134,21 +135,21 @@ public class Video {
 		return (xPixelsPerCm + yPixelsPerCm)/2;
 	}
 
-	public Rectangle2D getArenaBounds() {
+	public Rectangle getArenaBounds() {
 		return arenaBounds;
 	}
 
-	public void setArenaBounds(Rectangle2D arenaBounds) {
+	public void setArenaBounds(Rectangle arenaBounds) {
 		this.arenaBounds = arenaBounds;
 	}
 	
-//	public Point getOriginPoint() {
-//		return 
-//	}
-//	
-//	public void setOriginPoint() {
-//		
-//	}
+	public TimePoint getOriginPoint() {
+		return origin;
+	}
+	
+	public void setOriginPoint(TimePoint origin) {
+		this.origin = origin;
+	}
 	
 	public double convertFrameNumsToSeconds(int numFrames) {
 		return numFrames / getFrameRate();
@@ -157,11 +158,4 @@ public class Video {
 	public int convertSecondsToFrameNums(double numSecs) {
 		return (int) Math.round(numSecs * getFrameRate());
 	}
-
-	public void setEmptyFrameNum(int newEmptyFrame) {
-		this.emptyFrameNum = newEmptyFrame;
-		
-	}
-	
-
 }
