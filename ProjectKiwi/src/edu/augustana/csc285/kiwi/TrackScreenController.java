@@ -116,8 +116,8 @@ public class TrackScreenController implements AutoTrackListener {
 		videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
-			drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
-			//drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.2)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio), Color.WHITE);
+			//drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
+			drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio *1.1), Color.WHITE);
 		}
 		}
 	}
