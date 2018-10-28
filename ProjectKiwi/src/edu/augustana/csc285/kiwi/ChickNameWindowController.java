@@ -114,9 +114,9 @@ public class ChickNameWindowController {
 		fileChooser.setTitle("Open Video File");
 		File chosenFile = fileChooser.showOpenDialog(stage);
 		if (chosenFile != null) {
-			project = new ProjectData(chosenFile.getAbsolutePath());
-			project.getVideo().setCurrentFrameNum(0);
-			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
+			vid = new Video(chosenFile.getAbsolutePath());
+			vid.setCurrentFrameNum(0);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(vid.readFrame());
 			videoView.setImage(curFrame);
 		}
 	}
@@ -252,8 +252,6 @@ public class ChickNameWindowController {
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
 			//System.out.println(currentDots.toString());
 			createArenaRect();
-			project.getVideo().setArenaBounds(arenaRect);
-			
 			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
 			drawArenaRect();
 			
@@ -269,6 +267,7 @@ public class ChickNameWindowController {
 		}
 	}
 
+	
 	@FXML
 	public void handleSubmit(ActionEvent event) throws IOException {
 		try {
