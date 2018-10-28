@@ -109,9 +109,10 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	private double getImageScalingRatio() {
-		double widthRatio = videoPane.getWidth() / project.getVideo().getFrameWidth();
-		double heightRatio = videoPane.getHeight() / project.getVideo().getFrameHeight();
-		return Math.min(widthRatio, heightRatio);
+		double widthRatio = (videoPane.getWidth() - (sideBarPane.getWidth()*.5)) / project.getVideo().getFrameWidth();
+		double heightRatio = (videoPane.getHeight() - (topBarPane.getHeight()*.5)) / project.getVideo().getFrameHeight();
+		//return Math.min(widthRatio, heightRatio);
+		return heightRatio;
 	}
 
 	public String getFilePath() {
@@ -157,10 +158,11 @@ public class TrackScreenController implements AutoTrackListener {
 				drawDot(prevPt.getX()*scalingRatio-3, prevPt.getY()*scalingRatio-3, trackPrevColor);
 			}
 			// draw the current point (if any) as a larger dot
-			project.TimePoint currPt = track.getTimePointAtTime(frameNum);
+			TimePoint currPt = track.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-7, currPt.getY()*scalingRatio-7, trackColor);
+				drawDot(currPt.getX()*scalingRatio-7, currPt.getY()*scalingRatio-7, Color.GREEN);
 			}
+			System.out.println("finished all");
 		}		
 	}
 	
@@ -169,12 +171,12 @@ public class TrackScreenController implements AutoTrackListener {
 			
 			// draw this segments recent past & near future locations 
 			for (TimePoint prevPt : segment.getTimePointsWithinInterval(frameNum-30, frameNum+30)) {
-				drawDot(prevPt.getX()*scalingRatio-1, prevPt.getY()*scalingRatio-1, Color.DARKGREY);
+				drawDot(prevPt.getX()*scalingRatio-2 + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-7 + topBarPane.getHeight()-7, Color.DARKGREY);
 			}
 			// draw the current point (if any) as a larger square
 			TimePoint currPt = segment.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, Color.LIGHTGREY);
+				drawDot(currPt.getX()*scalingRatio-3 + topBarPane.getWidth(), currPt.getY()*scalingRatio-7 +topBarPane.getHeight()-7, Color.GREEN);
 			}
 		}		
 	}
