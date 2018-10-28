@@ -176,7 +176,12 @@ public class TrackScreenController implements AutoTrackListener {
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
-		//project.getVideo().setArenaBounds(arenaBounds); 
+		
+		double x = arenaBounds.x + sideBarPane.getWidth();
+		double y = arenaBounds.y + sideBarPane.getHeight();
+		arenaBounds.setLocation((int)x, (int)y);
+		project.getVideo().setArenaBounds(arenaBounds); 
+		System.out.println("done");
 	}
 	
 	public void repaintCanvas() {
