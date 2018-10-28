@@ -1,6 +1,6 @@
 package project;
 
-import java.awt.Rectangle;
+import javafx.geometry.Rectangle2D;
 import java.io.FileNotFoundException;
 
 import org.opencv.core.Mat;
@@ -17,9 +17,10 @@ public class Video {
 	private int curFrameNum;
 	private double xPixelsPerCm;
 	private double yPixelsPerCm;
+	private Rectangle2D arenaBounds; 
 	private TimePoint origin;
-	private Rectangle arenaBounds; 
-
+	
+		
 	public Video(String filePath) throws FileNotFoundException {
 		this.filePath = filePath;
 		this.vidCap = new VideoCapture(filePath);
@@ -33,7 +34,7 @@ public class Video {
 		
 		int frameWidth = (int)vidCap.get(Videoio.CAP_PROP_FRAME_WIDTH);
 		int frameHeight = (int)vidCap.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-		this.arenaBounds = new Rectangle(0,0,frameWidth,frameHeight);
+		this.arenaBounds = new Rectangle2D(0,0,frameWidth,frameHeight);
 		this.origin = new TimePoint(0, 0, 0);
 	}
 	
@@ -135,11 +136,11 @@ public class Video {
 		return (xPixelsPerCm + yPixelsPerCm)/2;
 	}
 
-	public Rectangle getArenaBounds() {
+	public Rectangle2D getArenaBounds() {
 		return arenaBounds;
 	}
 
-	public void setArenaBounds(Rectangle arenaBounds) {
+	public void setArenaBounds(Rectangle2D arenaBounds) {
 		this.arenaBounds = arenaBounds;
 	}
 	

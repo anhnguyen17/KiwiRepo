@@ -1,6 +1,5 @@
 package edu.augustana.csc285.kiwi;
 
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -31,11 +31,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import project.ProjectData;
-import project.TimePoint;
 import project.Video;
 import utils.UtilsForOpenCV;
 
@@ -68,7 +68,7 @@ public class ChickNameWindowController {
 	private ProjectData project;
 	private Window stage;
 	private TrackScreenController trackScreen;
-	private Rectangle arenaBounds;
+	private Rectangle2D arenaRect;
 
 	public void initialize() {
 		addToCalibrationBox();
@@ -105,10 +105,6 @@ public class ChickNameWindowController {
 		dot.setRadius(3);
 		dot.setFill(Color.RED);
 		currentDots.add(dot);
-		if (currentDots.size() == 3) {
-			videoPane.getChildren().remove(currentDots.get(0));
-			currentDots.remove(0);
-		}
 		videoPane.getChildren().add(dot);
 	} 
 
@@ -171,13 +167,43 @@ public class ChickNameWindowController {
 		});
 	}
 	
-	public Rectangle createArenaRect() {	
+	//coordinate with the smallest x
+	public Circle findUpperLeftCircle() {
+		
+	Circle upperLeft = null;
+	double minX = Integer.MAX_VALUE;
+	
+	for(int i = 0; i < currentDots.size(); i++) {
+		
+		if(currentDots.get(i).getCenterX() < minX) {
+			minX = currentDots.get(i).getCenterX();
+		}
+		
+		if(currentDots.get(i).getCenterX() == minX) {
+			upperLeft = currentDots.get(i);
+		}
+	}	
+	return upperLeft;
+	}
+	
+	public int calculateRectWidth() {
 		int rectWidth = (int) Math.round(Math.abs(currentDots.get(0).getCenterX() - currentDots.get(1).getCenterX()));
-		int rectHeight = (int) Math.round(Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY()));
-		if (currentDots.get(0).getCenterX() < currentDots.get(1).getCenterX() ) {
-			return new Rectangle((int) currentDots.get(0).getCenterX(),(int) currentDots.get(0).getCenterY(), rectWidth, rectHeight);
+
+		return rectWidth;
+	}
+	
+	public int calculateRectHeight() {
+		int rectHeight =(int) Math.round(Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY()));
+		return rectHeight;
+	}
+	
+	public void createArenaRect() {	
+		int rectWidth = calculateRectWidth();
+		int rectHeight = calculateRectHeight();
+		if (currentDots.get(0).getCenterX() < currentDots.get(0).getCenterX() ) {
+			arenaRect = new Rectangle2D(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), rectWidth, rectHeight);
 		} else {
-			return new Rectangle((int)currentDots.get(1).getCenterX(), (int)currentDots.get(1).getCenterY(), rectWidth, rectHeight);
+			arenaRect = new Rectangle2D(currentDots.get(1).getCenterX(), currentDots.get(1).getCenterY(), rectWidth, rectHeight);
 		}
 	//	arenaRect.setFill(Color.GREEN); 
 	} 
@@ -188,21 +214,19 @@ public class ChickNameWindowController {
 //		videoPane.getChildren().add(arenaRect);
 //	}
 	
-	public TimePoint createOriginPoint() {
-		TimePoint origin = new TimePoint(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), 0);
-		return origin;
-	}
-	
 	@FXML
 	public void handleSaveBtn() {
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
-			arenaBounds = createArenaRect();
+			//System.out.println(currentDots.toString());
+			createArenaRect();
 			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
+	//		drawArenaRect();
+	
+			currentDots.clear();
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
 			new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
-			project.getVideo().setOriginPoint(createOriginPoint()); 
-
+		//	project.getVideo().setOriginPoint(currentDots.get(0));
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
 			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
@@ -211,7 +235,6 @@ public class ChickNameWindowController {
 			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
 			
 		}
-		currentDots.clear();
 	}
 
 	
@@ -225,15 +248,12 @@ public class ChickNameWindowController {
 
 
 			nextController.setFilePath(vid.getFilePath());
-			nextController.setArenaBounds(arenaBounds); 
-			System.out.println(arenaBounds); 
 
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 			nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 			Stage primary = (Stage) submitButton.getScene().getWindow();
 			primary.setScene(nextScene);
-			primary.setResizable(false);
 
 			nextController.initializeAfterSceneCreated();
 
