@@ -10,36 +10,39 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.ChickNameWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="831.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.ChickNameWindowController">
    <children>
-      <Button fx:id="submitButton" layoutX="374.0" layoutY="515.0" mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
-      <Button fx:id="browseButton" layoutX="229.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleBrowse" text="Browse your video" />
-      <BorderPane fx:id="videoPane" layoutX="231.0" layoutY="113.0" prefHeight="287.0" prefWidth="354.0">
+      <Button fx:id="submitButton" layoutX="344.0" layoutY="612.0" mnemonicParsing="false" onAction="#handleSubmit" text="Submit">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Button fx:id="browseButton" layoutX="256.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleBrowse" text="Browse your video" />
+      <BorderPane fx:id="videoPane" layoutX="103.0" layoutY="76.0" prefHeight="287.0" prefWidth="354.0">
          <center>
-            <ImageView fx:id="videoView" fitHeight="314.0" fitWidth="387.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fx:id="videoView" fitHeight="420.0" fitWidth="632.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
             </ImageView>
          </center></BorderPane>
-      <Button fx:id="undoButton" layoutX="605.0" layoutY="423.0" mnemonicParsing="false" onAction="#handleUndo" text="Undo">
+      <Button fx:id="undoButton" layoutX="604.0" layoutY="538.0" mnemonicParsing="false" onAction="#handleUndo" text="Undo">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="calibrationNum" layoutX="469.0" layoutY="425.0" prefHeight="25.0" prefWidth="111.0" />
-      <Label layoutX="347.0" layoutY="427.0" prefHeight="20.0" prefWidth="122.0" text="Choose calibration:">
+      <TextField fx:id="calibrationNum" layoutX="444.0" layoutY="541.0" prefHeight="25.0" prefWidth="111.0" />
+      <Label layoutX="315.0" layoutY="543.0" prefHeight="20.0" prefWidth="122.0" text="Choose calibration:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="580.0" layoutY="429.0" text="cm" />
-      <ChoiceBox fx:id="calibrationChoice" layoutX="192.0" layoutY="424.0" prefWidth="150.0" />
-      <Button fx:id="saveBtn" layoutX="192.0" layoutY="460.0" mnemonicParsing="false" onAction="#handleSaveBtn" text="Save">
+      <Label layoutX="557.0" layoutY="545.0" text="cm" />
+      <ChoiceBox fx:id="calibrationChoice" layoutX="131.0" layoutY="541.0" prefWidth="150.0" />
+      <Button fx:id="saveBtn" layoutX="150.0" layoutY="582.0" mnemonicParsing="false" onAction="#handleSaveBtn" text="Save">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="importBtn" layoutX="401.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleImport" text="Import Existing Project" />
+      <Button fx:id="importBtn" layoutX="432.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleImport" text="Import Existing Project" />
    </children>
 </AnchorPane>

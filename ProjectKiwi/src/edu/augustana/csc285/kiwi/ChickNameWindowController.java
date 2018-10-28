@@ -81,9 +81,9 @@ public class ChickNameWindowController {
 		fileChooser.setTitle("Open Video File");
 		File chosenFile = fileChooser.showOpenDialog(stage);
 		if (chosenFile != null) {
-			project = new ProjectData(chosenFile.getAbsolutePath());
-			project.getVideo().setCurrentFrameNum(0);
-			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
+			vid = new Video(chosenFile.getAbsolutePath());
+			vid.setCurrentFrameNum(0);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(vid.readFrame());
 			videoView.setImage(curFrame);
 		}
 	}
@@ -188,12 +188,13 @@ public class ChickNameWindowController {
 	}
 	
 	public void createArenaRect() {	
-		Circle upperLeft = findUpperLeftCircle();
-		int upperLeftX = (int) Math.round(upperLeft.getCenterX());
-		int upperLeftY = (int) Math.round(upperLeft.getCenterY());
 		int rectWidth = calculateRectWidth();
 		int rectHeight = calculateRectHeight();
-		arenaRect = new Rectangle2D(upperLeftX, upperLeftY, rectWidth, rectHeight);
+		if (currentDots.get(0).getCenterX() < currentDots.get(0).getCenterX() ) {
+			arenaRect = new Rectangle2D(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), rectWidth, rectHeight);
+		} else {
+			arenaRect = new Rectangle2D(currentDots.get(1).getCenterX(), currentDots.get(1).getCenterY(), rectWidth, rectHeight);
+		}
 	//	arenaRect.setFill(Color.GREEN); 
 	} 
 	
@@ -210,7 +211,8 @@ public class ChickNameWindowController {
 			createArenaRect();
 			new Alert(AlertType.INFORMATION, "Successfully set the Arena Rectangle").showAndWait();
 	//		drawArenaRect();
-			project.getVideo().setArenaBounds(arenaRect);
+	
+			currentDots.clear();
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
 			
@@ -234,7 +236,7 @@ public class ChickNameWindowController {
 			TrackScreenController nextController = loader.getController();
 
 
-			nextController.setFilePath(project.getVideo().getFilePath());
+			nextController.setFilePath(vid.getFilePath());
 
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 			nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
