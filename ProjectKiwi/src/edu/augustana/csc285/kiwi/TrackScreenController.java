@@ -113,12 +113,15 @@ public class TrackScreenController implements AutoTrackListener {
 		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
 	}
 	public void showSelectedAutoTrack(AnimalTrack tracks) {
-		if(!availAutoChoiceBox.getItems().isEmpty()) {
-		videoPane.getChildren().removeAll(currentDots);
+		if(!(availAutoChoiceBox.getItems().isEmpty())) {
+		//videoPane.getChildren().removeAll(currentDots);
 		for (int x = 0; x < tracks.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
-			drawDot(tracks.getTimePointAtIndex(x).getX() + sideBarPane.getWidth() + 15, tracks.getTimePointAtIndex(x).getY()+topBarPane.getHeight() / scalingRatio *2, Color.WHITE);
-			//drawDot(tracks.getTimePointAtIndex(x).getX() + videoView.getLayoutX() / (scalingRatio *1.2)  , tracks.getTimePointAtIndex(x).getY() + videoView.getLayoutY() / (scalingRatio), Color.WHITE);
+			double currPt = tracks.getTimePointAtIndex(x).getFrameNum();
+					//(tracks.getTimePointAtIndex(x).getFrameNum());
+			System.out.println(tracks.getTimePointAtIndex(x).getFrameNum());
+			//drawDot(currPt.getX()*scalingRatio + topBarPane.getWidth(), currPt.getY()*scalingRatio +topBarPane.getHeight(), Color.GREEN);
+			drawDot(tracks.getTimePointAtIndex(x).getX()*scalingRatio + videoView.getLayoutX() / (scalingRatio *1.1)  , tracks.getTimePointAtIndex(x).getY()*scalingRatio + videoView.getLayoutY() / (scalingRatio*1.1), Color.WHITE);
 		}
 		}
 	}

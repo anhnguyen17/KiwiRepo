@@ -65,16 +65,19 @@ public class ChickNameWindowController {
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
+	private ProjectData project;
 
 	private Video vid;
 	private Window stage;
 	private TrackScreenController trackScreen;
+	
 
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
 		importBtn.setDisable(true);
 	}
+	
 
 	@FXML
 	public void handleUpdateNumChicks() {
