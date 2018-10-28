@@ -36,6 +36,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import project.ProjectData;
+import project.TimePoint;
 import project.Video;
 import utils.UtilsForOpenCV;
 
@@ -214,6 +215,11 @@ public class ChickNameWindowController {
 //		videoPane.getChildren().add(arenaRect);
 //	}
 	
+	public TimePoint createOriginPoint() {
+		TimePoint origin = new TimePoint(currentDots.get(0).getCenterX(), currentDots.get(0).getCenterY(), 0);
+		return origin;
+	}
+	
 	@FXML
 	public void handleSaveBtn() {
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
@@ -226,7 +232,8 @@ public class ChickNameWindowController {
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 1) {
 			new Alert(AlertType.INFORMATION, "Successfully set Origin").showAndWait();
-		//	project.getVideo().setOriginPoint(currentDots.get(0));
+			project.getVideo().setOriginPoint(createOriginPoint()); 
+
 			
 		} else if (calibrationChoice.getSelectionModel().getSelectedIndex() == 2) {
 			new Alert(AlertType.INFORMATION, "Successfully set ").showAndWait();
