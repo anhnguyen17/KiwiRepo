@@ -28,7 +28,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -37,7 +36,7 @@ import project.ProjectData;
 import project.Video;
 import utils.UtilsForOpenCV;
 
-import static org.junit.jupiter.api.Assertions.assertTimeout;
+import java.awt.Rectangle;
 
 public class ChickNameWindowController {
 	@FXML
@@ -62,37 +61,21 @@ public class ChickNameWindowController {
 	private ChoiceBox<String> calibrationChoice;
 	@FXML
 	private Button saveBtn;
-	@FXML
-	private Button beginCali;
 
 	private List<TextField> chickIDTextFields = new ArrayList<>();
 	private List<Label> chickIDLables = new ArrayList<>();
 	private List<Circle> currentDots = new ArrayList<>();
-	private List<Rectangle> currentRects = new ArrayList<>();
 
 	private Video vid;
 	private Window stage;
 	private TrackScreenController trackScreen;
-	private int totalClicks = 0;
 
-	
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
 		importBtn.setDisable(true);
-		
-		
-	}
-	
-	public void mouseClick(MouseEvent event) {
-		totalClicks += 1;
-		drawDot(event);
 	}
 
-	public void startCalib() {
-		totalClicks = 0;
-		new Alert(AlertType.INFORMATION, "please select the top left and bottom right points of the testing area.").showAndWait();
-	}
 	@FXML
 	public void handleUpdateNumChicks() {
 
@@ -145,19 +128,12 @@ public class ChickNameWindowController {
 	
 	public void drawDot(MouseEvent event) {
 		Circle dot = new Circle();
-		videoPane.getChildren().removeAll(currentDots);
 		dot.setCenterX(event.getX() + videoView.getLayoutX());
 		dot.setCenterY(event.getY() + videoView.getLayoutY());
 		dot.setRadius(3);
 		dot.setFill(Color.RED);
-		if(totalClicks > 1) {
-			Rectangle rect = new Rectangle((int)currentDots.get(0).getCenterX(), (int)currentDots.get(0).getCenterY(), (int)currentDots.get(1).getCenterX()-(int)currentDots.get(0).getCenterX(), (int)currentDots.get(0).getCenterY()-(int)currentDots.get(1).getCenterY());
-			currentRects.add(rect);
-			videoPane.getChildren().addAll(currentRects);
-		}
-		
 		currentDots.add(dot);
-		videoPane.getChildren().addAll(currentDots);
+		videoPane.getChildren().add(dot);
 	}
 
 	public void addToCalibrationBox() {
@@ -231,8 +207,6 @@ public class ChickNameWindowController {
 		Circle upperLeft = findUpperLeftCircle();
 		double upperLeftX = upperLeft.getCenterX();
 		double upperLeftY = upperLeft.getCenterY();
-		
-		
 		
 //		arenaRect.setBounds(upperLeftX, upperLeftY, width, height); 
 		

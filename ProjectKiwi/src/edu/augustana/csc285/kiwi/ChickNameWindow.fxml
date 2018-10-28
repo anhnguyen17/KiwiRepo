@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -17,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.ChickNameWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.augustana.csc285.kiwi.ChickNameWindowController">
    <children>
       <Label fx:id="nimChickLbl" layoutX="14.0" layoutY="16.0" prefHeight="30.0" prefWidth="214.0" text="Number of Chickens: ">
          <font>
@@ -50,13 +45,13 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="browseButton" layoutX="493.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleBrowse" text="Browse your video" />
+      <Button fx:id="browseButton" layoutX="522.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleBrowse" text="Browse your video" />
       <BorderPane fx:id="videoPane" layoutX="418.0" layoutY="102.0">
          <center>
-            <ImageView fx:id="videoView" fitHeight="314.0" fitWidth="387.0" onMouseClicked="#mouseClick" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="videoView" fitHeight="314.0" fitWidth="387.0" onMouseClicked="#drawDot" pickOnBounds="true" preserveRatio="true" />
          </center>
       </BorderPane>
-      <Button fx:id="undoButton" layoutX="738.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleUndo" text="Clear Points">
+      <Button fx:id="undoButton" layoutX="738.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleUndo" text="Undo">
          <font>
             <Font size="14.0" />
          </font>
@@ -69,12 +64,11 @@
       </Label>
       <Label layoutX="706.0" layoutY="453.0" text="cm" />
       <ChoiceBox fx:id="calibrationChoice" layoutX="418.0" layoutY="449.0" prefWidth="150.0" />
-      <Button fx:id="saveBtn" layoutX="651.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleSaveBtn" text="Save">
+      <Button fx:id="saveBtn" layoutX="469.0" layoutY="485.0" mnemonicParsing="false" onAction="#handleSaveBtn" text="Save">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
       <Button fx:id="importBtn" layoutX="651.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleImport" text="Import Existing Project" />
-      <Button fx:id="beginCali" layoutX="430.0" layoutY="490.0" mnemonicParsing="false" onAction="#startCalib" text="Start Calibration" />
    </children>
 </AnchorPane>
