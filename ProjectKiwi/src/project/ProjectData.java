@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,11 +29,11 @@ public class ProjectData {
 		tracks = new ArrayList<>();
 		unassignedSegments = new ArrayList<>();
 	}
-	
+
 	public static void openCurrentProject(String file) throws FileNotFoundException {
 		currentProject = new ProjectData(file);
 	}
-	 
+
 	public static ProjectData getCurrentProject() {
 		return currentProject;
 	}
@@ -140,20 +141,40 @@ public class ProjectData {
 		return data;
 	}
 
+
 	/**
-	 * Helper method used when exporting project to CSV file.
+	 * Helper method used when exporting Time Points to CSV file.
 	 * @param saveFile
 	 * @throws FileNotFoundException
 	 */
-	public void exportToCSV(File saveFile) throws FileNotFoundException {
+	public void exportTimePointsToCSV(File saveFile) throws FileNotFoundException {
 		PrintWriter out = new PrintWriter(saveFile);
-		out.print("Name, Time (in seconds), X-location, Y-location");
+		out.print(" Chick Name, Time (in seconds), X-location, Y-location");
 		out.println();
 		for (AnimalTrack assignedtracks: tracks) {
 			for(TimePoint point: assignedtracks) {
-				out.print(assignedtracks.getID()+ ", "+ String.format("%.2f", (video.convertFrameNumsToSeconds(point.getFrameNum()))));
-				out.print(", "+ point.getX());
-				out.print(", "+ point.getY());
+				out.print(assignedtracks.getID()+ ", "+ String.format("%.0f", (video.convertFrameNumsToSeconds(point.getFrameNum()))));
+				out.print(", "+ point.getX() + video.getOriginPoint().getX()/video.getXPixelsPerCm());
+				out.print(", "+ point.getY() + video.getOriginPoint().getY()/video.getYPixelsPerCm() );
+				out.println();
+			}
+		}
+		out.close();
+	}
+	/**
+	 * Helper method used when exporting average velocity to CSV file.
+	 * @param saveFile
+	 * @throws FileNotFoundException
+	 */
+	public void exportAverageVelocity(File saveFile) throws FileNotFoundException {
+		PrintWriter out  = new PrintWriter(saveFile);
+		DecimalFormat df = new DecimalFormat("#.##");
+		out.print("Chick Name, Average Velocity");
+		out.println();
+		if(tracks.size() > 1) {
+			for(int i = 0; i < tracks.size(); i ++) {
+				out.print(tracks.get(i).getID()); 
+				out.print("," + df.format(getAveSpeed(i)));
 				out.println();
 			}
 		}

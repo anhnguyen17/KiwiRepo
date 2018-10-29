@@ -76,6 +76,11 @@ public class ChickNameWindowController {
 		giveCalibrationInstructions();
 		importBtn.setDisable(true);
 	}
+	/**
+	 * this method allows us to browse and choose a video file
+	 * @throws FileNotFoundException
+	 *      
+ 	 */
 	@FXML
 	public void handleBrowse() throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
@@ -88,17 +93,24 @@ public class ChickNameWindowController {
 			videoView.setImage(curFrame);
 		}
 	}
-
+	/**
+	 * Allows the user to delete all the dots drawn     
+ 	 */
 	@FXML
 	public void handleUndo() {
 		removeDots();
 	}
-	
+	/**
+	 * deletes dots from the video pane     
+ 	 */
 	public void removeDots() {
 		videoPane.getChildren().removeAll(currentDots);
 		currentDots.clear();
 	}
-	
+	/**
+	 * this method allows us to draw a dot
+	 * @param event     
+ 	 */
 	public void drawDot(MouseEvent event) {
 		Circle dot = new Circle();
 		dot.setCenterX(event.getX() + videoView.getLayoutX());
@@ -112,14 +124,18 @@ public class ChickNameWindowController {
 		}
 		videoPane.getChildren().add(dot);
 	} 
-
+	
 	public void addToCalibrationBox() {
 		calibrationChoice.getItems().add("Arena Rectangle");
 		calibrationChoice.getItems().add("Origin: (0,0)");
 		calibrationChoice.getItems().add("Vertical");
 		calibrationChoice.getItems().add("Horizontal");
 	}
-	
+	/**
+	 *this method allows us to import a file
+	 * @throws IOException
+	 * @param vid - the video to analyze     
+ 	 */
 	@FXML 
 	public void handleImport (ActionEvent event) throws IOException  {
 		FileChooser fileChooser = new FileChooser();
@@ -139,7 +155,9 @@ public class ChickNameWindowController {
 		
 		nextController.initializeAfterSceneCreated(chosenFile);
 	}
-
+	/**
+	 * It gives instruction for the calibration      
+ 	 */
 	public void giveCalibrationInstructions() {
 		calibrationChoice.setOnAction(e ->
 		{
@@ -173,7 +191,9 @@ public class ChickNameWindowController {
 			}
 		}); 
 	}
-	
+	/**
+	 * Allows the user to create an Arena rectangle for calibration     
+ 	 */
 	public Rectangle createArenaRect() {	
 		int rectWidth = (int) Math.round(Math.abs(currentDots.get(0).getCenterX() - currentDots.get(1).getCenterX()));
 		int rectHeight = (int) Math.round(Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY()));
@@ -183,7 +203,9 @@ public class ChickNameWindowController {
 			return new Rectangle((int)currentDots.get(1).getCenterX(), (int)currentDots.get(1).getCenterY(), rectWidth, rectHeight);
 		}
 	} 
-	
+	/**
+	 * Calculates pixels per cm for Y coordinates    
+ 	 */
 	public double calculateYPixelsPerCm() {
 		double yDistance = Math.abs(currentDots.get(0).getCenterY() - currentDots.get(1).getCenterY());
 		double enteredAmount = (double) Integer.parseInt(calibrationNum.getText());
@@ -191,7 +213,9 @@ public class ChickNameWindowController {
 		
 		return yPixelsPerCm;
 	}
-	
+	/**
+	 * Calculates pixels per cm for X coordinates    
+ 	 */
 	public double calculateXPixelsPerCm() {
 		double xDistance = Math.abs(currentDots.get(0).getCenterX() - currentDots.get(1).getCenterX());
 		double enteredAmount = (double) Integer.parseInt(calibrationNum.getText());
@@ -199,7 +223,9 @@ public class ChickNameWindowController {
 		
 		return xPixelsPerCm;
 	}
-	
+	/**
+	 * Saves the Calibration choices that the user made    
+ 	 */
 	@FXML
 	public void handleSaveBtn() {
 		if (calibrationChoice.getSelectionModel().getSelectedIndex() == 0) {
@@ -234,7 +260,11 @@ public class ChickNameWindowController {
 		calibrationNum.clear();
 	}
 
-	
+	/**
+	 * this method allows us to transfer all the data on the first screen to the next screen
+	 * @throws IOException
+	 * @param  event    
+ 	 */
 	@FXML
 	public void handleSubmit(ActionEvent event) throws IOException {
 		try {
