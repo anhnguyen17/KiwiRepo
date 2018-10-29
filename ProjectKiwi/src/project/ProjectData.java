@@ -158,10 +158,6 @@ public class ProjectData {
 				out.print(", "+ point.getX() + video.getOriginPoint().getX()/video.getXPixelsPerCm());
 				out.print(", "+ point.getY() + video.getOriginPoint().getY()/video.getYPixelsPerCm() );
 				out.println();
-				out.print(assignedtracks.getID()+ ", "+ String.format("%.2f", (video.convertFrameNumsToSeconds(point.getFrameNum()))));
-				out.print(", "+ point.getX());
-				out.print(", "+ point.getY());
-				out.println();
 			}
 		}
 		out.close();
@@ -175,7 +171,6 @@ public class ProjectData {
 		PrintWriter out  = new PrintWriter(saveFile);
 		DecimalFormat df = new DecimalFormat("#.##");
 		out.print("Chick Name, Average Velocity");
-		out.println();
 		if(tracks.size() > 1) {
 			for(int i = 0; i < tracks.size(); i ++) {
 				out.print(tracks.get(i).getID()); 
