@@ -74,7 +74,7 @@ public class ChickNameWindowController {
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
-		importBtn.setDisable(true);
+		//importBtn.setDisable(true);
 	}
 	/**
 	 * this method allows us to browse and choose a video file
@@ -93,6 +93,7 @@ public class ChickNameWindowController {
 			videoView.setImage(curFrame);
 		}
 	}
+
 	/**
 	 * Allows the user to delete all the dots drawn     
  	 */
@@ -124,7 +125,7 @@ public class ChickNameWindowController {
 		}
 		videoPane.getChildren().add(dot);
 	} 
-	
+
 	public void addToCalibrationBox() {
 		calibrationChoice.getItems().add("Arena Rectangle");
 		calibrationChoice.getItems().add("Origin: (0,0)");
@@ -141,6 +142,8 @@ public class ChickNameWindowController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
 		File chosenFile = fileChooser.showOpenDialog(stage);
+		project.loadCurrentProject(chosenFile);
+		
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
 
@@ -153,7 +156,7 @@ public class ChickNameWindowController {
 		Stage primary = (Stage) importBtn.getScene().getWindow();
 		primary.setScene(nextScene);
 		
-		nextController.initializeAfterSceneCreated(chosenFile);
+		nextController.initializeAfterSceneCreated();
 	}
 	/**
 	 * It gives instruction for the calibration      
@@ -284,8 +287,10 @@ public class ChickNameWindowController {
 			primary.setResizable(false);
 
 			nextController.initializeAfterSceneCreated(arenaBounds, origin, xPixelsPerCm, yPixelsPerCm);
+			
 
 		} catch (NullPointerException e) {
 		}
 	}
 }
+

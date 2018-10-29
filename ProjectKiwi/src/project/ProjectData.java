@@ -33,7 +33,10 @@ public class ProjectData {
 	public static void openCurrentProject(String file) throws FileNotFoundException {
 		currentProject = new ProjectData(file);
 	}
-
+	
+	public static void loadCurrentProject(File chosenFile) throws FileNotFoundException {
+		currentProject = loadFromFile(chosenFile);
+	}
 	public static ProjectData getCurrentProject() {
 		return currentProject;
 	}
@@ -140,8 +143,6 @@ public class ProjectData {
 		data.getVideo().connectVideoCapture();
 		return data;
 	}
-
-
 	/**
 	 * Helper method used when exporting Time Points to CSV file.
 	 * @param saveFile
@@ -156,6 +157,10 @@ public class ProjectData {
 				out.print(assignedtracks.getID()+ ", "+ String.format("%.0f", (video.convertFrameNumsToSeconds(point.getFrameNum()))));
 				out.print(", "+ point.getX() + video.getOriginPoint().getX()/video.getXPixelsPerCm());
 				out.print(", "+ point.getY() + video.getOriginPoint().getY()/video.getYPixelsPerCm() );
+				out.println();
+				out.print(assignedtracks.getID()+ ", "+ String.format("%.2f", (video.convertFrameNumsToSeconds(point.getFrameNum()))));
+				out.print(", "+ point.getX());
+				out.print(", "+ point.getY());
 				out.println();
 			}
 		}
