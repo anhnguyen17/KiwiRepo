@@ -166,9 +166,6 @@ public class TrackScreenController implements AutoTrackListener {
 	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin, double xPixelsPerCm, double yPixelsPerCm) {
 		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
 		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
-		//videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
-		//videoView.fitHeightProperty().addListener((obs, oldV, newV) -> repaintCanvas());
-		
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(filePath);
@@ -179,7 +176,7 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getCurrentProject().getVideo().setArenaBounds(arenaBounds);
 		project.getCurrentProject().getVideo().setOriginPoint(origin); 
 		project.getCurrentProject().getVideo().setXPixelsPerCm(xPixelsPerCm);
-		project.getCurrentProject().getVideo().setXPixelsPerCm(yPixelsPerCm);
+		project.getCurrentProject().getVideo().setYPixelsPerCm(yPixelsPerCm);
 		System.out.println("done");
 	}
 	
@@ -295,7 +292,7 @@ public class TrackScreenController implements AutoTrackListener {
 		if (result.get() == ButtonType.OK){
 			int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
 			AnimalTrack temp = project.getCurrentProject().getTracks().get(currentChick);
-			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
+			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem(), sideBarPane.getWidth(), topBarPane.getHeight());
 			for (int x = 0; x < project.getCurrentProject().getTracks().size(); x++) {
 				System.out.println(temp);
 			}
@@ -344,7 +341,6 @@ public class TrackScreenController implements AutoTrackListener {
 		dot.setRadius(5);
 		dot.setFill(color);
 		currentDots.add(dot);
-		// add circle to scene
 		videoPane.getChildren().add(dot);
 	}
 	
@@ -412,7 +408,6 @@ public class TrackScreenController implements AutoTrackListener {
 			String temp = chickChoice.getSelectionModel().getSelectedItem();
 			project.getCurrentProject().removeChick(temp);
 			chickChoice.getItems().remove(temp);
-			
 		} else {
 		   new Alert(AlertType.ERROR, "Cancelled by user. " + chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
 		}
