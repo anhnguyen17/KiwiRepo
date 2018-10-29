@@ -290,7 +290,7 @@ public class TrackScreenController implements AutoTrackListener {
 		if (result.get() == ButtonType.OK){
 			int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
 			AnimalTrack temp = project.getCurrentProject().getTracks().get(currentChick);
-			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
+			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem(), sideBarPane.getWidth(), topBarPane.getHeight());
 			for (int x = 0; x < project.getCurrentProject().getTracks().size(); x++) {
 				System.out.println(temp);
 			}

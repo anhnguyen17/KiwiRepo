@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 import project.TimePoint;
 
 public class AnimalTrack implements Iterable<TimePoint>{
@@ -73,10 +74,10 @@ public class AnimalTrack implements Iterable<TimePoint>{
 	 * Adds auto-tracked segments to the currently selected chick
 	 * Will overwrite any existing manual points! *Notify user in pop-up
 	 */
-	public void mergeAutoTracks(AnimalTrack track) {
+	public void mergeAutoTracks(AnimalTrack track, double sideBarSize, double topBarSize) {
 		for(int x = 0; x < track.getTotalTimePoints(); x++) {
-			double xVal = track.getTimePointAtIndex(x).getX();
-			double yVal = track.getTimePointAtIndex(x).getY();
+			double xVal = track.getTimePointAtIndex(x).getX() + sideBarSize;
+			double yVal = track.getTimePointAtIndex(x).getY() + topBarSize;
 			int frameNum = track.getTimePointAtIndex(x).getFrameNum();
 			setTimePointAtTime(xVal,yVal,frameNum);
 		}
