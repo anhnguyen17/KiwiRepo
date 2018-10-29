@@ -116,7 +116,12 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void updateColor() {
-		chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
+		if(chickChoice.getSelectionModel().isEmpty()) {
+			System.out.println("no chick selected");
+		} else {
+			chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
+		}
+		
 	}
 	
 	
@@ -157,8 +162,11 @@ public class TrackScreenController implements AutoTrackListener {
 
 	/** this method changes a chick dot color to the user selected color */
 	public void handleChickColorChange() {
-		AnimalTrack temp = project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
-		temp.setColor(chickColor.getValue());
+		if(chickChoice.getSelectionModel().isEmpty()) {
+		} else {
+			AnimalTrack temp = project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
+			temp.setColor(chickColor.getValue());
+		}
 	}
 
 	
@@ -190,12 +198,12 @@ public class TrackScreenController implements AutoTrackListener {
 	//This method has not work yet
 	public void initializeAfterSceneCreated(File chosenFile) throws FileNotFoundException {
 		loadProject(chosenFile);
-		for (int i =0; i < project.getTracks().size(); i++) {
-			chickChoice.getItems().add(project.getTracks().get(i).getID());
-		}
-		for (AnimalTrack track : project.getUnassignedSegments()) {
-				availAutoChoiceBox.getItems().add(track);
-		}
+//		for (int i =0; i < project.getTracks().size(); i++) {
+//			chickChoice.getItems().add(project.getTracks().get(i).getID());
+//		}
+//		for (AnimalTrack track : project.getUnassignedSegments()) {
+//				availAutoChoiceBox.getItems().add(track);
+//		}
 		
 		
 		
@@ -398,17 +406,27 @@ public class TrackScreenController implements AutoTrackListener {
 
 	/** this method removes the currently selected chicks */ 
 	public void removeChick() {
+		if(chickChoice.getSelectionModel().isEmpty()) {
+			Alert alert = new Alert(AlertType.INFORMATION, "No chick is selected.");
+			Optional<ButtonType> result = alert.showAndWait();
+		} else {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirm Chick Removal");
 		alert.setHeaderText("You are about to remove chick: " + 
-				chickChoice.getSelectionModel().getSelectedItem() + ". This action cannot be undone. Are you sure you wish to continue?");
+				chickChoice.getSelectionModel().getSelectedItem() + ". This action cannot be undone.");
 		alert.setContentText("Are you sure you wish to continue?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
-			project.removeChick(chickChoice.getSelectionModel().getSelectedItem());
-			chickChoice.getItems().remove(chickChoice.getSelectionModel().getSelectedItem());
+			String temp = chickChoice.getSelectionModel().getSelectedItem();
+			project.removeChick(temp);
+			chickChoice.getItems().remove(temp);
+			for(AnimalTrack tracks: project.getTracks()) {
+				System.out.println(tracks.getID());
+			}
+			chickChoice.getItems().remove(temp);
 		} else {
-		   new Alert(AlertType.ERROR, chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
+		   new Alert(AlertType.ERROR, "Cancelled by user. " + chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
+		}
 		}
 	}
 
