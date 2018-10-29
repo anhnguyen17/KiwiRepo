@@ -74,7 +74,7 @@ public class ChickNameWindowController {
 	public void initialize() {
 		addToCalibrationBox();
 		giveCalibrationInstructions();
-		importBtn.setDisable(true);
+		//importBtn.setDisable(true);
 	}
 	@FXML
 	public void handleBrowse() throws FileNotFoundException {
@@ -125,6 +125,8 @@ public class ChickNameWindowController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Video File");
 		File chosenFile = fileChooser.showOpenDialog(stage);
+		project.loadCurrentProject(chosenFile);
+		
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("TrackScreen.fxml"));
 
@@ -137,7 +139,7 @@ public class ChickNameWindowController {
 		Stage primary = (Stage) importBtn.getScene().getWindow();
 		primary.setScene(nextScene);
 		
-		nextController.initializeAfterSceneCreated(chosenFile);
+		nextController.initializeAfterSceneCreated();
 	}
 
 	public void giveCalibrationInstructions() {
@@ -254,6 +256,7 @@ public class ChickNameWindowController {
 			primary.setResizable(false);
 
 			nextController.initializeAfterSceneCreated(arenaBounds, origin, xPixelsPerCm, yPixelsPerCm);
+			
 
 		} catch (NullPointerException e) {
 		}

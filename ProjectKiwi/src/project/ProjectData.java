@@ -32,6 +32,10 @@ public class ProjectData {
 	public static void openCurrentProject(String file) throws FileNotFoundException {
 		currentProject = new ProjectData(file);
 	}
+	
+	public static void loadCurrentProject(File chosenFile) throws FileNotFoundException {
+		currentProject = loadFromFile(chosenFile);
+	}
 	 
 	public static ProjectData getCurrentProject() {
 		return currentProject;

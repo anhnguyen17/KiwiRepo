@@ -202,15 +202,17 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	//This method has not work yet
-	public void initializeAfterSceneCreated(File chosenFile) throws FileNotFoundException {
-		loadProject(chosenFile);
+	public void initializeAfterSceneCreated() {
+		Video video = project.getCurrentProject().getVideo();
+		sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
+		showFrameAt(0);
 		
-//		for (int i =0; i < project.getTracks().size(); i++) {
-//			chickChoice.getItems().add(project.getTracks().get(i).getID());
-//		}
-//		for (AnimalTrack track : project.getUnassignedSegments()) {
-//				availAutoChoiceBox.getItems().add(track);
-//		}
+		for (int i =0; i < project.getCurrentProject().getTracks().size(); i++) {
+			chickChoice.getItems().add(project.getCurrentProject().getTracks().get(i).getID());
+		}
+		for (AnimalTrack track : project.getCurrentProject().getUnassignedSegments()) {
+				availAutoChoiceBox.getItems().add(track);
+		}
 	}
 
 	private void showFrameAt(int frameNum) {
@@ -466,12 +468,6 @@ public class TrackScreenController implements AutoTrackListener {
 			showFrameAt(0);
 	}
 	
-	public void loadProject(File chosenFile) throws FileNotFoundException {
-		project = ProjectData.loadFromFile(chosenFile);
-		Video video = project.getCurrentProject().getVideo();
-		sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
-		showFrameAt(0);	
-	}
 
 	@FXML
 	public void handleAutoTracking() {

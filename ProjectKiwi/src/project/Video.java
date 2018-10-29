@@ -10,7 +10,7 @@ import org.opencv.videoio.Videoio;
 public class Video {
 	
 	private String filePath;
-	private VideoCapture vidCap;
+	private transient VideoCapture vidCap;
 	private int emptyFrameNum;
 	private int startFrameNum;
 	private int endFrameNum;
