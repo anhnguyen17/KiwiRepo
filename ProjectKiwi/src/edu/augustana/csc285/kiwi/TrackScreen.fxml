@@ -59,10 +59,13 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" onAction="#handleSaveProgress" text="Export Project" />
-                              <MenuItem mnemonicParsing="false" text="Import Project" />
-                              <MenuItem mnemonicParsing="false" onAction="#ExportTimePointToCSVFile" text="Export Time points" />
-                              <MenuItem mnemonicParsing="false" onAction="#ExportAverageVelocityToCSVFile" text="Export  Average distance " />
+                              <MenuItem mnemonicParsing="false" text="Import Project" />								
+                              <Menu mnemonicParsing="false" text="Save As">
+                                <items>
+                                <MenuItem mnemonicParsing="false" onAction="#ExportTimePointToCSVFile" text="Export Time points" />
+                              <MenuItem mnemonicParsing="false" onAction="#ExportAverageVelocityToCSVFile" text="Export  Average distance " />                                </items>
+                              </Menu>
+
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Edit">
