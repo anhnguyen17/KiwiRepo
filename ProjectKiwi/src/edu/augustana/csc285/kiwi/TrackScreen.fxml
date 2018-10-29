@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -24,10 +25,11 @@
    <center>
       <BorderPane fx:id="videoPane">
          <center>
-            <ImageView fx:id="videoView" fitHeight="391.0" fitWidth="607.0" onMouseClicked="#mouseClick" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets left="30.0" />
-               </BorderPane.margin></ImageView>
+            <StackPane fx:id="stackPane">
+               <children>
+                  <Canvas fx:id="canvasView" height="391.0" onMouseClicked="#mouseClick" width="607.0" />
+               </children>
+            </StackPane>
          </center>
          <left>
             <AnchorPane fx:id="sideBarPane" prefHeight="420.0" prefWidth="54.0" BorderPane.alignment="CENTER">

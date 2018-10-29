@@ -12,7 +12,8 @@ import project.AnimalTrack;
 import project.ProjectData;
 import project.Video;
 import project.TimePoint;
-
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -20,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -58,6 +60,8 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	private BorderPane videoPane;
 	@FXML
+	private Canvas canvasView;
+	@FXML
 	private ChoiceBox<String> chickChoice;
 	@FXML
 	private AnchorPane trackPane;
@@ -77,6 +81,8 @@ public class TrackScreenController implements AutoTrackListener {
 	private AnchorPane topBarPane;
 	@FXML
 	private ColorPicker chickColor;
+	@FXML
+	private StackPane stackPane;
 
 	private List<Circle> currentDots = new ArrayList<>();
 	// add up to 10 colors
@@ -100,6 +106,11 @@ public class TrackScreenController implements AutoTrackListener {
 		}
 		timeStepCb.getSelectionModel().selectFirst();
 		availAutoChoiceBox.setOnAction(e -> showSelectedAutoTrack(availAutoChoiceBox.getSelectionModel().getSelectedItem()));
+		
+		canvasView.widthProperty().bind(stackPane.widthProperty());
+		canvasView.heightProperty().bind(stackPane.heightProperty());
+		canvasView.widthProperty().addListener((obs,oldV,newV)-> repaintCanvas());
+		canvasView.heightProperty().addListener((obs,oldV,newV)-> repaintCanvas());
 		
 	}
 	
@@ -133,8 +144,10 @@ public class TrackScreenController implements AutoTrackListener {
 		for (int x = 0; x < track.getTotalTimePoints(); x++) {
 			double scalingRatio = getImageScalingRatio();
 			TimePoint temp = track.getTimePointAtIndex(x);
-//			drawDot(temp.getX()*scalingRatio-5 + sideBarPane.getWidth(), temp.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
-			drawDot(temp.getX()*scalingRatio-5 + sideBarPane.getWidth(), temp.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
+			GraphicsContext g = canvasView.getGraphicsContext2D();
+			g.setFill(Color.DARKGRAY);
+			g.fillOval(temp.getX() * scalingRatio -3, temp.getY() * scalingRatio - 3, 7, 7);
+			
 		}
 		}
 	}
@@ -164,14 +177,18 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 
 	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin, double xPixelsPerCm, double yPixelsPerCm) {
-		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
-		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
-		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
+	//	canvasView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
+		//canvasView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
+		//canvasView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
+		
+		
+		
+		
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(filePath);
 		
-		double x = arenaBounds.x + sideBarPane.getWidth();
-		double y = arenaBounds.y + sideBarPane.getHeight();
+		double x = arenaBounds.x;
+		double y = arenaBounds.y;
 		arenaBounds.setLocation((int)x, (int)y);
 		project.getCurrentProject().getVideo().setArenaBounds(arenaBounds);
 		project.getCurrentProject().getVideo().setOriginPoint(origin); 
@@ -200,15 +217,18 @@ public class TrackScreenController implements AutoTrackListener {
 		if (autotracker == null || !autotracker.isRunning()) {
 			project.getCurrentProject().getVideo().setCurrentFrameNum(frameNum);
 			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getCurrentProject().getVideo().readFrame());
-			videoView.setImage(curFrame);
-			videoPane.getChildren().removeAll(currentDots);
+			GraphicsContext g = canvasView.getGraphicsContext2D();
+			
+			g.clearRect(0, 0, canvasView.getWidth(), canvasView.getHeight());
 			double scalingRatio = getImageScalingRatio();
-			drawAssignedAnimalTracks(scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
-			drawUnassignedSegments(scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
+			g.drawImage(curFrame, 0, 0, curFrame.getWidth() * scalingRatio, curFrame.getHeight() * scalingRatio);
+			
+			drawAssignedAnimalTracks(g, scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
+			drawUnassignedSegments(g, scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
 		}
 	}
 	
-	private void drawAssignedAnimalTracks(double scalingRatio, int frameNum) {
+	private void drawAssignedAnimalTracks(GraphicsContext g, double scalingRatio, int frameNum) {
 		for (int i = 0; i < project.getCurrentProject().getTracks().size(); i++) {
 			AnimalTrack track = project.getCurrentProject().getTracks().get(i);
 			Color trackColor = null;
@@ -220,27 +240,36 @@ public class TrackScreenController implements AutoTrackListener {
 			Color trackPrevColor = trackColor.deriveColor(0, 0.5, 2.5, 1.0); // subtler variant
 
 			// draw chick's recent trail from the last few seconds 
+			g.setFill(trackPrevColor);
 			for (project.TimePoint prevPt : track.getTimePointsWithinInterval(frameNum-90, frameNum)) {
-				drawDot(prevPt.getX()*scalingRatio-5, prevPt.getY()*scalingRatio-5, trackPrevColor);
+				//drawDot(prevPt.getX()*scalingRatio-5, prevPt.getY()*scalingRatio-5, trackPrevColor);
+				g.fillOval(prevPt.getX()*scalingRatio-3, prevPt.getY()*scalingRatio-3, 7,7); 
 			}
 			// draw the current point (if any) as a larger dot
 			TimePoint currPt = track.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, trackColor);
+				g.setFill(trackColor);
+				g.fillOval(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, 15, 15);
+				//drawDot(currPt.getX()*scalingRatio-5, currPt.getY()*scalingRatio-5, trackColor);
+				
 			}
 		}		
 	}
 	
-	private void drawUnassignedSegments(double scalingRatio, int frameNum) {
+	private void drawUnassignedSegments(GraphicsContext g, double scalingRatio, int frameNum) {
 		for (AnimalTrack segment: project.getCurrentProject().getUnassignedSegments()) {
 			// draw this segments recent past & near future locations 
+			
+			g.setFill(Color.DARKGREY);
 			for (TimePoint prevPt : segment.getTimePointsWithinInterval(frameNum-30, frameNum+30)) {
-				drawDot(prevPt.getX()*scalingRatio + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
+				//drawDot(prevPt.getX()*scalingRatio + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
+				g.fillRect(prevPt.getX()*scalingRatio-1, prevPt.getY()*scalingRatio-1, 2, 2);
 			}
 			// draw the current point (if any) as a larger square
 			TimePoint currPt = segment.getTimePointAtTime(frameNum);
 			if (currPt != null) {
-				drawDot(currPt.getX()*scalingRatio + sideBarPane.getWidth(), currPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.GREEN);
+				g.fillRect(currPt.getX()*scalingRatio, currPt.getY()*scalingRatio-5,11,11);
+				//drawDot(currPt.getX()*scalingRatio + sideBarPane.getWidth(), currPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.GREEN);
 			}
 		}		
 	}
@@ -315,8 +344,9 @@ public class TrackScreenController implements AutoTrackListener {
 		if (selectedChickIndex >= 0) {
 			AnimalTrack selectedTrack = project.getCurrentProject().getTracks().get(selectedChickIndex);
 			int curFrameNum = (int) sliderSeekBar.getValue();
-			double x = event.getX() + videoView.getLayoutX();
-			double y = event.getY() + videoView.getLayoutY();
+			double scalingRatio = getImageScalingRatio();
+			double x = event.getX() / scalingRatio;
+			double y = event.getY() / scalingRatio;
 			System.out.println(x + " y: " + y);
 			selectedTrack.setTimePointAtTime(x, y, curFrameNum);
 			System.out.println(selectedTrack);
@@ -472,8 +502,11 @@ public class TrackScreenController implements AutoTrackListener {
 		// this method is being run by the AutoTracker's thread, so we must
 		// ask the JavaFX UI thread to update some visual properties
 		Platform.runLater(() -> {
-			
-			videoView.setImage(imgFrame);
+			GraphicsContext g = canvasView.getGraphicsContext2D();
+			g.clearRect(0, 0, canvasView.getWidth(), canvasView.getHeight());
+			double scalingRatio = getImageScalingRatio();
+			g.drawImage(imgFrame, 0, 0, imgFrame.getWidth()*scalingRatio,imgFrame.getWidth()*scalingRatio);
+			//canvasView.getGraphicsContext2D().drawImage(imgFrame, 0, 0, project.getVideo().getFrameWidth(), project.getVideo().getFrameHeight());
 			// progressAutoTrack.setProgress(fractionComplete);
 			sliderSeekBar.setValue(frameNumber);
 			setTimeLabel(frameNumber);

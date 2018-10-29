@@ -76,8 +76,8 @@ public class AnimalTrack implements Iterable<TimePoint>{
 	 */
 	public void mergeAutoTracks(AnimalTrack track, double sideBarSize, double topBarSize) {
 		for(int x = 0; x < track.getTotalTimePoints(); x++) {
-			double xVal = track.getTimePointAtIndex(x).getX() + sideBarSize;
-			double yVal = track.getTimePointAtIndex(x).getY() + topBarSize;
+			double xVal = track.getTimePointAtIndex(x).getX();
+			double yVal = track.getTimePointAtIndex(x).getY();
 			int frameNum = track.getTimePointAtIndex(x).getFrameNum();
 			setTimePointAtTime(xVal,yVal,frameNum);
 		}
