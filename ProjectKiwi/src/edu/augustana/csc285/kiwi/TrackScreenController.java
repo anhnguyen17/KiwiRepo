@@ -174,9 +174,6 @@ public class TrackScreenController implements AutoTrackListener {
 	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin, double xPixelsPerCm, double yPixelsPerCm) {
 		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
 		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
-		//videoView.fitWidthProperty().addListener((obs, oldV, newV) -> repaintCanvas());
-		//videoView.fitHeightProperty().addListener((obs, oldV, newV) -> repaintCanvas());
-		
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
 		loadVideo(getFilePath());
@@ -187,7 +184,7 @@ public class TrackScreenController implements AutoTrackListener {
 		project.getVideo().setArenaBounds(arenaBounds);
 		project.getVideo().setOriginPoint(origin); 
 		project.getVideo().setXPixelsPerCm(xPixelsPerCm);
-		project.getVideo().setXPixelsPerCm(yPixelsPerCm);
+		project.getVideo().setYPixelsPerCm(yPixelsPerCm);
 		System.out.println("done");
 	}
 	
@@ -352,7 +349,6 @@ public class TrackScreenController implements AutoTrackListener {
 		dot.setRadius(5);
 		dot.setFill(color);
 		currentDots.add(dot);
-		// add circle to scene
 		videoPane.getChildren().add(dot);
 	}
 	
@@ -419,10 +415,6 @@ public class TrackScreenController implements AutoTrackListener {
 		if (result.get() == ButtonType.OK){
 			String temp = chickChoice.getSelectionModel().getSelectedItem();
 			project.removeChick(temp);
-			chickChoice.getItems().remove(temp);
-			for(AnimalTrack tracks: project.getTracks()) {
-				System.out.println(tracks.getID());
-			}
 			chickChoice.getItems().remove(temp);
 		} else {
 		   new Alert(AlertType.ERROR, "Cancelled by user. " + chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
