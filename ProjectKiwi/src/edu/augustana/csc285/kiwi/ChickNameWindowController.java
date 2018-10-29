@@ -82,9 +82,9 @@ public class ChickNameWindowController {
 		fileChooser.setTitle("Open Video File");
 		File chosenFile = fileChooser.showOpenDialog(stage);
 		if (chosenFile != null) {
-			vid = new Video(chosenFile.getAbsolutePath());
-			vid.setCurrentFrameNum(0);
-			Image curFrame = UtilsForOpenCV.matToJavaFXImage(vid.readFrame());
+			project.openCurrentProject(chosenFile.getAbsolutePath());
+			project.getCurrentProject().getVideo().setCurrentFrameNum(0);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getCurrentProject().getVideo().readFrame());
 			videoView.setImage(curFrame);
 		}
 	}
@@ -244,7 +244,7 @@ public class ChickNameWindowController {
 			TrackScreenController nextController = loader.getController();
 
 
-			nextController.setFilePath(vid.getFilePath()); 
+			nextController.setFilePath(project.getCurrentProject().getVideo().getFilePath()); 
 	
 			Scene nextScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 			nextScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

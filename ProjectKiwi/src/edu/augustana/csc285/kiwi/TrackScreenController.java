@@ -119,11 +119,9 @@ public class TrackScreenController implements AutoTrackListener {
 		if(chickChoice.getSelectionModel().isEmpty()) {
 			System.out.println("no chick selected");
 		} else {
-			chickColor.setValue(project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
+			chickColor.setValue(project.getCurrentProject().getTracks().get(chickChoice.getSelectionModel().getSelectedIndex()).getColor());
 		}
-		
 	}
-	
 	
 	/**
 	 * this method draw the user selected AutoTrack on top of the video pane
@@ -146,8 +144,8 @@ public class TrackScreenController implements AutoTrackListener {
 	 * @return the scaling ratio for converting between pixels and cm for this specific video
 	 */
 	private double getImageScalingRatio() {
-		double widthRatio = (videoPane.getWidth() - (sideBarPane.getWidth()*.5)) / project.getVideo().getFrameWidth();
-		double heightRatio = (videoPane.getHeight() - (topBarPane.getHeight()*.5)) / project.getVideo().getFrameHeight();
+		double widthRatio = (videoPane.getWidth() - (sideBarPane.getWidth()*.5)) / project.getCurrentProject().getVideo().getFrameWidth();
+		double heightRatio = (videoPane.getHeight() - (topBarPane.getHeight()*.5)) / project.getCurrentProject().getVideo().getFrameHeight();
 		return Math.min(widthRatio, heightRatio);
 		//return heightRatio;
 	}
@@ -156,71 +154,63 @@ public class TrackScreenController implements AutoTrackListener {
 		this.filePath = filePath;
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
 	/** this method changes a chick dot color to the user selected color */
 	public void handleChickColorChange() {
 		if(chickChoice.getSelectionModel().isEmpty()) {
 		} else {
-			AnimalTrack temp = project.getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
+			AnimalTrack temp = project.getCurrentProject().getTracks().get(chickChoice.getSelectionModel().getSelectedIndex());
 			temp.setColor(chickColor.getValue());
 		}
 	}
-
-	
 
 	public void initializeAfterSceneCreated(Rectangle arenaBounds, TimePoint origin, double xPixelsPerCm, double yPixelsPerCm) {
 		videoView.fitWidthProperty().bind(videoPane.widthProperty().subtract(sideBarPane.widthProperty()));
 		videoView.fitHeightProperty().bind(videoPane.heightProperty().subtract(topBarPane.heightProperty()));
 		videoView.fitWidthProperty().bind(videoPane.getScene().widthProperty().subtract(sideBarPane.widthProperty()));
 		chickChoice.setOnAction(e -> updateColor());
-		loadVideo(getFilePath());
+		loadVideo(filePath);
 		
 		double x = arenaBounds.x + sideBarPane.getWidth();
 		double y = arenaBounds.y + sideBarPane.getHeight();
 		arenaBounds.setLocation((int)x, (int)y);
-		project.getVideo().setArenaBounds(arenaBounds);
-		project.getVideo().setOriginPoint(origin); 
-		project.getVideo().setXPixelsPerCm(xPixelsPerCm);
-		project.getVideo().setYPixelsPerCm(yPixelsPerCm);
+		project.getCurrentProject().getVideo().setArenaBounds(arenaBounds);
+		project.getCurrentProject().getVideo().setOriginPoint(origin); 
+		project.getCurrentProject().getVideo().setXPixelsPerCm(xPixelsPerCm);
+		project.getCurrentProject().getVideo().setYPixelsPerCm(yPixelsPerCm);
 		System.out.println("done");
 	}
 	
 	public void repaintCanvas() {
-		showFrameAt(project.getVideo().getCurFrameNum());
+		showFrameAt(project.getCurrentProject().getVideo().getCurFrameNum());
 	}
 	
 	//This method has not work yet
 	public void initializeAfterSceneCreated(File chosenFile) throws FileNotFoundException {
 		loadProject(chosenFile);
+		
 //		for (int i =0; i < project.getTracks().size(); i++) {
 //			chickChoice.getItems().add(project.getTracks().get(i).getID());
 //		}
 //		for (AnimalTrack track : project.getUnassignedSegments()) {
 //				availAutoChoiceBox.getItems().add(track);
 //		}
-		
-		
-		
 	}
 
 	private void showFrameAt(int frameNum) {
 		if (autotracker == null || !autotracker.isRunning()) {
-			project.getVideo().setCurrentFrameNum(frameNum);
-			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getVideo().readFrame());
+			project.getCurrentProject().getVideo().setCurrentFrameNum(frameNum);
+			Image curFrame = UtilsForOpenCV.matToJavaFXImage(project.getCurrentProject().getVideo().readFrame());
 			videoView.setImage(curFrame);
 			videoPane.getChildren().removeAll(currentDots);
 			double scalingRatio = getImageScalingRatio();
-			drawAssignedAnimalTracks(scalingRatio, project.getVideo().getCurFrameNum());
-			drawUnassignedSegments(scalingRatio, project.getVideo().getCurFrameNum());
+			drawAssignedAnimalTracks(scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
+			drawUnassignedSegments(scalingRatio, project.getCurrentProject().getVideo().getCurFrameNum());
 		}
 	}
 	
 	private void drawAssignedAnimalTracks(double scalingRatio, int frameNum) {
-		for (int i = 0; i < project.getTracks().size(); i++) {
-			AnimalTrack track = project.getTracks().get(i);
+		for (int i = 0; i < project.getCurrentProject().getTracks().size(); i++) {
+			AnimalTrack track = project.getCurrentProject().getTracks().get(i);
 			Color trackColor = null;
 			if(track.getColor() != null) {
 				trackColor = track.getColor();
@@ -242,7 +232,7 @@ public class TrackScreenController implements AutoTrackListener {
 	}
 	
 	private void drawUnassignedSegments(double scalingRatio, int frameNum) {
-		for (AnimalTrack segment: project.getUnassignedSegments()) {
+		for (AnimalTrack segment: project.getCurrentProject().getUnassignedSegments()) {
 			// draw this segments recent past & near future locations 
 			for (TimePoint prevPt : segment.getTimePointsWithinInterval(frameNum-30, frameNum+30)) {
 				drawDot(prevPt.getX()*scalingRatio + sideBarPane.getWidth(), prevPt.getY()*scalingRatio-5 + topBarPane.getHeight(), Color.DARKGREY);
@@ -261,12 +251,12 @@ public class TrackScreenController implements AutoTrackListener {
 	 * @param time the selected amount of time changed
 	 */
 	public void jumpFrame(double time) {
-		int frameNum = project.getVideo().getCurFrameNum() + ((int) (30 * time));
-		if (frameNum <= project.getVideo().getTotalNumFrames() && frameNum >= 0) {
+		int frameNum = project.getCurrentProject().getVideo().getCurFrameNum() + ((int) (30 * time));
+		if (frameNum <= project.getCurrentProject().getVideo().getTotalNumFrames() && frameNum >= 0) {
 			setTimeLabel(frameNum);
 			showFrameAt((int) frameNum);
 			sliderSeekBar.setValue((int) frameNum);
-			project.getVideo().setCurFrameNum(frameNum);
+			project.getCurrentProject().getVideo().setCurFrameNum(frameNum);
 		}
 	}
 
@@ -299,9 +289,9 @@ public class TrackScreenController implements AutoTrackListener {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
 			int currentChick = chickChoice.getSelectionModel().getSelectedIndex();
-			AnimalTrack temp = project.getTracks().get(currentChick);
+			AnimalTrack temp = project.getCurrentProject().getTracks().get(currentChick);
 			temp.mergeAutoTracks(availAutoChoiceBox.getSelectionModel().getSelectedItem());
-			for (int x = 0; x < project.getTracks().size(); x++) {
+			for (int x = 0; x < project.getCurrentProject().getTracks().size(); x++) {
 				System.out.println(temp);
 			}
 			availAutoChoiceBox.getItems().remove(availAutoChoiceBox.getSelectionModel().getSelectedItem());
@@ -315,7 +305,7 @@ public class TrackScreenController implements AutoTrackListener {
 	/** this method set the chosen frame as the empty frame*/ 
 	@FXML
 	public void handleSetEmptyFrame() {
-		project.getVideo().setEmptyFrameNum(project.getVideo().getCurFrameNum());
+		project.getCurrentProject().getVideo().setEmptyFrameNum(project.getCurrentProject().getVideo().getCurFrameNum());
 		new Alert(AlertType.INFORMATION, "Success! The empty frame has been updated.").showAndWait();
 	}
 	
@@ -323,7 +313,7 @@ public class TrackScreenController implements AutoTrackListener {
 	public void mouseClick(MouseEvent event) {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
 		if (selectedChickIndex >= 0) {
-			AnimalTrack selectedTrack = project.getTracks().get(selectedChickIndex);
+			AnimalTrack selectedTrack = project.getCurrentProject().getTracks().get(selectedChickIndex);
 			int curFrameNum = (int) sliderSeekBar.getValue();
 			double x = event.getX() + videoView.getLayoutX();
 			double y = event.getY() + videoView.getLayoutY();
@@ -365,13 +355,13 @@ public class TrackScreenController implements AutoTrackListener {
 		
 		result.ifPresent(name -> {
 			String temp = result.get();
-			for(int x = 0; x < project.getTracks().size(); x++) {
-				if(project.getTracks().get(x).getID().equals(temp)) {
+			for(int x = 0; x < project.getCurrentProject().getTracks().size(); x++) {
+				if(project.getCurrentProject().getTracks().get(x).getID().equals(temp)) {
 					new Alert(AlertType.ERROR, "Chick with desired name already exists!").showAndWait();
 					return;
 				}
 			}
-		    project.getTracks().add(new AnimalTrack(temp));
+		    project.getCurrentProject().getTracks().add(new AnimalTrack(temp));
 		    chickChoice.getItems().add(temp);
 		});
 	}
@@ -384,7 +374,7 @@ public class TrackScreenController implements AutoTrackListener {
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON file", "*.json"));
 		File chosenFile = fileChooser.showSaveDialog(stage);
 		if (chosenFile != null) {
-			project.saveToFile(chosenFile); 
+			project.getCurrentProject().saveToFile(chosenFile); 
 		} 
 	}
 	
@@ -396,7 +386,7 @@ public class TrackScreenController implements AutoTrackListener {
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV", "*.csv"));
 		File file = fileChooser.showSaveDialog(stage);
 		if (file != null) {
-			project.exportToCSV(file);
+			project.getCurrentProject().exportToCSV(file);
 		}
 	}
 
@@ -414,7 +404,7 @@ public class TrackScreenController implements AutoTrackListener {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
 			String temp = chickChoice.getSelectionModel().getSelectedItem();
-			project.removeChick(temp);
+			project.getCurrentProject().removeChick(temp);
 			chickChoice.getItems().remove(temp);
 		} else {
 		   new Alert(AlertType.ERROR, "Cancelled by user. " + chickChoice.getSelectionModel().getSelectedItem() + " was not removed.").showAndWait();
@@ -430,31 +420,25 @@ public class TrackScreenController implements AutoTrackListener {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				int frameNum = (int) (newValue.doubleValue() / sliderSeekBar.getMax()
-						* project.getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
+						* project.getCurrentProject().getVideo().getVidCap().get(Videoio.CV_CAP_PROP_FRAME_COUNT) - 1);
 				showFrameAt(frameNum);
 				setTimeLabel(frameNum);
-				project.getVideo().setCurFrameNum(frameNum);
+				project.getCurrentProject().getVideo().setCurFrameNum(frameNum);
 			}
 		});
 	}
 
 	/** this method loads the Video and create a new Project */ 
 	public void loadVideo(String filePath) {
-		try {
-			project = new ProjectData(filePath);
-			Video video = project.getVideo();
+			project.getCurrentProject().getVideo().setFilePath(filePath);
+			Video video = project.getCurrentProject().getVideo();
 			sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 			showFrameAt(0);
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
 	}
 	
 	public void loadProject(File chosenFile) throws FileNotFoundException {
 		project = ProjectData.loadFromFile(chosenFile);
-		Video video = project.getVideo();
+		Video video = project.getCurrentProject().getVideo();
 		sliderSeekBar.setMax(video.getTotalNumFrames() - 1);
 		showFrameAt(0);	
 	}
@@ -463,15 +447,15 @@ public class TrackScreenController implements AutoTrackListener {
 	public void handleAutoTracking() {
 		videoPane.getChildren().removeAll(currentDots);
 		if (autotracker == null || !autotracker.isRunning()) {
-			project.getVideo().setXPixelsPerCm(5.5);
-			project.getVideo().setYPixelsPerCm(5.5);
+			project.getCurrentProject().getVideo().setXPixelsPerCm(5.5);
+			project.getCurrentProject().getVideo().setYPixelsPerCm(5.5);
 			autotracker = new AutoTracker();
 			// Use Observer Pattern to give autotracker a reference to this object,
 			// and call back to methods in this class to update progress.
 			autotracker.addAutoTrackListener(this);
 			// this method will start a new thread to run AutoTracker in the background
 			// so that we don't freeze up the main JavaFX UI thread.
-			autotracker.startAnalysis(project.getVideo());
+			autotracker.startAnalysis(project.getCurrentProject().getVideo());
 			submitButton.setText("CANCEL auto-tracking");
 		} else {
 			autotracker.cancelAnalysis();
@@ -498,12 +482,12 @@ public class TrackScreenController implements AutoTrackListener {
 
 	@Override
 	public void trackingComplete(List<AnimalTrack> trackedSegments) {
-		project.getUnassignedSegments().clear();
-		project.getUnassignedSegments().addAll(trackedSegments);
+		project.getCurrentProject().getUnassignedSegments().clear();
+		project.getCurrentProject().getUnassignedSegments().addAll(trackedSegments);
 		for (AnimalTrack track : trackedSegments) {
 			System.out.println(track);
 			if(track.getTotalTimePoints() < 15) {
-				project.getUnassignedSegments().remove(track);
+				project.getCurrentProject().getUnassignedSegments().remove(track);
 			} else {
 				availAutoChoiceBox.getItems().add(track);
 			}
@@ -532,11 +516,11 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	public void handleFrame() {
 		if (frameBtn.getText().equals("Start Time")) {
-			project.getVideo().setStartFrameNum(project.getVideo().getCurFrameNum());
+			project.getCurrentProject().getVideo().setStartFrameNum(project.getCurrentProject().getVideo().getCurFrameNum());
 			frameBtn.setText("End Time");
 			instructionLabel.setText("Select your prefered end time:");
 		} else {
-			project.getVideo().setEndFrameNum(project.getVideo().getCurFrameNum());
+			project.getCurrentProject().getVideo().setEndFrameNum(project.getCurrentProject().getVideo().getCurFrameNum());
 			frameBtn.setText("Start Time");
 			instructionLabel.setText("Select your prefered start time:");
 		}
@@ -546,8 +530,8 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	public void handleTotalDistance() {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
-		int distance = (int) project.getTracks().get(selectedChickIndex).getTotalDistance();
-		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+		int distance = (int) project.getCurrentProject().getTracks().get(selectedChickIndex).getTotalDistance();
+		String message = "Chick " + project.getCurrentProject().getTracks().get(selectedChickIndex).getID() +
 				"travels a total distance of "+ distance;
 		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}
@@ -556,8 +540,8 @@ public class TrackScreenController implements AutoTrackListener {
 	@FXML
 	public void handleAverageVelocity() {
 		int selectedChickIndex = chickChoice.getSelectionModel().getSelectedIndex();
-		int aveSpeed =  (int) project.getAveSpeed(selectedChickIndex);
-		String message = "Chick " + project.getTracks().get(selectedChickIndex).getID() +
+		int aveSpeed =  (int) project.getCurrentProject().getAveSpeed(selectedChickIndex);
+		String message = "Chick " + project.getCurrentProject().getTracks().get(selectedChickIndex).getID() +
 				"travels with an average velocity of "+ aveSpeed;
 		new Alert(AlertType.INFORMATION, message).showAndWait();
 	}

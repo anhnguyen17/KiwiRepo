@@ -21,11 +21,20 @@ public class ProjectData {
 	private Video video;
 	private List<AnimalTrack> tracks;
 	private List<AnimalTrack> unassignedSegments;
+	private static ProjectData currentProject;
 
-	public ProjectData(String videoFilePath) throws FileNotFoundException {
+	private ProjectData(String videoFilePath) throws FileNotFoundException {
 		video = new Video(videoFilePath);
 		tracks = new ArrayList<>();
 		unassignedSegments = new ArrayList<>();
+	}
+	
+	public static void openCurrentProject(String file) throws FileNotFoundException {
+		currentProject = new ProjectData(file);
+	}
+	 
+	public static ProjectData getCurrentProject() {
+		return currentProject;
 	}
 
 	public Video getVideo() {

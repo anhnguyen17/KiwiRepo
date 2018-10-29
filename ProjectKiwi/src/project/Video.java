@@ -69,6 +69,10 @@ public class Video {
 	public String getFilePath() {
 		return this.filePath;
 	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 	/** 
 	 * @return frames per second
 	 */
