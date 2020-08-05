@@ -1,2 +1,6 @@
 # KiwiRepo
 Chick Video Tracking Project by Team Kiwi
+
+  - Our software’s basic features, including importing the video, naming chicks, time-cropping and flexible viewing of the videos, are completed and enhanced from the last sprint. In regards to the auto-tracking process, when the software finishes auto-tracking for your desired time period, a list of available autotracks will be displayed and drawn on the video. You will then be able to select different auto-tracks, assign them to the correct chick and continue with manual track. After a track is assigned, it will be drawn on the video with the chick’s color that the user can select.
+  - In this version of our software, users are able to save their working progress to a file and later reload that file to continue working. We’ve also implemented a feature to calculate the total distance and average velocity of each chick for basic analysis. After all the tracking and analysis is completed, all data will be exported to a CSV file for further analysis.
+  - However, the calibration features are incomplete. The user is able to set the calibration values in the first window, but those values are not integrated into the software. 
